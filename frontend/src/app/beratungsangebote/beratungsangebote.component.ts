@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-beratungsangebote',
@@ -6,10 +7,48 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./beratungsangebote.component.css']
 })
 export class BeratungsangeboteComponent implements OnInit {
+  tags: any[] = [];
+  zielgruppen: any[] = [];
+  selectedTags: Set<number> = new Set(); // Enthält die IDs der ausgewählten Tags
+  selectedZielgruppen: Set<number> = new Set(); // Enthält die IDs der ausgewählten Zielgruppen
 
-  constructor() { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
+    this.getTags();
+    this.getZielgruppen();
   }
 
+  // Tags abrufen
+  getTags(): void {
+    this.dataService.getTags().subscribe(response => {
+      this.tags = response.data;
+    });
+  }
+
+  // Zielgruppen abrufen
+  getZielgruppen(): void {
+    this.dataService.getZielgruppen().subscribe(response => {
+      this.zielgruppen = response.data;
+    });
+  }
+
+  // Tag auswählen oder abwählen
+  toggleTag(id: number): void {
+    if (this.selectedTags.has(id)) {
+      this.selectedTags.delete(id);
+    } else {
+      this.selectedTags.add(id);
+    }
+  }
+
+  // Zielgruppe auswählen oder abwählen
+  toggleZielgruppe(id: number): void {
+    if (this.selectedZielgruppen.has(id)) {
+      this.selectedZielgruppen.delete(id);
+    } else {
+      this.selectedZielgruppen.add(id);
+    }
+  }
 }
+

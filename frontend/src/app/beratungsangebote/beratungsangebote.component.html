@@ -1,1 +1,30 @@
-<p>beratungsangebote works!</p>
+<div class="container mt-4">
+    <p>Wähle Kategorien aus, für die Du Empfehlungen erhalten möchtest. Du kannst Deine Auswahl später jederzeit anpassen.</p>
+  
+    <!-- Tags als Buttons -->
+    <div class="d-flex flex-wrap">
+      <button
+        *ngFor="let tag of tags"
+        class="btn btn-outline-primary me-2 mb-2"
+        [class.active]="selectedTags.has(tag.ID)"
+        (click)="toggleTag(tag.ID)"
+      >
+        {{ tag.Tag }}
+      </button>
+    </div>
+  
+    <p class="mt-4">Wähle zusätzlich ein oder mehrere Filter aus, die auf Dich zutreffen. Du kannst Deine Auswahl später jederzeit anpassen.</p>
+  
+    <!-- Zielgruppen als Buttons -->
+    <div class="d-flex flex-wrap">
+      <button
+        *ngFor="let zielgruppe of zielgruppen"
+        class="btn btn-outline-secondary me-2 mb-2"
+        [class.active]="selectedZielgruppen.has(zielgruppe.ID)"
+        (click)="toggleZielgruppe(zielgruppe.ID)"
+      >
+        {{ zielgruppe.Zielgruppe }}
+      </button>
+    </div>
+  </div>
+  

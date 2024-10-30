@@ -7,12 +7,18 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <app-header></app-header>
-<app-beratungsangebote></app-beratungsangebote>
-<app-kontakt></app-kontakt>
-<app-scroll-up-button></app-scroll-up-button>
-<app-ausgabe-tabelle></app-ausgabe-tabelle>
-<app-semantische-suche></app-semantische-suche>
-<app-impressum-datenschutz></app-impressum-datenschutz>
+<div class="container mt-4">
+    <h1>Beratungsangebote für Studierende der TU Berlin</h1>
+    <p class="lead">Finde schnell und einfach die passende Beratungsstelle für dein Anliegen!</p>
+  
+    <!-- Platz für die Suchfunktion und nachfolgende Komponenten -->
+    <app-beratungsangebote></app-beratungsangebote> <!-- Hauptbereich der Beratungsangebote -->
+    <app-ausgabe-tabelle></app-ausgabe-tabelle> <!-- Tabelle mit Suchergebnissen oder Detailinfos -->
+    <app-semantische-suche></app-semantische-suche> <!-- Suchfunktion mit Meilisearch -->
+    <app-kontakt></app-kontakt> <!-- Kontaktinformationen -->
+    <app-impressum-datenschutz></app-impressum-datenschutz> <!-- Impressum und Datenschutz -->
+    <app-scroll-up-button></app-scroll-up-button> <!-- Scroll-Up-Button für Nutzerkomfort -->
+  </div>
 
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
