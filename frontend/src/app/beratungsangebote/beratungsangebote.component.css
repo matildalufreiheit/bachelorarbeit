@@ -1,0 +1,10 @@
+.custom-more-button {
+    border-color: #ff9800; /* Orange Rand */
+    color: #ff9800; /* Orange Text */
+  }
+  
+  .custom-more-button:hover {
+    background-color: #ff9800; /* Orange Hintergrund beim Hover */
+    color: #ffffff; /* Weißer Text beim Hover */
+  }
+  

@@ -11,6 +11,8 @@ export class BeratungsangeboteComponent implements OnInit {
   zielgruppen: any[] = [];
   selectedTags: Set<number> = new Set(); // Enthält die IDs der ausgewählten Tags
   selectedZielgruppen: Set<string> = new Set(); // Enthält die IDs der ausgewählten Zielgruppen
+  showAllTags = false; // Kontrolliert die Anzeige der vollständigen Liste
+  showAllZielgruppen = false; // Kontrolliert die Anzeige der vollständigen Liste
 
   constructor(private dataService: DataService) {}
 
@@ -49,8 +51,15 @@ export class BeratungsangeboteComponent implements OnInit {
       this.selectedZielgruppen.add(zielgruppe);
     }
   }
-  
-  
+
+  // Funktion zum Umschalten der Anzeige
+  toggleShowAllTags(): void {
+    this.showAllTags = !this.showAllTags;
+  }
+
+  toggleShowAllZielgruppen(): void {
+    this.showAllZielgruppen = !this.showAllZielgruppen;
+  }
 }
 
 
