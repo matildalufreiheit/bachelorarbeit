@@ -20,11 +20,11 @@
       <button
         *ngFor="let zielgruppe of zielgruppen"
         class="btn btn-outline-secondary me-2 mb-2"
-        [class.active]="selectedZielgruppen.has(zielgruppe.ID)"
-        (click)="toggleZielgruppe(zielgruppe.ID)"
-      >
-        {{ zielgruppe.Zielgruppe }}
-      </button>
+        [class.active]="selectedZielgruppen.has(zielgruppe)"
+        (click)="toggleZielgruppe(zielgruppe)"
+        >
+        {{ zielgruppe }}
+</button>
     </div>
   </div>
   

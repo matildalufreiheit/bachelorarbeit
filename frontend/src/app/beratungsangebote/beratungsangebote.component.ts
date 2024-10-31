@@ -10,7 +10,7 @@ export class BeratungsangeboteComponent implements OnInit {
   tags: any[] = [];
   zielgruppen: any[] = [];
   selectedTags: Set<number> = new Set(); // Enthält die IDs der ausgewählten Tags
-  selectedZielgruppen: Set<number> = new Set(); // Enthält die IDs der ausgewählten Zielgruppen
+  selectedZielgruppen: Set<string> = new Set(); // Enthält die IDs der ausgewählten Zielgruppen
 
   constructor(private dataService: DataService) {}
 
@@ -42,13 +42,15 @@ export class BeratungsangeboteComponent implements OnInit {
     }
   }
 
-  // Zielgruppe auswählen oder abwählen
-  toggleZielgruppe(id: number): void {
-    if (this.selectedZielgruppen.has(id)) {
-      this.selectedZielgruppen.delete(id);
+  toggleZielgruppe(zielgruppe: string): void {
+    if (this.selectedZielgruppen.has(zielgruppe)) {
+      this.selectedZielgruppen.delete(zielgruppe);
     } else {
-      this.selectedZielgruppen.add(id);
+      this.selectedZielgruppen.add(zielgruppe);
     }
   }
+  
+  
 }
+
 
