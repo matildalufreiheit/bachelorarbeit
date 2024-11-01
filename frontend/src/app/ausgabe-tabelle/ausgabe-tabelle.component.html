@@ -1,23 +1,37 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th>Institution</th>
-      <th>Beschreibung</th>
-      <th>URL</th>
-      <th>Angebotsart</th>
-      <th>Zielgruppe</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of filteredResults">
-      <td>{{ item.Name }}</td>
-      <td>{{ item.Beschreibung }}</td>
-      <td><a [href]="item.URL" target="_blank">{{ item.URL }}</a></td>
-      <td>{{ item.Art }}</td>
-      <td>{{ item.Zielgruppe }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container mt-4">
+  <h2>Deine Ergebnisse</h2>
+  <p>Klicke rechts auf den Pfeil, um eine Beschreibung zum jeweiligen Angebot zu erhalten.</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Institution</th>
+        <th></th> <!-- Spalte für den Pfeil -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filteredResults">
+        <td>
+          <div (click)="toggleDetails(item.ID)" class="name-link">
+            <a [href]="item.URL" target="_blank">
+              {{ item.Name }}
+              <i class="bi bi-link-45deg" title="Zur Webseite"></i>
+            </a>
+          </div>
+          <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
+            <p><strong>Beschreibung:</strong> {{ item.Beschreibung }}</p>
+            <p><strong>Angebotsart:</strong> {{ item.Art }}</p>
+          </div>
+        </td>
+        <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
+          <i [class]="isDetailsVisible(item.ID) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" title="Mehr Informationen"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+</div>
+
+
 
 
 

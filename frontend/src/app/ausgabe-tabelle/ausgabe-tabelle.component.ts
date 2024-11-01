@@ -25,6 +25,7 @@ export class AusgabeTabelleComponent implements OnInit {
   showAllTags = false;
   showAllZielgruppen = false;
   filteredResults: Angebot[] = [];
+  visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
 
   constructor(private dataService: DataService) {}
 
@@ -54,6 +55,18 @@ export class AusgabeTabelleComponent implements OnInit {
         return tagMatch && zielgruppeMatch;
       });
     });
+  }
+
+  toggleDetails(id: number): void {
+    if (this.visibleDetails.has(id)) {
+      this.visibleDetails.delete(id);
+    } else {
+      this.visibleDetails.add(id);
+    }
+  }
+
+  isDetailsVisible(id: number): boolean {
+    return this.visibleDetails.has(id);
   }
 
   toggleTag(id: number): void {
