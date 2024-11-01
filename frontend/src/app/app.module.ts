@@ -10,9 +10,11 @@ import { KontaktComponent } from './kontakt/kontakt.component';
 import { ScrollUpButtonComponent } from './scroll-up-button/scroll-up-button.component';
 import { AusgabeTabelleComponent } from './ausgabe-tabelle/ausgabe-tabelle.component';
 import { SemantischeSucheComponent } from './semantische-suche/semantische-suche.component';
-import { ImpressumDatenschutzComponent } from './impressum-datenschutz/impressum-datenschutz.component';
+import { ImpressumComponent } from './impressum-datenschutz/impressum-datenschutz.component';
 import { HeaderComponent } from './header/header.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from './footer/footer.component';
+import { StartseiteComponent } from './startseite/startseite.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +24,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ScrollUpButtonComponent,
     AusgabeTabelleComponent,
     SemantischeSucheComponent,
-    ImpressumDatenschutzComponent,
-    HeaderComponent
+    ImpressumComponent,
+    HeaderComponent,
+    FooterComponent,
+    StartseiteComponent
   ],
   imports: [
     BrowserModule,

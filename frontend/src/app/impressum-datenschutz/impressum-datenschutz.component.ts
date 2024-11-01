@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-impressum-datenschutz',
-  templateUrl: './impressum-datenschutz.component.html',
-  styleUrls: ['./impressum-datenschutz.component.css']
+  templateUrl: './impressum-datenschutz.component.html'
 })
-export class ImpressumDatenschutzComponent implements OnInit {
+export class ImpressumComponent { }
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
