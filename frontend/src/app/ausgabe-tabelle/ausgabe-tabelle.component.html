@@ -1,13 +1,25 @@
 <table class="table">
-    <thead>
-      <tr>
-        <th>Institution</th>
-        <th>Beschreibung</th>
-        <th>URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Hier später die gefilterten Ergebnisse anzeigen -->
-    </tbody>
-  </table>
+  <thead>
+    <tr>
+      <th>Institution</th>
+      <th>Beschreibung</th>
+      <th>URL</th>
+      <th>Angebotsart</th>
+      <th>Zielgruppe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of filteredResults">
+      <td>{{ item.Name }}</td>
+      <td>{{ item.Beschreibung }}</td>
+      <td><a [href]="item.URL" target="_blank">{{ item.URL }}</a></td>
+      <td>{{ item.Art }}</td>
+      <td>{{ item.Zielgruppe }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
   
