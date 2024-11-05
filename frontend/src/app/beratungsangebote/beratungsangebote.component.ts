@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
+import { SharedDataService } from '../services/shared-data.service';
 
 @Component({
   selector: 'app-beratungsangebote',
@@ -14,7 +15,7 @@ export class BeratungsangeboteComponent implements OnInit {
   showAllTags = false; // Kontrolliert die Anzeige der vollständigen Liste
   showAllZielgruppen = false; // Kontrolliert die Anzeige der vollständigen Liste
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
 
   ngOnInit(): void {
     this.getTags();
@@ -35,13 +36,13 @@ export class BeratungsangeboteComponent implements OnInit {
     });
   }
 
-  // Tag auswählen oder abwählen
   toggleTag(id: number): void {
     if (this.selectedTags.has(id)) {
       this.selectedTags.delete(id);
     } else {
       this.selectedTags.add(id);
     }
+    this.sharedDataService.setSelectedTags(new Set(this.selectedTags)); // Synchronisierung
   }
 
   toggleZielgruppe(zielgruppe: string): void {
@@ -50,6 +51,7 @@ export class BeratungsangeboteComponent implements OnInit {
     } else {
       this.selectedZielgruppen.add(zielgruppe);
     }
+    this.sharedDataService.setSelectedZielgruppen(new Set(this.selectedZielgruppen)); // Synchronisierung
   }
 
   // Funktion zum Umschalten der Anzeige

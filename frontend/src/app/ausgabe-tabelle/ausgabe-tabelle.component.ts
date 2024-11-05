@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
+import { SharedDataService } from '../services/shared-data.service';
 
 interface Angebot {
   ID: number;
@@ -27,12 +28,23 @@ export class AusgabeTabelleComponent implements OnInit {
   filteredResults: Angebot[] = [];
   visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
 
   ngOnInit(): void {
     this.getTags();
     this.getZielgruppen();
-    this.getAngebote(); // Holen der Angebote beim Start
+  
+    this.sharedDataService.selectedTags$.subscribe(tags => {
+      this.selectedTags = tags;
+      this.getAngebote();
+    });
+  
+    this.sharedDataService.selectedZielgruppen$.subscribe(zielgruppen => {
+      this.selectedZielgruppen = zielgruppen;
+      this.getAngebote();
+    });
+  
+    this.getAngebote(); // Initiale Laden der Daten
   }
 
   getTags(): void {
@@ -50,12 +62,14 @@ export class AusgabeTabelleComponent implements OnInit {
   getAngebote(): void {
     this.dataService.getAngebote().subscribe(response => {
       this.filteredResults = response.data.filter((item: Angebot) => {
-        const tagMatch = !this.selectedTags.size || item.TagIDs?.some((id: number) => this.selectedTags.has(id));
+        const tagMatch = !this.selectedTags.size || Array.from(this.selectedTags).every((tagId: number) => item.TagIDs?.includes(tagId));
         const zielgruppeMatch = !this.selectedZielgruppen.size || this.selectedZielgruppen.has(item.Zielgruppe);
         return tagMatch && zielgruppeMatch;
       });
     });
   }
+  
+  
 
   toggleDetails(id: number): void {
     if (this.visibleDetails.has(id)) {
