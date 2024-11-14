@@ -4,7 +4,7 @@
   <!-- Tags als Buttons -->
   <div class="d-flex flex-wrap">
     <button
-      *ngFor="let tag of (showAllTags ? tags : tags.slice(0, 5))"
+      *ngFor="let tag of filteredTags"
       class="btn btn-outline-primary me-2 mb-2"
       [class.active]="selectedTags.has(tag.ID)"
       (click)="toggleTag(tag.ID)"
@@ -12,19 +12,20 @@
       {{ tag.Tag }}
     </button>
   </div>
+
   <button
-  class="btn custom-more-button me-2 mb-2"
-  (click)="toggleShowAllTags()"
->
-  {{ showAllTags ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
-</button>
+    class="btn custom-more-button me-2 mb-2"
+    (click)="toggleShowAllTags()"
+  >
+    {{ showAllTags ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
+  </button>
 
   <p class="mt-4">Wähle zusätzlich ein oder mehrere Filter aus, die auf Dich zutreffen. Du kannst Deine Auswahl später jederzeit anpassen.</p>
 
-  <!-- Zielgruppen als Buttons -->
+  <!-- Gefilterte Zielgruppen als Buttons -->
   <div class="d-flex flex-wrap">
     <button
-      *ngFor="let zielgruppe of (showAllZielgruppen ? zielgruppen : zielgruppen.slice(0, 5))"
+      *ngFor="let zielgruppe of (showAllZielgruppen ? filteredZielgruppen : filteredZielgruppen.slice(0, 5))"
       class="btn btn-outline-primary me-2 mb-2"
       [class.active]="selectedZielgruppen.has(zielgruppe)"
       (click)="toggleZielgruppe(zielgruppe)"
@@ -32,11 +33,11 @@
       {{ zielgruppe }}
     </button>
   </div>
-    <button
+
+  <button
     class="btn custom-more-button me-2 mb-2"
     (click)="toggleShowAllZielgruppen()"
   >
     {{ showAllZielgruppen ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
   </button>
-
 </div>

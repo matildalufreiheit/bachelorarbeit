@@ -23,6 +23,11 @@ export class DataService {
   getAngebote(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/angebote`);
   }
+
+    // Neue Methode zum Abrufen der Angebot_Tags-Daten
+    getAngebotTags(): Observable<any> {
+      return this.http.get(`${this.apiUrl}/angebot_tags`);
+  }
   
 }
 
