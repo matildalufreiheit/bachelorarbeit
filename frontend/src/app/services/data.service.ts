@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +18,20 @@ export class DataService {
   }
 
   // Einzigartige Zielgruppen abrufen
+  //getZielgruppen(): Observable<any> {
+  //  return this.http.get(`${this.apiUrl}/zielgruppen`);
+  //}
+
   getZielgruppen(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/zielgruppen`);
+    return this.http.get(`${this.apiUrl}/zielgruppen`).pipe(
+      map((response: any) => {
+        // Zielgruppen aufteilen
+        response.data = response.data.map((ziel: string) =>
+          ziel.split(',').map((z) => z.trim())
+        ).flat();
+        return response;
+      })
+    );
   }
 
   getAngebote(): Observable<any> {

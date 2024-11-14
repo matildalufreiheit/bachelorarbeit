@@ -122,6 +122,8 @@ export class BeratungsangeboteComponent implements OnInit {
   
     console.log('Gefilterte Tags:', this.filteredTags);
     console.log('Gefilterte Zielgruppen:', this.filteredZielgruppen);
+
+    
   }
   
   
