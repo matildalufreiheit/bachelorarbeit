@@ -6,10 +6,11 @@ interface Angebot {
   ID: number;
   InstitutionID: number;
   Art: string;
-  Zielgruppe: string;
-  Name: string; 
-  Beschreibung: string; 
-  URL: string; 
+  Zielgruppe: string; // Falls Zielgruppen-String existiert
+  ZielgruppenIDs?: number[]; // Falls Zielgruppen als Array vorliegt
+  Name: string;
+  Beschreibung: string;
+  URL: string;
   TagIDs?: number[];
 }
 
@@ -22,17 +23,19 @@ export class AusgabeTabelleComponent implements OnInit {
   tags: any[] = [];
   zielgruppen: any[] = [];
   selectedTags: Set<number> = new Set();
-  selectedZielgruppen: Set<string> = new Set();
+  selectedZielgruppen: Set<number> = new Set();
   showAllTags = false;
   showAllZielgruppen = false;
   filteredResults: Angebot[] = [];
   visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
+  angeboteZielgruppen: { AngebotID: number; ZielgruppeID: number }[] = []; // Neu hinzugefügt
 
   constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
 
   ngOnInit(): void {
     this.getTags();
     this.getZielgruppen();
+    this.getAngeboteZielgruppen(); // Neu hinzugefügt
   
     this.sharedDataService.selectedTags$.subscribe(tags => {
       this.selectedTags = tags;
@@ -44,8 +47,9 @@ export class AusgabeTabelleComponent implements OnInit {
       this.getAngebote();
     });
   
-    this.getAngebote(); // Initiale Laden der Daten
+    this.getAngebote(); // Initiales Laden der Daten
   }
+  
 
   getTags(): void {
     this.dataService.getTags().subscribe(response => {
@@ -61,16 +65,47 @@ export class AusgabeTabelleComponent implements OnInit {
 
   getAngebote(): void {
     this.dataService.getAngebote().subscribe(response => {
-      this.filteredResults = response.data.filter((item: Angebot) => {
-        const tagMatch = !this.selectedTags.size || Array.from(this.selectedTags).every((tagId: number) => item.TagIDs?.includes(tagId));
-        const zielgruppeMatch = !this.selectedZielgruppen.size || this.selectedZielgruppen.has(item.Zielgruppe);
-        return tagMatch && zielgruppeMatch;
+      console.log('Geladene Angebote:', response.data);
+  
+      // Berechnung der ZielgruppenIDs für jedes Angebot
+      response.data.forEach((item: Angebot) => {
+        item.ZielgruppenIDs = this.angeboteZielgruppen
+          .filter((az: { AngebotID: number; ZielgruppeID: number }) => az.AngebotID === item.ID) // Verknüpfung finden
+          .map((az: { AngebotID: number; ZielgruppeID: number }) => az.ZielgruppeID); // ZielgruppenIDs extrahieren
+  
+        console.log('Angebot:', item.ID, 'berechnete ZielgruppenIDs:', item.ZielgruppenIDs);
       });
+  
+      // Filterung basierend auf Tags und Zielgruppen
+      this.filteredResults = response.data.filter((item: Angebot) => {
+        console.log('Angebot:', item.ID, 'TagIDs:', item.TagIDs, 'ZielgruppenIDs:', item.ZielgruppenIDs);
+  
+        // Prüfe, ob die Tags passen
+        const tagMatch = !this.selectedTags.size || 
+          Array.from(this.selectedTags).some((tagId: number) => item.TagIDs?.includes(tagId));
+  
+        // Prüfe, ob die Zielgruppen passen
+        const zielgruppeMatch = !this.selectedZielgruppen.size || 
+          Array.from(this.selectedZielgruppen).some((zielgruppenId: number) => item.ZielgruppenIDs?.includes(zielgruppenId));
+  
+        console.log('Angebot:', item.ID, 'Tag Match:', tagMatch, 'Zielgruppe Match:', zielgruppeMatch);
+  
+        return tagMatch && zielgruppeMatch; // Nur Angebote behalten, die beide Bedingungen erfüllen
+      });
+  
+      console.log('Gefilterte Ergebnisse:', this.filteredResults);
     });
   }
   
   
-
+  getAngeboteZielgruppen(): void {
+    this.dataService.getAngebotZielgruppe().subscribe(response => {
+      this.angeboteZielgruppen = response.data;
+      console.log('Angebote_Zielgruppen:', this.angeboteZielgruppen);
+    });
+  }
+   
+  
   toggleDetails(id: number): void {
     if (this.visibleDetails.has(id)) {
       this.visibleDetails.delete(id);
@@ -92,11 +127,11 @@ export class AusgabeTabelleComponent implements OnInit {
     this.getAngebote();
   }
 
-  toggleZielgruppe(zielgruppe: string): void {
-    if (this.selectedZielgruppen.has(zielgruppe)) {
-      this.selectedZielgruppen.delete(zielgruppe);
+  toggleZielgruppe(id: number): void {
+    if (this.selectedZielgruppen.has(id)) {
+      this.selectedZielgruppen.delete(id);
     } else {
-      this.selectedZielgruppen.add(zielgruppe);
+      this.selectedZielgruppen.add(id);
     }
     this.getAngebote();
   }

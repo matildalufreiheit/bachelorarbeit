@@ -4,10 +4,11 @@
   <!-- Tags als Buttons -->
   <div class="d-flex flex-wrap">
     <button
-      *ngFor="let tag of filteredTags"
+      *ngFor="let tag of visibleTags"
       class="btn btn-outline-primary me-2 mb-2"
       [class.active]="selectedTags.has(tag.ID)"
-      (click)="toggleTag(tag.ID)"
+      [disabled]="tag.disabled"
+      (click)="!tag.disabled && toggleTag(tag.ID)"
     >
       {{ tag.Tag }}
     </button>
@@ -25,15 +26,16 @@
   <!-- Gefilterte Zielgruppen als Buttons -->
   <div class="d-flex flex-wrap">
     <button
-      *ngFor="let zielgruppe of (showAllZielgruppen ? filteredZielgruppen : filteredZielgruppen.slice(0, 5))"
+      *ngFor="let zielgruppe of visibleZielgruppen"
       class="btn btn-outline-primary me-2 mb-2"
-      [class.active]="selectedZielgruppen.has(zielgruppe)"
-      (click)="toggleZielgruppe(zielgruppe)"
+      [class.active]="selectedZielgruppen.has(zielgruppe.ID)"
+      [disabled]="zielgruppe.disabled"
+      (click)="!zielgruppe.disabled && toggleZielgruppe(zielgruppe.ID)"
     >
-      {{ zielgruppe }}
+      {{ zielgruppe.Name }}
     </button>
   </div>
-
+  
   <button
     class="btn custom-more-button me-2 mb-2"
     (click)="toggleShowAllZielgruppen()"
