@@ -22,9 +22,10 @@ export class SemantischeSucheComponent {
       try {
         const response = await fetch(`http://localhost:3000/meilisearch/search?q=${query}`);
         const data = await response.json();
-        this.searchResults = data.hits; // `hits` enthält die Suchergebnisse
   
-        // Debugging: Ausgabe der Suchergebnisse
+        // Begrenze die Ergebnisse auf die ersten drei
+        this.searchResults = data.hits.slice(0, 3);
+  
         console.log('Suchergebnisse:', this.searchResults);
       } catch (error) {
         console.error('Fehler bei der Suche:', error);
@@ -33,6 +34,7 @@ export class SemantischeSucheComponent {
       }
     }
   }
+  
     
 
   get canDeleteSearchterm(): boolean {
