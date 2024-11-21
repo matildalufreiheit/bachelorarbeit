@@ -12,27 +12,20 @@ export class SemantischeSucheComponent {
   showResults = false;
   searchLoading = false;
   searchPlaceHolder = 'Zu welchem Thema suchst du eine Beratungsstelle? Gib hier ein Stichwort ein!';
+  visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
 
-  // Meilisearch-Client einrichten
-  client = new MeiliSearch({
-    host: 'http://localhost:7700', // TODO: Ersetzen durch  der URL des Meilisearch-Servers
-    apiKey: 'dein_api_schlüssel'   // TODO: Meilisearch-API-Schlüssel
-  });
-
-  get canDeleteSearchterm(): boolean {
-    return this.searchQuery.length > 0;
-  }
-
-  // Suchanfrage durchführen
-  async fetchSearch() {
-    if (this.searchQuery.trim()) {
+  async search(query: string) {
+    if (query.trim()) {
       this.searchLoading = true;
       this.showResults = true;
-      const index = this.client.index('beratungsangebote'); // TODO: Name des Indexes von Meilisearch
-
+  
       try {
-        const response = await index.search(this.searchQuery);
-        this.searchResults = response.hits;
+        const response = await fetch(`http://localhost:3000/meilisearch/search?q=${query}`);
+        const data = await response.json();
+        this.searchResults = data.hits; // `hits` enthält die Suchergebnisse
+  
+        // Debugging: Ausgabe der Suchergebnisse
+        console.log('Suchergebnisse:', this.searchResults);
       } catch (error) {
         console.error('Fehler bei der Suche:', error);
       } finally {
@@ -40,7 +33,11 @@ export class SemantischeSucheComponent {
       }
     }
   }
+    
 
+  get canDeleteSearchterm(): boolean {
+    return this.searchQuery.length > 0;
+  }
   // Suchleiste leeren
   clearSearch() {
     this.searchQuery = '';

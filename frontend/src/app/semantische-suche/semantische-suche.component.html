@@ -1,59 +1,74 @@
 <div class="container my-4">
   <h2>Dein Thema war nicht dabei? <br> Dann kannst du hier mit eigenen Stichworten deine Anlaufstelle suchen.</h2>
-    <!-- Suchfeld und Buttons -->
-    <div class="input-group">
-      <input
-        [(ngModel)]="searchQuery"
-        type="text"
-        class="form-control"
-        [placeholder]="searchPlaceHolder"
-        autocomplete="off"
-        (keydown.enter)="fetchSearch(); showResults = true"
-        (keydown.esc)="showResults = false"
-      />
   
-      <!-- Button zum Löschen des Suchbegriffs -->
-      <button
-        *ngIf="canDeleteSearchterm"
-        class="btn btn-outline-secondary"
-        (click)="clearSearch()"
-      >
-        <i class="bi bi-x-lg"></i>
-      </button>
-  
-      <!-- Such-Button -->
-      <button
-        class="btn btn-primary"
-        (click)="fetchSearch(); showResults = true"
-      >
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  
-    <!-- Suchergebnisse -->
-    <div *ngIf="showResults" class="mt-3 p-3 border rounded bg-light">
-      <ul class="list-unstyled">
-        <!-- Ladeicon -->
-        <div *ngIf="searchLoading" class="text-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Lädt...</span>
-          </div>
+  <!-- Suchfeld und Buttons -->
+  <div class="input-group">
+    <input
+      [(ngModel)]="searchQuery"
+      type="text"
+      class="form-control"
+      [placeholder]="searchPlaceHolder"
+      autocomplete="off"
+      autofocus
+      (keydown.enter)="search(searchQuery)"
+      (keydown.esc)="clearSearch(); showResults = false"
+    />
+
+    <!-- Button zum Löschen des Suchbegriffs -->
+    <button
+      *ngIf="canDeleteSearchterm"
+      class="btn btn-outline-secondary"
+      (click)="clearSearch()"
+    >
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <!-- Such-Button -->
+    <button
+      class="btn btn-primary"
+      (click)="search(searchQuery)"
+    >
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+
+  <!-- Suchergebnisse -->
+  <div *ngIf="showResults" class="mt-3 p-3 border rounded bg-light">
+    <ul class="list-unstyled">
+      <!-- Ladeicon -->
+      <div *ngIf="searchLoading" class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Lädt...</span>
         </div>
-  
-        <!-- Suchergebnisse -->
-        <li *ngFor="let item of searchResults" class="mb-2">
-          <a [href]="item.meta.url" class="text-decoration-none" target="_blank">
-            {{ item.meta.name }}
-          </a>
-        </li>
-      </ul>
-  
-      <!-- Pfeil zum Schließen der Suchergebnisse -->
-      <div class="text-end">
-        <button class="btn btn-sm btn-outline-secondary" (click)="showResults = false">
-          <i class="bi bi-chevron-up"></i> Ergebnisse schließen
-        </button>
       </div>
+
+      <!-- Suchergebnisse -->
+      <li *ngFor="let item of searchResults" class="mb-2">
+        <!-- Name der Institution als Link -->
+        <div>
+          <a [href]="item.url" class="text-decoration-none" target="_blank">
+            {{ item.name }}
+          </a>
+          <i class="bi bi-link-45deg" title="Zur Webseite"></i>
+        </div>
+
+        <!-- URL anzeigen 
+        <small>
+          <a [href]="item.url" class="text-muted" target="_blank">
+            {{ item.url }}
+          </a>
+        </small>-->
+      </li>
+    </ul>
+
+    <!-- Pfeil zum Schließen der Suchergebnisse -->
+    <div class="text-end">
+      <button class="btn btn-sm btn-outline-secondary" (click)="showResults = false">
+        <i class="bi bi-chevron-up"></i> Ergebnisse schließen
+      </button>
     </div>
   </div>
+</div>
+
+
   
