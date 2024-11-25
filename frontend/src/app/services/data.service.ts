@@ -30,6 +30,15 @@ export class DataService {
   getAngebotZielgruppe(): Observable<any> {
     return this.http.get(`${this.apiUrl}/angebote_zielgruppe`);
   }
+
+  addTag(tag: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tags`, { tag });
+  }
+  
+  addZielgruppe(name: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/zielgruppe`, { name });
+  }
+  
   
 }
 

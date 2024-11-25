@@ -15,6 +15,13 @@ import { HeaderComponent } from './header/header.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './footer/footer.component';
 import { StartseiteComponent } from './startseite/startseite.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -27,14 +34,20 @@ import { StartseiteComponent } from './startseite/startseite.component';
     ImpressumComponent,
     HeaderComponent,
     FooterComponent,
-    StartseiteComponent
+    StartseiteComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
