@@ -15,6 +15,10 @@ export class AdminPageComponent implements OnInit {
   newTag: string = ''; // Variable für neuen Tag
   newZielgruppe: string = ''; // Variable für neue Zielgruppe
 
+  // Steuerungsvariablen für die Sichtbarkeit der Felder
+  showAddTagForm: boolean = false;
+  showAddZielgruppeForm: boolean = false;
+
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
@@ -34,15 +38,18 @@ export class AdminPageComponent implements OnInit {
     this.isLoggedIn = false;
   }
 
-  createOffer(title: string, description: string) {
+  createOffer(title: string, description: string, url: string) {
     console.log('Neues Angebot:', {
       title,
       description,
+      url,
       tags: this.selectedTags,
       zielgruppen: this.selectedZielgruppen,
     });
+  
     // Hier kannst du eine HTTP-Anfrage hinzufügen, um das Angebot zu speichern
   }
+  
 
   onTagsChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
