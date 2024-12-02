@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <!-- Anmeldeformular -->
     <div *ngIf="!isLoggedIn">
-      <h2 class="mb-4">Admin Login</h2>
+      <h2 class="mb-4">Login</h2>
       <form (ngSubmit)="login(username.value, password.value)" class="border p-4 rounded shadow-sm">
         <div class="mb-3">
           <label for="username" class="form-label">Benutzername:</label>
@@ -111,6 +111,28 @@
         <button type="submit" class="btn btn-success w-100">Erstellen</button>
       </form>
     </div>
+</div>
+
+<div class="container mt-4">
+    <!-- Registrierung -->
+    <div *ngIf="!isLoggedIn">
+      <h2 class="mb-4">Neuen Benutzer registrieren</h2>
+      <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
+        <div class="mb-3">
+          <label for="regUsername" class="form-label">Benutzername:</label>
+          <input id="regUsername" type="text" class="form-control" #regUsername required />
+        </div>
+        <div class="mb-3">
+          <label for="regPassword" class="form-label">Passwort:</label>
+          <input id="regPassword" type="password" class="form-control" #regPassword required />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Registrieren</button>
+      </form>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <button routerLink="/" class="btn btn-outline-primary">Zurück zur Startseite</button>
 </div>
 
   

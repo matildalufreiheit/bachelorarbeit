@@ -52,6 +52,13 @@ getAngebotsarten(): Observable<any> {
   return this.http.get(`${this.apiUrl}/angebotsarten`);
 }
 
+login(username: string, password: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/login`, { benutzername: username, passwort: password });
+}
+
+register(username: string, password: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/register`, { benutzername: username, passwort: password });
+}
   
 }
 

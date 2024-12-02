@@ -8,6 +8,7 @@ import { DataService } from '../services/data.service';
 })
 export class AdminPageComponent implements OnInit {
   isLoggedIn = false;
+  // userRole: string = ''; // Rolle des Benutzers (z. B. 'admin' oder 'user')
   tags: any[] = [];
   zielgruppen: any[] = [];
   selectedTags: number[] = [];
@@ -30,34 +31,36 @@ export class AdminPageComponent implements OnInit {
   }
 
   login(username: string, password: string) {
-    if (username === 'admin' && password === 'password123') {
-      this.isLoggedIn = true;
-    } else {
-      alert('Ungültige Anmeldedaten!');
-    }
-  }
+    this.dataService.login(username, password).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.isLoggedIn = true;
+          //this.userRole = response.rolle; // Speichere die Rolle
+          alert('Erfolgreich angemeldet!');
+        }
+      },
+      error: (err) => {
+        console.error('Fehler beim Anmelden:', err);
+        alert(err.error.error || 'Anmeldung fehlgeschlagen.');
+      },
+    });
+  }  
+
+  register(username: string, password: string) {
+  this.dataService.register(username, password).subscribe({
+    next: (response) => {
+      alert('Benutzer erfolgreich registriert!');
+    },
+    error: (err) => {
+      console.error('Fehler bei der Registrierung:', err);
+      alert(err.error.error || 'Registrierung fehlgeschlagen.');
+    },
+  });
+}
 
   logout() {
     this.isLoggedIn = false;
   }
-  // createInstitution(name: string, description: string, url: string) {
-  //   const institution = {
-  //     name,
-  //     description,
-  //     url,
-  //   };
-  
-  //   this.dataService.createInstitution(institution).subscribe({
-  //     next: (response) => {
-  //       console.log('Institution erfolgreich erstellt:', response);
-  //       alert('Die Institution wurde erfolgreich erstellt.');
-  //     },
-  //     error: (err) => {
-  //       console.error('Fehler beim Erstellen der Institution:', err);
-  //       alert('Es gab einen Fehler beim Speichern der Institution.');
-  //     },
-  //   });
-  // }
 
   createAngebot(name: string, description: string, url: string) {
     const angebot = {
@@ -81,10 +84,7 @@ export class AdminPageComponent implements OnInit {
         alert('Es gab einen Fehler beim Speichern des Angebots.');
       },
     });
-  }
-  
-  
-  
+  }  
   
   private resetForm() {
     this.selectedTags = [];
