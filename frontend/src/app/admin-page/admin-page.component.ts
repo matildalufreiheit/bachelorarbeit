@@ -17,6 +17,16 @@ export class AdminPageComponent implements OnInit {
   newZielgruppe: string = ''; // Variable für neue Zielgruppe
   angebotsarten: string[] = [];
   selectedArt: string = '';
+  angebotsnamen: string[] = [];
+  selectedAngebotsname: string = '';
+  institutionNames: string[] = [];
+  selectedInstitutionName: string = '';
+
+
+
+  // Modus für die Aktionen: "neu", "löschen", "ändern"
+  mode: 'neu' | 'löschen' | 'ändern' | '' = ''; // Standardmäßig kein Modus ausgewählt
+
 
   // Steuerungsvariablen für die Sichtbarkeit der Felder
   showAddTagForm: boolean = false;
@@ -28,6 +38,8 @@ export class AdminPageComponent implements OnInit {
     this.loadTags();
     this.loadZielgruppen();
     this.loadAngebotsarten();
+    this.loadAngebotsnamen();
+    this.loadInstitutionNames();
   }
 
   login(username: string, password: string) {
@@ -186,6 +198,71 @@ export class AdminPageComponent implements OnInit {
       this.angebotsarten = response.data.map((item: { Art: string }) => item.Art);
     });
   }
+
+  private loadAngebotsnamen(): void {
+    this.dataService.getAngebote().subscribe(response => {
+      // Extrahiere nur die Namen der Angebote
+      this.angebotsnamen = response.data.map((item: any) => item.Name);
+      console.log('Geladene Angebotsnamen:', this.angebotsnamen);
+    });
+  }
+
+  private loadInstitutionNames(): void {
+    this.dataService.getInstitutions().subscribe(response => {
+        this.institutionNames = response.data.map((item: any) => item.Name);
+        console.log('Geladene Institutionsnamen:', this.institutionNames);
+    });
+}
+
+  
+
+  setMode(mode: 'neu' | 'löschen' | 'ändern') {
+    this.mode = mode;
+  }
+
+  deleteInstitution(): void {
+    console.log('Löschen der Institution:', this.selectedInstitutionName);
+
+    if (!this.selectedInstitutionName) {
+        alert('Bitte wählen Sie eine Institution aus.');
+        return;
+    }
+
+    this.dataService.deleteInstitutionByName(this.selectedInstitutionName).subscribe({
+        next: () => {
+            alert(`Institution "${this.selectedInstitutionName}" erfolgreich gelöscht.`);
+            this.loadInstitutionNames(); // Liste nach dem Löschen aktualisieren
+            this.selectedInstitutionName = ''; // Auswahl zurücksetzen
+        },
+        error: (err) => {
+            console.error('Fehler beim Löschen der Institution:', err);
+            alert('Es gab einen Fehler beim Löschen der Institution.');
+        },
+    });
+}
+ 
+  
+  updateAngebot(id: number, name: string, description: string, url: string) {
+    const angebot = {
+      art: this.selectedArt,
+      beschreibung: description,
+      tags: this.selectedTags,
+      zielgruppen: this.selectedZielgruppen,
+      institution: { name, beschreibung: description, url },
+    };
+  
+    this.dataService.updateAngebot(id, angebot).subscribe({
+      next: () => {
+        alert('Angebot erfolgreich aktualisiert.');
+      },
+      error: (err) => {
+        console.error('Fehler beim Aktualisieren des Angebots:', err);
+        alert('Es gab einen Fehler beim Aktualisieren des Angebots.');
+      },
+    });
+  }
+  
+  
 }
 
 

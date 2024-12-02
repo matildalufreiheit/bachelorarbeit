@@ -16,102 +16,137 @@
     </div>
   
     <!-- Adminbereich nach Anmeldung -->
+      
     <div *ngIf="isLoggedIn" class="mt-4">
       <h3>Willkommen, Admin!</h3>
       <button (click)="logout()" class="btn btn-danger mb-4">Abmelden</button>
-  
-      <h2 class="mt-4">Neues Angebot erstellen</h2>
-      <form (ngSubmit)="createAngebot(name.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name:</label>
-          <input id="name" type="text" class="form-control" #name />
+    <div class="mb-4">
+        <label class="form-label">Wähle eine Aktion:</label>
+        <div class="btn-group w-100" role="group">
+            <button type="button" class="btn btn-outline-primary" (click)="setMode('neu')">
+                Neu
+            </button>
+            <button type="button" class="btn btn-outline-primary" (click)="setMode('ändern')">
+                Ändern
+            </button>
+            <button type="button" class="btn btn-outline-primary" (click)="setMode('löschen')">
+                Löschen
+            </button>
         </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Beschreibung:</label>
-          <textarea id="description" class="form-control" #description></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="url" class="form-label">URL:</label>
-            <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
-          </div>          
-        
-        <!-- Multi-Select für Tags -->
-        <div class="mb-4">
-            <label class="form-label">Tags:</label>
-            <div class="d-flex flex-column">
-                <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Tags auswählen</mat-label>
-                  <mat-select multiple [(value)]="selectedTags">
-                      <mat-option *ngFor="let tag of tags" [value]="tag.ID">{{ tag.Tag }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <button
-                  type="button"
-                  class="btn btn-outline-primary mt-2 align-self-end"
-                  (click)="showAddTagForm = !showAddTagForm"
-                >
-                  Neuer Tag hinzufügen
-                </button>
-            </div>
-            <div *ngIf="showAddTagForm" class="mt-2">
-                <div class="input-group">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Neuer Tag"
-                        [(ngModel)]="newTag"
-                    />
-                    <button class="btn btn-outline-success" (click)="addTag()">Hinzufügen</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Multi-Select für Zielgruppen -->
-        <div class="mb-4">
-            <label class="form-label">Zielgruppen:</label>
-            <div class="d-flex flex-column">
-                <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Zielgruppen auswählen</mat-label>
-                  <mat-select multiple [(value)]="selectedZielgruppen">
-                      <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-                      {{ zielgruppe.Name }}
-                      </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <button
-                  type="button"
-                  class="btn btn-outline-primary mt-2 align-self-end"
-                  (click)="showAddZielgruppeForm = !showAddZielgruppeForm"
-                >
-                  Neue Zielgruppe hinzufügen
-                </button>
-            </div>
-            <div *ngIf="showAddZielgruppeForm" class="mt-2">
-                <div class="input-group">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Neue Zielgruppe"
-                        [(ngModel)]="newZielgruppe"
-                    />
-                    <button class="btn btn-outline-success" (click)="addZielgruppe()">Hinzufügen</button>
-                </div>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="art" class="form-label">Angebotsart:</label>
-            <mat-form-field appearance="fill" class="w-100">
-              <mat-label>Angebotsart auswählen</mat-label>
-              <mat-select [(value)]="selectedArt">
-                <mat-option *ngFor="let art of angebotsarten" [value]="art">{{ art }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-        </div>
-          
-        <button type="submit" class="btn btn-success w-100">Erstellen</button>
-      </form>
     </div>
-</div>
+    </div>
+
+      <!--NEU-->
+      <div *ngIf="mode === 'neu'">
+            <h2 class="mt-4">Neues Angebot erstellen</h2>
+            <form (ngSubmit)="createAngebot(name.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
+                <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input id="name" type="text" class="form-control" #name />
+                </div>
+                <div class="mb-3">
+                <label for="description" class="form-label">Beschreibung:</label>
+                <textarea id="description" class="form-control" #description></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="url" class="form-label">URL:</label>
+                    <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
+                </div>          
+                
+                <!-- Multi-Select für Tags -->
+                <div class="mb-4">
+                    <label class="form-label">Tags:</label>
+                    <div class="d-flex flex-column">
+                        <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Tags auswählen</mat-label>
+                        <mat-select multiple [(value)]="selectedTags">
+                            <mat-option *ngFor="let tag of tags" [value]="tag.ID">{{ tag.Tag }}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        <button
+                        type="button"
+                        class="btn btn-outline-primary mt-2 align-self-end"
+                        (click)="showAddTagForm = !showAddTagForm"
+                        >
+                        Neuer Tag hinzufügen
+                        </button>
+                    </div>
+                    <div *ngIf="showAddTagForm" class="mt-2">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Neuer Tag"
+                                [(ngModel)]="newTag"
+                            />
+                            <button class="btn btn-outline-success" (click)="addTag()">Hinzufügen</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Multi-Select für Zielgruppen -->
+                <div class="mb-4">
+                    <label class="form-label">Zielgruppen:</label>
+                    <div class="d-flex flex-column">
+                        <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Zielgruppen auswählen</mat-label>
+                        <mat-select multiple [(value)]="selectedZielgruppen">
+                            <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
+                            {{ zielgruppe.Name }}
+                            </mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        <button
+                        type="button"
+                        class="btn btn-outline-primary mt-2 align-self-end"
+                        (click)="showAddZielgruppeForm = !showAddZielgruppeForm"
+                        >
+                        Neue Zielgruppe hinzufügen
+                        </button>
+                    </div>
+                    <div *ngIf="showAddZielgruppeForm" class="mt-2">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Neue Zielgruppe"
+                                [(ngModel)]="newZielgruppe"
+                            />
+                            <button class="btn btn-outline-success" (click)="addZielgruppe()">Hinzufügen</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="art" class="form-label">Angebotsart:</label>
+                    <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Angebotsart auswählen</mat-label>
+                    <mat-select [(value)]="selectedArt">
+                        <mat-option *ngFor="let art of angebotsarten" [value]="art">{{ art }}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                </div>
+                
+                <button type="submit" class="btn btn-success w-100">Erstellen</button>
+            </form>
+        </div>
+        <!--TODO Ändern!!-->
+        <!--LÖSCHEN-->
+        <div *ngIf="mode === 'löschen'" class="mt-4">
+            <h3>Institution löschen</h3>
+            <form (ngSubmit)="deleteInstitution()" class="border p-4 rounded shadow-sm">
+                <div class="mb-3">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Angebot auswählen</mat-label>
+                        <mat-select [(value)]="selectedInstitutionName" required>
+                            <mat-option *ngFor="let name of institutionNames" [value]="name">{{ name }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <button type="submit" class="btn btn-danger w-100">Löschen</button>
+            </form>
+        </div>
+                                           
+    </div>
 
 <div class="container mt-4">
     <!-- Registrierung -->

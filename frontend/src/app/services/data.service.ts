@@ -6,46 +6,42 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000'; 
+private apiUrl = 'http://localhost:3000'; 
 
-  constructor(private http: HttpClient) { }
+constructor(private http: HttpClient) { }
 
-  // Tags abrufen
-  getTags(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/tags`);
-  }
+// Tags abrufen
+getTags(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/tags`);
+}
 
-  getZielgruppen(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/zielgruppe`);
-  }
+getZielgruppen(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/zielgruppe`);
+}
 
-  getAngebote(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/angebote`);
-  }
+getAngebote(): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/angebote`);
+}
 
-  getAngebotTags(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/angebot_tags`);
-  }
+getAngebotTags(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/angebot_tags`);
+}
 
-  getAngebotZielgruppe(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/angebote_zielgruppe`);
-  }
+getAngebotZielgruppe(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/angebote_zielgruppe`);
+}
 
-  addTag(tag: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/tags`, { tag });
-  }
-  
-  addZielgruppe(name: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/zielgruppe`, { name });
-  }
-  
-  // createInstitution(institution: any): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/institution`, institution);
-  // }
+addTag(tag: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/tags`, { tag });
+}
 
-  createAngebot(angebot: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/angebote`, angebot);
-  }
+addZielgruppe(name: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/zielgruppe`, { name });
+}
+
+createAngebot(angebot: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/angebote`, angebot);
+}
   
   // Bestehende Angebotsarten abrufen
 getAngebotsarten(): Observable<any> {
@@ -59,6 +55,25 @@ login(username: string, password: string): Observable<any> {
 register(username: string, password: string): Observable<any> {
   return this.http.post(`${this.apiUrl}/register`, { benutzername: username, passwort: password });
 }
+
+deleteInstitutionByName(name: string): Observable<any> {
+  const encodedName = encodeURIComponent(name); // Name für URL kodieren
+  return this.http.delete(`${this.apiUrl}/institution/name/${encodedName}`);
+}
+
+getInstitutions(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/institutionen`);
+}
+
+
+updateAngebot(id: number, angebot: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/angebote/${id}`, angebot);
+}
+
+getAngebotsnamen(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/angebote/namen`);
+}
+
   
 }
 
