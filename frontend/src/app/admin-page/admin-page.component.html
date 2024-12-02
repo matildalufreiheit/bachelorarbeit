@@ -21,10 +21,10 @@
       <button (click)="logout()" class="btn btn-danger mb-4">Abmelden</button>
   
       <h2 class="mt-4">Neues Angebot erstellen</h2>
-      <form (ngSubmit)="createOffer(title.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
+      <form (ngSubmit)="createAngebot(name.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
         <div class="mb-3">
-          <label for="title" class="form-label">Titel:</label>
-          <input id="title" type="text" class="form-control" #title />
+          <label for="name" class="form-label">Name:</label>
+          <input id="name" type="text" class="form-control" #name />
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Beschreibung:</label>
@@ -98,7 +98,16 @@
                 </div>
             </div>
         </div>
-        
+        <div class="mb-3">
+            <label for="art" class="form-label">Angebotsart:</label>
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Angebotsart auswählen</mat-label>
+              <mat-select [(value)]="selectedArt">
+                <mat-option *ngFor="let art of angebotsarten" [value]="art">{{ art }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+          
         <button type="submit" class="btn btn-success w-100">Erstellen</button>
       </form>
     </div>

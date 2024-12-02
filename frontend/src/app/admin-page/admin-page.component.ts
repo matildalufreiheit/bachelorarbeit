@@ -14,6 +14,8 @@ export class AdminPageComponent implements OnInit {
   selectedZielgruppen: number[] = [];
   newTag: string = ''; // Variable für neuen Tag
   newZielgruppe: string = ''; // Variable für neue Zielgruppe
+  angebotsarten: string[] = [];
+  selectedArt: string = '';
 
   // Steuerungsvariablen für die Sichtbarkeit der Felder
   showAddTagForm: boolean = false;
@@ -24,6 +26,7 @@ export class AdminPageComponent implements OnInit {
   ngOnInit() {
     this.loadTags();
     this.loadZielgruppen();
+    this.loadAngebotsarten();
   }
 
   login(username: string, password: string) {
@@ -37,18 +40,59 @@ export class AdminPageComponent implements OnInit {
   logout() {
     this.isLoggedIn = false;
   }
+  // createInstitution(name: string, description: string, url: string) {
+  //   const institution = {
+  //     name,
+  //     description,
+  //     url,
+  //   };
+  
+  //   this.dataService.createInstitution(institution).subscribe({
+  //     next: (response) => {
+  //       console.log('Institution erfolgreich erstellt:', response);
+  //       alert('Die Institution wurde erfolgreich erstellt.');
+  //     },
+  //     error: (err) => {
+  //       console.error('Fehler beim Erstellen der Institution:', err);
+  //       alert('Es gab einen Fehler beim Speichern der Institution.');
+  //     },
+  //   });
+  // }
 
-  createOffer(title: string, description: string, url: string) {
-    console.log('Neues Angebot:', {
-      title,
-      description,
+  createAngebot(name: string, description: string, url: string) {
+    const angebot = {
+      name,
+      beschreibung: description,
+      art: this.selectedArt, // Angebotsart wird aus der Komponente gelesen
       url,
+      institution: { name, beschreibung: description, url },
       tags: this.selectedTags,
       zielgruppen: this.selectedZielgruppen,
-    });
+    };
   
-    // Hier kannst du eine HTTP-Anfrage hinzufügen, um das Angebot zu speichern
+    this.dataService.createAngebot(angebot).subscribe({
+      next: (response) => {
+        console.log('Angebot erfolgreich erstellt:', response);
+        alert('Das Angebot wurde erfolgreich erstellt.');
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error('Fehler beim Erstellen des Angebots:', err);
+        alert('Es gab einen Fehler beim Speichern des Angebots.');
+      },
+    });
   }
+  
+  
+  
+  
+  private resetForm() {
+    this.selectedTags = [];
+    this.selectedZielgruppen = [];
+    this.newTag = '';
+    this.newZielgruppe = '';
+  }  
+  
   
 
   onTagsChange(event: Event) {
@@ -134,6 +178,12 @@ export class AdminPageComponent implements OnInit {
   private loadZielgruppen() {
     this.dataService.getZielgruppen().subscribe((response: any) => {
       this.zielgruppen = response.data;
+    });
+  }
+
+  private loadAngebotsarten() {
+    this.dataService.getAngebotsarten().subscribe((response: any) => {
+      this.angebotsarten = response.data.map((item: { Art: string }) => item.Art);
     });
   }
 }

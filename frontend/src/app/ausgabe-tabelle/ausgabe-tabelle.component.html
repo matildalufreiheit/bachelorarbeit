@@ -18,8 +18,8 @@
             </a>
           </div>
           <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
-            <p><strong>Beschreibung:</strong> {{ item.Beschreibung }}</p>
-            <p><strong>Angebotsart:</strong> {{ item.Art }}</p>
+            <p>Beschreibung: {{ item.Beschreibung }}</p>
+            <p>Angebotsart: {{ item.Art }}</p>
           </div>
         </td>
         <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
@@ -28,7 +28,6 @@
       </tr>
     </tbody>
   </table>
-  
 </div>
 
 

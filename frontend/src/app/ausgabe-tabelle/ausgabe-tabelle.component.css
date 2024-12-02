@@ -1,0 +1,7 @@
+:host ::ng-deep .table th {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    text-align: left;
+  }
+  

@@ -39,6 +39,19 @@ export class DataService {
     return this.http.post(`${this.apiUrl}/zielgruppe`, { name });
   }
   
+  // createInstitution(institution: any): Observable<any> {
+  //   return this.http.post(`${this.apiUrl}/institution`, institution);
+  // }
+
+  createAngebot(angebot: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/angebote`, angebot);
+  }
+  
+  // Bestehende Angebotsarten abrufen
+getAngebotsarten(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/angebotsarten`);
+}
+
   
 }
 
