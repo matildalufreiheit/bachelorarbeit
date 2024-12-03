@@ -14,26 +14,41 @@
         <button type="submit" class="btn btn-primary w-100">Anmelden</button>
       </form>
     </div>
-  
     <!-- Adminbereich nach Anmeldung -->
-      
     <div *ngIf="isLoggedIn" class="mt-4">
       <h3>Willkommen, Admin!</h3>
       <button (click)="logout()" class="btn btn-danger mb-4">Abmelden</button>
-    <div class="mb-4">
-        <label class="form-label">Wähle eine Aktion:</label>
-        <div class="btn-group w-100" role="group">
-            <button type="button" class="btn btn-outline-primary" (click)="setMode('neu')">
-                Neu
-            </button>
-            <button type="button" class="btn btn-outline-primary" (click)="setMode('ändern')">
-                Ändern
-            </button>
-            <button type="button" class="btn btn-outline-primary" (click)="setMode('löschen')">
-                Löschen
-            </button>
+        <div class="mb-4">
+            <label class="form-label">Wähle eine Aktion:</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" (click)="setMode('neu')">
+                    Neu
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="setMode('ändern')">
+                    Ändern
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="setMode('löschen')">
+                    Löschen
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="setMode('neuerBenutzer')">
+                    Neuer Benutzer
+                </button>
+            </div>
         </div>
-    </div>
+        <div *ngIf="mode === 'neuerBenutzer'" class="mt-4">
+            <h2 class="mb-4">Neuen Benutzer registrieren</h2>
+            <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
+              <div class="mb-3">
+                <label for="regUsername" class="form-label">Benutzername:</label>
+                <input id="regUsername" type="text" class="form-control" #regUsername required />
+              </div>
+              <div class="mb-3">
+                <label for="regPassword" class="form-label">Passwort:</label>
+                <input id="regPassword" type="password" class="form-control" #regPassword required />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Registrieren</button>
+            </form>
+          </div>          
     </div>
 
       <!--NEU-->
@@ -132,7 +147,7 @@
         <!--TODO Ändern!!-->
         <!--LÖSCHEN-->
         <div *ngIf="mode === 'löschen'" class="mt-4">
-            <h3>Institution löschen</h3>
+            <h2 class="mt-4">Angebot löschen</h2>
             <form (ngSubmit)="deleteInstitution()" class="border p-4 rounded shadow-sm">
                 <div class="mb-3">
                     <mat-form-field appearance="fill" class="w-100">
@@ -144,28 +159,8 @@
                 </div>
                 <button type="submit" class="btn btn-danger w-100">Löschen</button>
             </form>
-        </div>
-                                           
+        </div>                                  
     </div>
-
-<div class="container mt-4">
-    <!-- Registrierung -->
-    <div *ngIf="!isLoggedIn">
-      <h2 class="mb-4">Neuen Benutzer registrieren</h2>
-      <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
-        <div class="mb-3">
-          <label for="regUsername" class="form-label">Benutzername:</label>
-          <input id="regUsername" type="text" class="form-control" #regUsername required />
-        </div>
-        <div class="mb-3">
-          <label for="regPassword" class="form-label">Passwort:</label>
-          <input id="regPassword" type="password" class="form-control" #regPassword required />
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Registrieren</button>
-      </form>
-    </div>
-</div>
-
 <div class="container mt-3">
     <button routerLink="/" class="btn btn-outline-primary">Zurück zur Startseite</button>
 </div>

@@ -25,7 +25,7 @@ export class AdminPageComponent implements OnInit {
 
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
-  mode: 'neu' | 'löschen' | 'ändern' | '' = ''; // Standardmäßig kein Modus ausgewählt
+  mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
 
 
   // Steuerungsvariablen für die Sichtbarkeit der Felder
@@ -216,7 +216,7 @@ export class AdminPageComponent implements OnInit {
 
   
 
-  setMode(mode: 'neu' | 'löschen' | 'ändern') {
+  setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
     this.mode = mode;
   }
 
