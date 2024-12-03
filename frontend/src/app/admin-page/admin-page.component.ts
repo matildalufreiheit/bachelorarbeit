@@ -23,7 +23,6 @@ export class AdminPageComponent implements OnInit {
   selectedInstitutionName: string = '';
 
 
-
   // Modus für die Aktionen: "neu", "löschen", "ändern"
   mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
 
@@ -68,7 +67,7 @@ export class AdminPageComponent implements OnInit {
       alert(err.error.error || 'Registrierung fehlgeschlagen.');
     },
   });
-}
+  }
 
   logout() {
     this.isLoggedIn = false;
@@ -105,8 +104,6 @@ export class AdminPageComponent implements OnInit {
     this.newZielgruppe = '';
   }  
   
-  
-
   onTagsChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedTags = Array.from(selectElement.selectedOptions).map(
@@ -146,41 +143,55 @@ export class AdminPageComponent implements OnInit {
   }
 
   // Methode zum Hinzufügen eines neuen Tags
-  addTag() {
+  addTag(): void {
     if (!this.newTag.trim()) {
-      alert('Bitte einen gültigen Tag eingeben.');
+      alert('Tag darf nicht leer sein.');
       return;
     }
-
+  
+    console.log('Sende Anfrage zum Erstellen eines Tags:', this.newTag); // Debugging
+  
     this.dataService.addTag(this.newTag).subscribe({
       next: (response) => {
-        this.tags.push(response); // Neuer Tag zur Liste hinzufügen
-        this.newTag = ''; // Eingabefeld leeren
+        console.log('Tag erfolgreich erstellt:', response); // Debugging
+        alert(`Tag "${this.newTag}" wurde erfolgreich hinzugefügt.`);
+        this.loadTags(); // Aktualisiere die Tags-Liste
+        this.newTag = ''; // Eingabefeld zurücksetzen
       },
-      error: () => {
-        alert('Fehler beim Hinzufügen des Tags.');
+      error: (err) => {
+        console.error('Fehler beim Hinzufügen des Tags:', err); // Debugging
+        alert('Fehler beim Hinzufügen des Tags. Bitte versuchen Sie es erneut.');
       },
     });
   }
-
-  // Methode zum Hinzufügen einer neuen Zielgruppe
-  addZielgruppe() {
+  
+  
+  
+  addZielgruppe(): void {
     if (!this.newZielgruppe.trim()) {
-      alert('Bitte eine gültige Zielgruppe eingeben.');
+      alert('Zielgruppe darf nicht leer sein.');
       return;
     }
-
+  
     this.dataService.addZielgruppe(this.newZielgruppe).subscribe({
       next: (response) => {
-        this.zielgruppen.push(response); // Neue Zielgruppe zur Liste hinzufügen
-        this.newZielgruppe = ''; // Eingabefeld leeren
+        console.log('Zielgruppe erfolgreich erstellt:', response); // Debug-Ausgabe
+        alert(`Zielgruppe "${this.newZielgruppe}" wurde erfolgreich hinzugefügt.`);
+        this.loadZielgruppen(); // Aktualisiere die Zielgruppen-Liste
+        this.newZielgruppe = ''; // Eingabefeld zurücksetzen
       },
-      error: () => {
-        alert('Fehler beim Hinzufügen der Zielgruppe.');
+      error: (err) => {
+        console.error('Fehler beim Hinzufügen der Zielgruppe:', err); // Debug-Ausgabe
+        alert('Fehler beim Hinzufügen der Zielgruppe. Bitte versuchen Sie es erneut.');
+      },
+      complete: () => {
+        console.log('Anfrage zum Hinzufügen einer Zielgruppe abgeschlossen.'); // Debug-Ausgabe
       },
     });
   }
-
+  
+    
+  
   private loadTags() {
     this.dataService.getTags().subscribe((response: any) => {
       this.tags = response.data;
@@ -214,55 +225,90 @@ export class AdminPageComponent implements OnInit {
     });
 }
 
-  
+setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
+  this.mode = mode;
+}
 
-  setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
-    this.mode = mode;
+deleteInstitution(): void {
+  console.log('Löschen der Institution:', this.selectedInstitutionName);
+
+  if (!this.selectedInstitutionName) {
+      alert('Bitte wählen Sie eine Institution aus.');
+      return;
   }
 
-  deleteInstitution(): void {
-    console.log('Löschen der Institution:', this.selectedInstitutionName);
-
-    if (!this.selectedInstitutionName) {
-        alert('Bitte wählen Sie eine Institution aus.');
-        return;
-    }
-
-    this.dataService.deleteInstitutionByName(this.selectedInstitutionName).subscribe({
-        next: () => {
-            alert(`Institution "${this.selectedInstitutionName}" erfolgreich gelöscht.`);
-            this.loadInstitutionNames(); // Liste nach dem Löschen aktualisieren
-            this.selectedInstitutionName = ''; // Auswahl zurücksetzen
-        },
-        error: (err) => {
-            console.error('Fehler beim Löschen der Institution:', err);
-            alert('Es gab einen Fehler beim Löschen der Institution.');
-        },
-    });
-}
- 
-  
-  updateAngebot(id: number, name: string, description: string, url: string) {
-    const angebot = {
-      art: this.selectedArt,
-      beschreibung: description,
-      tags: this.selectedTags,
-      zielgruppen: this.selectedZielgruppen,
-      institution: { name, beschreibung: description, url },
-    };
-  
-    this.dataService.updateAngebot(id, angebot).subscribe({
+  this.dataService.deleteInstitutionByName(this.selectedInstitutionName).subscribe({
       next: () => {
-        alert('Angebot erfolgreich aktualisiert.');
+          alert(`Institution "${this.selectedInstitutionName}" erfolgreich gelöscht.`);
+          this.loadInstitutionNames(); // Liste nach dem Löschen aktualisieren
+          this.selectedInstitutionName = ''; // Auswahl zurücksetzen
       },
       error: (err) => {
-        console.error('Fehler beim Aktualisieren des Angebots:', err);
-        alert('Es gab einen Fehler beim Aktualisieren des Angebots.');
+          console.error('Fehler beim Löschen der Institution:', err);
+          alert('Es gab einen Fehler beim Löschen der Institution.');
       },
-    });
+  });
+}
+
+// Tag löschen
+deleteTag(tagId: number): void {
+  if (!tagId) {
+    alert('Kein Tag ausgewählt.');
+    return;
   }
+
+  this.dataService.deleteTagById(tagId).subscribe({
+    next: () => {
+      alert('Tag erfolgreich gelöscht.');
+      this.loadTags(); // Tags-Liste nach dem Löschen aktualisieren
+    },
+    error: (err) => {
+      console.error('Fehler beim Löschen des Tags:', err);
+      alert('Fehler beim Löschen des Tags.');
+    },
+  });
+}
+
+// Zielgruppe löschen:
+deleteZielgruppe(zielgruppeId: number): void {
+  if (!zielgruppeId) {
+    alert('Keine Zielgruppe ausgewählt.');
+    return;
+  }
+
+  this.dataService.deleteZielgruppeById(zielgruppeId).subscribe({
+    next: () => {
+      alert('Zielgruppe erfolgreich gelöscht.');
+      this.loadZielgruppen(); // Zielgruppen-Liste nach dem Löschen aktualisieren
+    },
+    error: (err) => {
+      console.error('Fehler beim Löschen der Zielgruppe:', err);
+      alert('Fehler beim Löschen der Zielgruppe.');
+    },
+  });
+}
   
-  
+updateAngebot(id: number, name: string, description: string, url: string) {
+  const angebot = {
+    art: this.selectedArt,
+    beschreibung: description,
+    tags: this.selectedTags,
+    zielgruppen: this.selectedZielgruppen,
+    institution: { name, beschreibung: description, url },
+  };
+
+  this.dataService.updateAngebot(id, angebot).subscribe({
+    next: () => {
+      alert('Angebot erfolgreich aktualisiert.');
+    },
+    error: (err) => {
+      console.error('Fehler beim Aktualisieren des Angebots:', err);
+      alert('Es gab einen Fehler beim Aktualisieren des Angebots.');
+    },
+  });
+}
+
+
 }
 
 

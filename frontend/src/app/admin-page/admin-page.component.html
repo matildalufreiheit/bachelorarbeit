@@ -16,8 +16,9 @@
     </div>
     <!-- Adminbereich nach Anmeldung -->
     <div *ngIf="isLoggedIn" class="mt-4">
-      <h3>Willkommen, Admin!</h3>
-      <button (click)="logout()" class="btn btn-danger mb-4">Abmelden</button>
+        <h3>Willkommen, Admin!</h3>
+        <button (click)="logout()" class="btn btn-danger mb-4">Abmelden</button>
+        <!-- Aktion wählen -->
         <div class="mb-4">
             <label class="form-label">Wähle eine Aktion:</label>
             <div class="btn-group w-100" role="group">
@@ -35,6 +36,7 @@
                 </button>
             </div>
         </div>
+        <!-- Neuer Benutzer ausgewählt -->
         <div *ngIf="mode === 'neuerBenutzer'" class="mt-4">
             <h2 class="mb-4">Neuen Benutzer registrieren</h2>
             <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
@@ -48,26 +50,24 @@
               </div>
               <button type="submit" class="btn btn-primary w-100">Registrieren</button>
             </form>
-          </div>          
-    </div>
-
-      <!--NEU-->
-      <div *ngIf="mode === 'neu'">
+        </div>          
+        <!--NEU -->
+        <div *ngIf="mode === 'neu'">
+            <!-- Neues Angebot -->
             <h2 class="mt-4">Neues Angebot erstellen</h2>
             <form (ngSubmit)="createAngebot(name.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
                 <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <input id="name" type="text" class="form-control" #name />
+                    <label for="name" class="form-label">Name:</label>
+                    <input id="name" type="text" class="form-control" #name />
                 </div>
                 <div class="mb-3">
-                <label for="description" class="form-label">Beschreibung:</label>
-                <textarea id="description" class="form-control" #description></textarea>
+                    <label for="description" class="form-label">Beschreibung:</label>
+                    <textarea id="description" class="form-control" #description></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">URL:</label>
                     <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
                 </div>          
-                
                 <!-- Multi-Select für Tags -->
                 <div class="mb-4">
                     <label class="form-label">Tags:</label>
@@ -131,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Multi-Select für Angebotsart -->
                 <div class="mb-3">
                     <label for="art" class="form-label">Angebotsart:</label>
                     <mat-form-field appearance="fill" class="w-100">
@@ -140,11 +141,34 @@
                     </mat-select>
                     </mat-form-field>
                 </div>
-                
                 <button type="submit" class="btn btn-success w-100">Erstellen</button>
             </form>
+
+            <!-- Neuer Tag -->
+            <div class="mb-4">
+                <h2 class="mt-4">Tag hinzufügen</h2>
+                <form (ngSubmit)="addTag()" class="d-flex">
+                    <input type="text" class="form-control me-2" [(ngModel)]="newTag" name="newTag" placeholder="Neuer Tag" required />
+                    <button type="submit" class="btn btn-outline-success">Hinzufügen</button>
+                  </form>                  
+            </div>              
+            <!-- Neue Zielgruppe -->
+            <div class="mb-4">
+                <h2 class="mt-4">Zielgruppe hinzufügen</h2>
+                <form (ngSubmit)="addZielgruppe()" class="d-flex">
+                  <input
+                    type="text"
+                    class="form-control me-2"
+                    [(ngModel)]="newZielgruppe"
+                    name="newZielgruppe"
+                    placeholder="Neue Zielgruppe"
+                    required
+                  />
+                  <button type="submit" class="btn btn-outline-success">Hinzufügen</button>
+                </form>
+            </div>
         </div>
-        <!--TODO Ändern!!-->
+        <!-- TODO Ändern!!-->
         <!--LÖSCHEN-->
         <div *ngIf="mode === 'löschen'" class="mt-4">
             <h2 class="mt-4">Angebot löschen</h2>
@@ -159,11 +183,28 @@
                 </div>
                 <button type="submit" class="btn btn-danger w-100">Löschen</button>
             </form>
+                <!-- Tag einzelnd löschen -->
+                <h2 class="mt-4">Tags löschen</h2>
+                <div class="mb-4">
+                    <ul class="list-group">
+                      <li *ngFor="let tag of tags" class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ tag.Tag }}
+                        <button class="btn btn-danger btn-sm" (click)="deleteTag(tag.ID)">Löschen</button>
+                      </li>
+                    </ul>
+                </div>
+                <!-- Zielgruppe einzelnd löschen  -->
+                <h2 class="mt-4">Zielgruppe löschen</h2>
+                <div class="mb-4">
+                    <ul class="list-group">
+                      <li *ngFor="let zielgruppe of zielgruppen" class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ zielgruppe.Name }}
+                        <button class="btn btn-danger btn-sm" (click)="deleteZielgruppe(zielgruppe.ID)">Löschen</button>
+                      </li>
+                    </ul>
+                </div>                  
         </div>                                  
     </div>
 <div class="container mt-3">
     <button routerLink="/" class="btn btn-outline-primary">Zurück zur Startseite</button>
 </div>
-
-  
-  

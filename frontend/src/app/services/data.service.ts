@@ -74,6 +74,19 @@ getAngebotsnamen(): Observable<any> {
   return this.http.get(`${this.apiUrl}/angebote/namen`);
 }
 
+deleteTagById(tagId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/tags/${tagId}`);
+}
+
+deleteZielgruppeById(zielgruppeId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/zielgruppe/${zielgruppeId}`);
+}
+
+getAngebotById(id: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/angebote/${id}`);
+}
+
+
   
 }
 
