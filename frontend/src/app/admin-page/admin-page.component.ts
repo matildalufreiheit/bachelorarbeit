@@ -278,17 +278,23 @@ export class AdminPageComponent implements OnInit {
   
 
 // Löschen
-deleteInstitution(): void {
+deleteSelectedInstitution(): void {
   if (this.selectedInstitutionId) {
-    this.dataService.deleteInstitution(this.selectedInstitutionId)
-      .subscribe((response: any) => {
+    this.dataService.deleteInstitution(this.selectedInstitutionId).subscribe({
+      next: (response) => {
         console.log('Institution erfolgreich gelöscht:', response);
-        this.selectedInstitution = null;
-        this.selectedInstitutionId = null;
-        this.loadInstitutions(); // Liste neu laden
-      });
+        this.loadInstitutions(); // Aktualisiere die Liste der Institutionen
+        this.selectedInstitutionId = null; // Setze die Auswahl zurück
+      },
+      error: (err) => {
+        console.error('Fehler beim Löschen der Institution:', err);
+      },
+    });
+  } else {
+    console.warn('Keine Institution ausgewählt.');
   }
 }
+
 
 setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
   this.mode = mode;

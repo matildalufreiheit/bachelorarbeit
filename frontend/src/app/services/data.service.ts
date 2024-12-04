@@ -77,8 +77,6 @@ updateInstitution(id: number, institution: any): Observable<any> {
   return this.http.put(`${this.apiUrl}/institution/${id}`, institution);
 }
 
-
-
 updateAngebot(id: number, angebot: any): Observable<any> {
   return this.http.put(`${this.apiUrl}/angebote/${id}`, angebot);
 }
@@ -100,8 +98,9 @@ getAngebotById(id: number): Observable<any> {
 }
 
 deleteInstitution(id: number): Observable<any> {
-  return this.http.delete(`/api/institutions/${id}`);
+  return this.http.delete(`${this.apiUrl}/institution/${id}`);
 }
+
 
 
 }
