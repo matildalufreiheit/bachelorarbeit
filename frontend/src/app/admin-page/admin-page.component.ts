@@ -8,7 +8,6 @@ import { DataService } from '../services/data.service';
 })
 export class AdminPageComponent implements OnInit {
   isLoggedIn = false;
-  // userRole: string = ''; // Rolle des Benutzers (z. B. 'admin' oder 'user')
   tags: any[] = [];
   zielgruppen: any[] = [];
   selectedTags: number[] = [];
@@ -20,7 +19,10 @@ export class AdminPageComponent implements OnInit {
   angebotsnamen: string[] = [];
   selectedAngebotsname: string = '';
   institutionNames: string[] = [];
-  selectedInstitutionName: string = '';
+  institutions: any[] = []; // Liste der Institutionen
+  selectedInstitutionId: number | null = null; // ID der ausgewählten Institution
+  selectedInstitution: any = null; // Details der ausgewählten Institution
+
 
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
@@ -38,7 +40,8 @@ export class AdminPageComponent implements OnInit {
     this.loadZielgruppen();
     this.loadAngebotsarten();
     this.loadAngebotsnamen();
-    this.loadInstitutionNames();
+    //this.loadInstitution();
+    this.loadInstitutions();
   }
 
   login(username: string, password: string) {
@@ -165,8 +168,6 @@ export class AdminPageComponent implements OnInit {
     });
   }
   
-  
-  
   addZielgruppe(): void {
     if (!this.newZielgruppe.trim()) {
       alert('Zielgruppe darf nicht leer sein.');
@@ -189,8 +190,6 @@ export class AdminPageComponent implements OnInit {
       },
     });
   }
-  
-    
   
   private loadTags() {
     this.dataService.getTags().subscribe((response: any) => {
@@ -218,36 +217,81 @@ export class AdminPageComponent implements OnInit {
     });
   }
 
-  private loadInstitutionNames(): void {
+  // Lädt die Liste aller Institutionen
+  loadInstitutions(): void {
     this.dataService.getInstitutions().subscribe(response => {
-        this.institutionNames = response.data.map((item: any) => item.Name);
-        console.log('Geladene Institutionsnamen:', this.institutionNames);
+      this.institutions = response.data; // Prüfe, ob response.data korrekt ist
+      console.log('Geladene Institutionen:', this.institutions);
     });
+  }
+  
+
+  // Wird aufgerufen, wenn eine Institution im Dropdown ausgewählt wird
+  onInstitutionSelected(institutionId: number): void {
+    console.log('Ausgewählte Institution ID:', institutionId);
+    const institution = this.institutions.find(inst => inst.ID === institutionId);
+    if (institution) {
+      this.selectedInstitution = { ...institution }; // Kopiere die Institution für Änderungen
+      console.log('Ausgewählte Institution:', this.selectedInstitution);
+    } else {
+      console.error('Institution nicht gefunden:', institutionId);
+    }
+  }
+  
+
+  // Lädt die Details einer spezifischen Institution
+  loadInstitutionDetails(institutionId: number): void {
+    const institution = this.institutions.find(inst => inst.ID === institutionId);
+    if (institution) {
+      this.selectedInstitution = { ...institution }; // Kopie der Institution erstellen
+      console.log('Ausgewählte Institution:', this.selectedInstitution);
+    } else {
+      console.error('Institution konnte nicht gefunden werden:', institutionId);
+    }
+  }
+
+  // Ändern (Speichern)
+  saveChanges(): void {
+    if (this.selectedInstitution && this.selectedInstitutionId) {
+      const updatedInstitution = {
+        Name: this.selectedInstitution.Name,
+        Beschreibung: this.selectedInstitution.Beschreibung,
+        URL: this.selectedInstitution.URL,
+        Tags: this.selectedTags,
+        Zielgruppen: this.selectedZielgruppen,
+        Art: this.selectedArt
+      };
+  
+      this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution)
+        .subscribe({
+          next: (response) => {
+            console.log('Institution erfolgreich aktualisiert:', response);
+            this.loadInstitutions(); // Aktualisiere die Liste
+          },
+          error: (err) => {
+            console.error('Fehler beim Aktualisieren der Institution:', err);
+          }
+        });
+    }
+  }
+  
+  
+
+// Löschen
+deleteInstitution(): void {
+  if (this.selectedInstitutionId) {
+    this.dataService.deleteInstitution(this.selectedInstitutionId)
+      .subscribe((response: any) => {
+        console.log('Institution erfolgreich gelöscht:', response);
+        this.selectedInstitution = null;
+        this.selectedInstitutionId = null;
+        this.loadInstitutions(); // Liste neu laden
+      });
+  }
 }
 
 setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
   this.mode = mode;
-}
-
-deleteInstitution(): void {
-  console.log('Löschen der Institution:', this.selectedInstitutionName);
-
-  if (!this.selectedInstitutionName) {
-      alert('Bitte wählen Sie eine Institution aus.');
-      return;
-  }
-
-  this.dataService.deleteInstitutionByName(this.selectedInstitutionName).subscribe({
-      next: () => {
-          alert(`Institution "${this.selectedInstitutionName}" erfolgreich gelöscht.`);
-          this.loadInstitutionNames(); // Liste nach dem Löschen aktualisieren
-          this.selectedInstitutionName = ''; // Auswahl zurücksetzen
-      },
-      error: (err) => {
-          console.error('Fehler beim Löschen der Institution:', err);
-          alert('Es gab einen Fehler beim Löschen der Institution.');
-      },
-  });
 }
 
 // Tag löschen
@@ -307,7 +351,6 @@ updateAngebot(id: number, name: string, description: string, url: string) {
     },
   });
 }
-
 
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -62,8 +63,20 @@ deleteInstitutionByName(name: string): Observable<any> {
 }
 
 getInstitutions(): Observable<any> {
-  return this.http.get(`${this.apiUrl}/institutionen`);
+  return this.http.get(`${this.apiUrl}/institutionen`).pipe(
+    tap(response => console.log('API Antwort:', response))
+  );
 }
+
+
+getInstitutionById(id: number){
+  return this.http.get(`${this.apiUrl}/institution/${id}`);
+}
+
+updateInstitution(id: number, institution: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/institution/${id}`, institution);
+}
+
 
 
 updateAngebot(id: number, angebot: any): Observable<any> {
@@ -86,7 +99,10 @@ getAngebotById(id: number): Observable<any> {
   return this.http.get(`${this.apiUrl}/angebote/${id}`);
 }
 
+deleteInstitution(id: number): Observable<any> {
+  return this.http.delete(`/api/institutions/${id}`);
+}
 
-  
+
 }
 
