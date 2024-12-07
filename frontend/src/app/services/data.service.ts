@@ -21,7 +21,7 @@ getZielgruppen(): Observable<any> {
 }
 
 getAngebote(): Observable<any> {
-  return this.http.get<any>(`${this.apiUrl}/angebote`);
+  return this.http.get(`${this.apiUrl}/angebote`);
 }
 
 getAngebotTags(): Observable<any> {
@@ -46,7 +46,7 @@ createAngebot(angebot: any): Observable<any> {
   
   // Bestehende Angebotsarten abrufen
 getAngebotsarten(): Observable<any> {
-  return this.http.get(`${this.apiUrl}/angebotsarten`);
+  return this.http.get(`${this.apiUrl}/arten`);
 }
 
 login(username: string, password: string): Observable<any> {
@@ -68,13 +68,17 @@ getInstitutions(): Observable<any> {
   );
 }
 
+getArten(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/arten`);
+}
+
 
 getInstitutionById(id: number){
   return this.http.get(`${this.apiUrl}/institution/${id}`);
 }
 
-updateInstitution(id: number, institution: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/institution/${id}`, institution);
+updateInstitution(id: number, updatedInstitution: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/update-institution/${id}`, updatedInstitution);
 }
 
 updateAngebot(id: number, angebot: any): Observable<any> {

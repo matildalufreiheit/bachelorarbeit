@@ -5,13 +5,14 @@ import { SharedDataService } from '../services/shared-data.service';
 interface Angebot {
   ID: number;
   InstitutionID: number;
-  Art: string;
   Zielgruppe: string; // Falls Zielgruppen-String existiert
   ZielgruppenIDs?: number[]; // Falls Zielgruppen als Array vorliegt
   Name: string;
   Beschreibung: string;
   URL: string;
   TagIDs?: number[];
+  Arten?: string[];
+  ArtIDs?: number[];
 }
 
 @Component({
@@ -29,13 +30,18 @@ export class AusgabeTabelleComponent implements OnInit {
   filteredResults: Angebot[] = [];
   visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
   angeboteZielgruppen: { AngebotID: number; ZielgruppeID: number }[] = []; // Neu hinzugefügt
+  
+
+  arten: { ID: number; Art: string }[] = [];
 
   constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
 
   ngOnInit(): void {
     this.getTags();
     this.getZielgruppen();
-    this.getAngeboteZielgruppen(); // Neu hinzugefügt
+    this.getArten(); 
+    this.getAngeboteZielgruppen(); 
+    this.getAngebote();
   
     this.sharedDataService.selectedTags$.subscribe(tags => {
       this.selectedTags = tags;
@@ -46,10 +52,41 @@ export class AusgabeTabelleComponent implements OnInit {
       this.selectedZielgruppen = zielgruppen;
       this.getAngebote();
     });
-  
+
     this.getAngebote(); // Initiales Laden der Daten
   }
+
+  getAngebotsarten(): void {
+    this.dataService.getAngebotsarten().subscribe(response => {
+      this.arten = response.data; // Arten speichern
+      console.log('Geladene Angebotsarten:', this.arten); // Debug-Ausgabe
+    });
+  }
+
+  getAngebote(): void {
+    this.dataService.getAngebote().subscribe({
+      next: (response) => {
+        console.log('Geladene Angebote:', response.data);
   
+        this.filteredResults = response.data;       
+              
+        console.log('Gefilterte Ergebnisse:', this.filteredResults);
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Angebote:', err);
+      }
+    });
+  }
+  
+  
+  // Neue Methode, um Arten aus der API zu laden
+  getArten(): void {
+    this.dataService.getArten().subscribe(response => {
+        this.arten = response.data;
+        console.log('Geladene Arten:', this.arten);
+    });
+}
+
 
   getTags(): void {
     this.dataService.getTags().subscribe(response => {
@@ -62,41 +99,6 @@ export class AusgabeTabelleComponent implements OnInit {
       this.zielgruppen = response.data;
     });
   }
-
-  getAngebote(): void {
-    this.dataService.getAngebote().subscribe(response => {
-      console.log('Geladene Angebote:', response.data);
-  
-      // Berechnung der ZielgruppenIDs für jedes Angebot
-      response.data.forEach((item: Angebot) => {
-        item.ZielgruppenIDs = this.angeboteZielgruppen
-          .filter((az: { AngebotID: number; ZielgruppeID: number }) => az.AngebotID === item.ID) // Verknüpfung finden
-          .map((az: { AngebotID: number; ZielgruppeID: number }) => az.ZielgruppeID); // ZielgruppenIDs extrahieren
-  
-        console.log('Angebot:', item.ID, 'berechnete ZielgruppenIDs:', item.ZielgruppenIDs);
-      });
-  
-      // Filterung basierend auf Tags und Zielgruppen
-      this.filteredResults = response.data.filter((item: Angebot) => {
-        console.log('Angebot:', item.ID, 'TagIDs:', item.TagIDs, 'ZielgruppenIDs:', item.ZielgruppenIDs);
-  
-        // Prüfe, ob die Tags passen
-        const tagMatch = !this.selectedTags.size || 
-          Array.from(this.selectedTags).some((tagId: number) => item.TagIDs?.includes(tagId));
-  
-        // Prüfe, ob die Zielgruppen passen
-        const zielgruppeMatch = !this.selectedZielgruppen.size || 
-          Array.from(this.selectedZielgruppen).some((zielgruppenId: number) => item.ZielgruppenIDs?.includes(zielgruppenId));
-  
-        console.log('Angebot:', item.ID, 'Tag Match:', tagMatch, 'Zielgruppe Match:', zielgruppeMatch);
-  
-        return tagMatch && zielgruppeMatch; // Nur Angebote behalten, die beide Bedingungen erfüllen
-      });
-  
-      console.log('Gefilterte Ergebnisse:', this.filteredResults);
-    });
-  }
-  
   
   getAngeboteZielgruppen(): void {
     this.dataService.getAngebotZielgruppe().subscribe(response => {

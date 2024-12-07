@@ -19,7 +19,13 @@
           </div>
           <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
             <p>Beschreibung: {{ item.Beschreibung }}</p>
-            <p>Angebotsart: {{ item.Art }}</p>
+            <p>Angebotsart:</p>
+              <ul *ngIf="item.Arten && item.Arten.length > 0; else noArten">
+                <li *ngFor="let art of item.Arten">{{ art }}</li>
+              </ul>
+              <ng-template #noArten>
+                <p>Keine Arten verfügbar.</p>
+              </ng-template>
           </div>
         </td>
         <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
@@ -29,10 +35,3 @@
     </tbody>
   </table>
 </div>
-
-
-
-
-
-
-  

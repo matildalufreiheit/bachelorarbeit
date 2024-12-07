@@ -87,13 +87,15 @@
           <!-- Angebotsart -->
           <div class="mb-4">
             <mat-form-field appearance="fill" class="w-100">
-              <mat-label>Angebotsart auswählen</mat-label>
-              <mat-select multiple [(value)]="selectedArt">
-                <mat-option *ngFor="let art of angebotsarten" [value]="art">{{ art }}</mat-option>
-              </mat-select>
+                <mat-label>Angebotsart auswählen</mat-label>
+                <mat-select multiple [(value)]="selectedArt">
+                    <mat-option *ngFor="let art of arten" [value]="art.ID">
+                        {{ art.Art }}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
           </div>
-  
+
           <button type="submit" class="btn btn-success w-100">Erstellen</button>
         </form>
     </div>
@@ -173,15 +175,15 @@
                 </mat-form-field>
               </div>
           
-              <!-- Art -->
+              <!-- Angebotsart -->
               <div class="mb-4">
                 <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Angebotsart auswählen</mat-label>
-                  <mat-select [(value)]="selectedArt">
-                    <mat-option *ngFor="let art of angebotsarten" [value]="art">
-                      {{ art }}
-                    </mat-option>
-                  </mat-select>
+                    <mat-label>Angebotsart auswählen</mat-label>
+                    <mat-select multiple [(value)]="selectedArt">
+                        <mat-option *ngFor="let art of arten" [value]="art.ID">
+                            {{ art.Art }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
               </div>
           

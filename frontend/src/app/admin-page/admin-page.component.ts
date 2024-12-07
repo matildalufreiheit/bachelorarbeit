@@ -14,16 +14,17 @@ export class AdminPageComponent implements OnInit {
   selectedZielgruppen: number[] = [];
   newTag: string = ''; // Variable für neuen Tag
   newZielgruppe: string = ''; // Variable für neue Zielgruppe
-  angebotsarten: string[] = [];
-  selectedArt: string = '';
-  angebotsnamen: string[] = [];
-  selectedAngebotsname: string = '';
+  angebotsarten: { ID: number; Art: string }[] = [];
+  selectedArt: number[] = []; // Jetzt ein Array von IDs, da mehrere Arten ausgewählt werden können
   institutionNames: string[] = [];
   institutions: any[] = []; // Liste der Institutionen
   selectedInstitutionId: number | null = null; // ID der ausgewählten Institution
   selectedInstitution: any = null; // Details der ausgewählten Institution
 
-
+  institutionName: string = ''; // Name der Institution
+  institutionDescription: string = ''; // Beschreibung der Institution
+  institutionURL: string = ''; // URL der Institution
+  arten: { ID: number; Art: string }[] = []; // Speichere die Arten
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
   mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
@@ -39,9 +40,8 @@ export class AdminPageComponent implements OnInit {
     this.loadTags();
     this.loadZielgruppen();
     this.loadAngebotsarten();
-    this.loadAngebotsnamen();
-    //this.loadInstitution();
     this.loadInstitutions();
+    this.loadArten();
   }
 
   login(username: string, password: string) {
@@ -76,30 +76,34 @@ export class AdminPageComponent implements OnInit {
     this.isLoggedIn = false;
   }
 
-  createAngebot(name: string, description: string, url: string) {
+createAngebot(name: string, description: string, url: string) {
     const angebot = {
-      name,
-      beschreibung: description,
-      art: this.selectedArt, // Angebotsart wird aus der Komponente gelesen
-      url,
-      institution: { name, beschreibung: description, url },
-      tags: this.selectedTags,
-      zielgruppen: this.selectedZielgruppen,
+        name,
+        beschreibung: description,
+        artIDs: this.selectedArt, // IDs der ausgewählten Arten
+        url,
+        tags: this.selectedTags, // IDs der ausgewählten Tags
+        zielgruppen: this.selectedZielgruppen, // IDs der ausgewählten Zielgruppen
+        institution: {
+            name: this.institutionName, // Name der Institution
+            beschreibung: this.institutionDescription, // Beschreibung der Institution
+            url: this.institutionURL // URL der Institution
+        }
     };
-  
+
     this.dataService.createAngebot(angebot).subscribe({
-      next: (response) => {
-        console.log('Angebot erfolgreich erstellt:', response);
-        alert('Das Angebot wurde erfolgreich erstellt.');
-        this.resetForm();
-      },
-      error: (err) => {
-        console.error('Fehler beim Erstellen des Angebots:', err);
-        alert('Es gab einen Fehler beim Speichern des Angebots.');
-      },
+        next: (response) => {
+            console.log('Angebot erfolgreich erstellt:', response);
+            alert('Das Angebot wurde erfolgreich erstellt.');
+            this.resetForm();
+        },
+        error: (err) => {
+            console.error('Fehler beim Erstellen des Angebots:', err);
+            alert('Es gab einen Fehler beim Speichern des Angebots.');
+        },
     });
-  }  
-  
+}
+
   private resetForm() {
     this.selectedTags = [];
     this.selectedZielgruppen = [];
@@ -203,17 +207,10 @@ export class AdminPageComponent implements OnInit {
     });
   }
 
-  private loadAngebotsarten() {
+  private loadAngebotsarten(): void {
     this.dataService.getAngebotsarten().subscribe((response: any) => {
-      this.angebotsarten = response.data.map((item: { Art: string }) => item.Art);
-    });
-  }
-
-  private loadAngebotsnamen(): void {
-    this.dataService.getAngebote().subscribe(response => {
-      // Extrahiere nur die Namen der Angebote
-      this.angebotsnamen = response.data.map((item: any) => item.Name);
-      console.log('Geladene Angebotsnamen:', this.angebotsnamen);
+      this.angebotsarten = response.data; 
+      console.log('Geladene Angebotsarten:', this.angebotsarten);
     });
   }
 
@@ -225,6 +222,17 @@ export class AdminPageComponent implements OnInit {
     });
   }
   
+  loadArten(): void {
+    this.dataService.getAngebotsarten().subscribe({
+        next: (response) => {
+            this.arten = response.data; // Daten zuweisen
+            console.log('Geladene Arten:', this.arten); // Debug-Ausgabe
+        },
+        error: (err) => {
+            console.error('Fehler beim Laden der Arten:', err);
+        },
+    });
+}
 
   // Wird aufgerufen, wenn eine Institution im Dropdown ausgewählt wird
   onInstitutionSelected(institutionId: number): void {
@@ -357,6 +365,8 @@ updateAngebot(id: number, name: string, description: string, url: string) {
     },
   });
 }
+
+
 
 }
 
