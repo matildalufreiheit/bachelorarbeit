@@ -110,7 +110,7 @@ deleteTagById(tagId: number): Observable<any> {
 }
 
 deleteZielgruppeById(zielgruppeId: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/zielgruppe/${zielgruppeId}`);
+  return this.http.delete(`${this.apiUrl}/zielgruppen/${zielgruppeId}`);
 }
 
 getAngebotById(id: number): Observable<any> {

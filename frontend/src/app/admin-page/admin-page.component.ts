@@ -30,6 +30,8 @@ export class AdminPageComponent implements OnInit {
   arten: { ID: number; Art: string }[] = []; // Speichere die Arten
   tags: { ID: number; Tag: string }[] = [];
   zielgruppen: { ID: number; Name: string }[] = [];
+  originalInstitution: any | null = null;
+
 
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
@@ -148,6 +150,16 @@ createAngebot(name: string, description: string, url: string) {
     this.newTag = '';
     this.newZielgruppe = '';
   }  
+
+  private resetFields(): void {
+    this.selectedInstitutionId = null;
+    this.selectedInstitution = null;
+    this.selectedTags = [];
+    this.selectedZielgruppen = [];
+    this.selectedArt = [];
+    this.originalInstitution = null;
+  }
+  
   
   onTagsChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
@@ -338,12 +350,14 @@ onZielgruppeSelectionChange(zielgruppeId: number): void {
     console.log('Ausgewählte Institution ID:', institutionId);
     const institution = this.institutions.find(inst => inst.ID === institutionId);
     if (institution) {
-      this.selectedInstitution = { ...institution }; // Kopiere die Institution für Änderungen
+      this.selectedInstitution = { ...institution }; // Setze die ausgewählte Institution
+      this.originalInstitution = { ...institution }; // Speichere den Originalzustand
       console.log('Ausgewählte Institution:', this.selectedInstitution);
     } else {
       console.error('Institution nicht gefunden:', institutionId);
     }
   }
+  
   
 
   // Lädt die Details einer spezifischen Institution
@@ -360,30 +374,36 @@ onZielgruppeSelectionChange(zielgruppeId: number): void {
   // Ändern (Speichern)
   saveChanges(): void {
     if (this.selectedInstitution && this.selectedInstitutionId) {
-      const updatedInstitution = {
-        Name: this.selectedInstitution.Name,
-        Beschreibung: this.selectedInstitution.Beschreibung,
-        URL: this.selectedInstitution.URL,
-        Tags: this.selectedTags,
-        Zielgruppen: this.selectedZielgruppen,
-        Art: this.selectedArt
-      };
+      const updatedInstitution: any = {};
   
-      this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution)
-        .subscribe({
-          next: (response) => {
-            console.log('Institution erfolgreich aktualisiert:', response);
-            this.loadInstitutions(); // Aktualisiere die Liste
-          },
-          error: (err) => {
-            console.error('Fehler beim Aktualisieren der Institution:', err);
-          }
-        });
+      if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
+        updatedInstitution.name = this.selectedInstitution.Name;
+      }
+      if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
+        updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
+      }
+      if (this.selectedInstitution.URL !== this.originalInstitution.URL) {
+        updatedInstitution.url = this.selectedInstitution.URL;
+      }
+  
+      if (Object.keys(updatedInstitution).length === 0) {
+        alert('Keine Änderungen vorgenommen.');
+        return;
+      }
+  
+      this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution).subscribe({
+        next: () => {
+          alert('Institution erfolgreich aktualisiert!');
+          this.loadInstitutions(); // Aktualisiere die Liste
+        },
+        error: (err) => {
+          console.error('Fehler beim Aktualisieren der Institution:', err);
+          alert('Fehler beim Aktualisieren der Institution.');
+        },
+      });
     }
-  }
+}
   
-  
-
 // Löschen
 deleteSelectedInstitution(): void {
   if (this.selectedInstitutionId) {
@@ -391,16 +411,19 @@ deleteSelectedInstitution(): void {
       next: (response) => {
         console.log('Institution erfolgreich gelöscht:', response);
         this.loadInstitutions(); // Aktualisiere die Liste der Institutionen
-        this.selectedInstitutionId = null; // Setze die Auswahl zurück
+        this.resetFields(); // Felder zurücksetzen
+        alert('Institution wurde erfolgreich gelöscht.');
       },
       error: (err) => {
         console.error('Fehler beim Löschen der Institution:', err);
+        alert('Fehler beim Löschen der Institution.');
       },
     });
   } else {
     console.warn('Keine Institution ausgewählt.');
   }
 }
+
 
 
 setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {

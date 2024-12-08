@@ -164,14 +164,12 @@
       <h2>Institution bearbeiten</h2>
       <mat-form-field appearance="fill" class="w-100 mb-4">
         <mat-label>Institution auswählen</mat-label>
-        <mat-select
-          [(value)]="selectedInstitutionId"
-          (selectionChange)="onInstitutionSelected($event.value)">
+        <mat-select [(value)]="selectedInstitutionId" (selectionChange)="onInstitutionSelected($event.value)">
           <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
             {{ institution.Name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field>      
       <div *ngIf="selectedInstitution">
         <h3>Details bearbeiten</h3>
         <form>
