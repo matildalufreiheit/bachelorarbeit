@@ -57,6 +57,14 @@ register(username: string, password: string): Observable<any> {
   return this.http.post(`${this.apiUrl}/register`, { benutzername: username, passwort: password });
 }
 
+getUsers(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/benutzer`);
+}
+
+deleteUser(userId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/benutzer/${userId}`);
+}
+
 deleteInstitutionByName(name: string): Observable<any> {
   const encodedName = encodeURIComponent(name); // Name für URL kodieren
   return this.http.delete(`${this.apiUrl}/institution/name/${encodedName}`);
@@ -83,6 +91,14 @@ updateInstitution(id: number, updatedInstitution: any): Observable<any> {
 
 updateAngebot(id: number, angebot: any): Observable<any> {
   return this.http.put(`${this.apiUrl}/angebote/${id}`, angebot);
+}
+
+updateTag(tagId: number, tagName: string): Observable<any> {
+  return this.http.put(`${this.apiUrl}/tags/${tagId}`, { tag: tagName });
+}
+
+updateZielgruppe(zielgruppeId: number, zielgruppeName: string): Observable<any> {
+  return this.http.put(`${this.apiUrl}/zielgruppen/${zielgruppeId}`, { name: zielgruppeName });
 }
 
 getAngebotsnamen(): Observable<any> {

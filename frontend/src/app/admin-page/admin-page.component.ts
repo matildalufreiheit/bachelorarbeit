@@ -8,10 +8,12 @@ import { DataService } from '../services/data.service';
 })
 export class AdminPageComponent implements OnInit {
   isLoggedIn = false;
-  tags: any[] = [];
-  zielgruppen: any[] = [];
   selectedTags: number[] = [];
   selectedZielgruppen: number[] = [];
+  selectedTagId: number | null = null;
+  selectedTagName: string = '';
+  selectedZielgruppeId: number | null = null;
+  selectedZielgruppeName: string = '';
   newTag: string = ''; // Variable für neuen Tag
   newZielgruppe: string = ''; // Variable für neue Zielgruppe
   angebotsarten: { ID: number; Art: string }[] = [];
@@ -20,11 +22,15 @@ export class AdminPageComponent implements OnInit {
   institutions: any[] = []; // Liste der Institutionen
   selectedInstitutionId: number | null = null; // ID der ausgewählten Institution
   selectedInstitution: any = null; // Details der ausgewählten Institution
-
+  users: any[] = [];
+  selectedUserId: number | null = null;
   institutionName: string = ''; // Name der Institution
   institutionDescription: string = ''; // Beschreibung der Institution
   institutionURL: string = ''; // URL der Institution
   arten: { ID: number; Art: string }[] = []; // Speichere die Arten
+  tags: { ID: number; Tag: string }[] = [];
+  zielgruppen: { ID: number; Name: string }[] = [];
+
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
   mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
@@ -42,7 +48,39 @@ export class AdminPageComponent implements OnInit {
     this.loadAngebotsarten();
     this.loadInstitutions();
     this.loadArten();
+    this.loadUsers();
   }
+
+  loadUsers(): void {
+    this.dataService.getUsers().subscribe({
+      next: (response: any) => {
+        this.users = response.data;
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Benutzer:', err);
+      },
+    });
+  }
+
+  deleteUser(userId: number | null): void {
+    if (!userId) {
+      console.error('Kein Benutzer ausgewählt.');
+      return;
+    }
+
+    this.dataService.deleteUser(userId).subscribe({
+      next: () => {
+        this.users = this.users.filter(user => user.ID !== userId);
+        this.selectedUserId = null;
+        alert('Benutzer erfolgreich gelöscht!');
+      },
+      error: (err) => {
+        console.error('Fehler beim Löschen des Benutzers:', err);
+        alert('Fehler beim Löschen des Benutzers.');
+      },
+    });
+  }
+
 
   login(username: string, password: string) {
     this.dataService.login(username, password).subscribe({
@@ -194,6 +232,67 @@ createAngebot(name: string, description: string, url: string) {
       },
     });
   }
+
+  // Tag bearbeiten
+editTag(): void {
+  if (this.selectedTagId === null || !this.selectedTagName.trim()) {
+    alert('Bitte wählen Sie ein Tag aus und geben Sie einen gültigen Namen ein.');
+    return;
+  }
+
+  this.dataService.updateTag(this.selectedTagId, this.selectedTagName).subscribe({
+    next: () => {
+      alert('Tag erfolgreich bearbeitet.');
+      this.loadTags(); // Tags-Liste aktualisieren
+      this.selectedTagId = null;
+      this.selectedTagName = '';
+    },
+    error: (err) => {
+      console.error('Fehler beim Bearbeiten des Tags:', err);
+      alert('Fehler beim Bearbeiten des Tags.');
+    },
+  });
+}
+
+// Zielgruppe bearbeiten
+editZielgruppe(): void {
+  if (this.selectedZielgruppeId === null || !this.selectedZielgruppeName.trim()) {
+    alert('Bitte wählen Sie eine Zielgruppe aus und geben Sie einen gültigen Namen ein.');
+    return;
+  }
+
+  this.dataService.updateZielgruppe(this.selectedZielgruppeId, this.selectedZielgruppeName).subscribe({
+    next: () => {
+      alert('Zielgruppe erfolgreich bearbeitet.');
+      this.loadZielgruppen(); // Zielgruppen-Liste aktualisieren
+      this.selectedZielgruppeId = null;
+      this.selectedZielgruppeName = '';
+    },
+    error: (err) => {
+      console.error('Fehler beim Bearbeiten der Zielgruppe:', err);
+      alert('Fehler beim Bearbeiten der Zielgruppe.');
+    },
+  });
+}
+
+onTagSelectionChange(tagId: number): void {
+  const selectedTag = this.tags.find(tag => tag.ID === tagId);
+  if (selectedTag) {
+    this.selectedTagName = selectedTag.Tag; // Setze den Tag-Namen
+  } else {
+    this.selectedTagName = ''; // Zurücksetzen, falls keine Auswahl
+  }
+}
+
+onZielgruppeSelectionChange(zielgruppeId: number): void {
+  const selectedZielgruppe = this.zielgruppen.find(zielgruppe => zielgruppe.ID === zielgruppeId);
+  if (selectedZielgruppe) {
+    this.selectedZielgruppeName = selectedZielgruppe.Name; // Setze den Zielgruppen-Namen
+  } else {
+    this.selectedZielgruppeName = ''; // Zurücksetzen, falls keine Auswahl
+  }
+}
+
   
   private loadTags() {
     this.dataService.getTags().subscribe((response: any) => {
@@ -309,16 +408,16 @@ setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
 }
 
 // Tag löschen
-deleteTag(tagId: number): void {
-  if (!tagId) {
-    alert('Kein Tag ausgewählt.');
+deleteTag(tagId: number | null): void {
+  if (tagId === null) {
+    alert('Kein gültiger Tag ausgewählt.');
     return;
   }
 
   this.dataService.deleteTagById(tagId).subscribe({
     next: () => {
       alert('Tag erfolgreich gelöscht.');
-      this.loadTags(); // Tags-Liste nach dem Löschen aktualisieren
+      this.loadTags(); // Aktualisiere die Tags-Liste
     },
     error: (err) => {
       console.error('Fehler beim Löschen des Tags:', err);
@@ -328,16 +427,16 @@ deleteTag(tagId: number): void {
 }
 
 // Zielgruppe löschen:
-deleteZielgruppe(zielgruppeId: number): void {
-  if (!zielgruppeId) {
-    alert('Keine Zielgruppe ausgewählt.');
+deleteZielgruppe(zielgruppeId: number | null): void {
+  if (zielgruppeId === null) {
+    alert('Keine gültige Zielgruppe ausgewählt.');
     return;
   }
 
   this.dataService.deleteZielgruppeById(zielgruppeId).subscribe({
     next: () => {
       alert('Zielgruppe erfolgreich gelöscht.');
-      this.loadZielgruppen(); // Zielgruppen-Liste nach dem Löschen aktualisieren
+      this.loadZielgruppen(); // Aktualisiere die Zielgruppen-Liste
     },
     error: (err) => {
       console.error('Fehler beim Löschen der Zielgruppe:', err);
