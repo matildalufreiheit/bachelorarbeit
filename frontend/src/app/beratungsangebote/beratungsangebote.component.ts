@@ -22,6 +22,8 @@ export class BeratungsangeboteComponent implements OnInit {
   visibleTags: any[] = []; // Sichtbare Tags
   visibleZielgruppen: any[] = []; // Sichtbare Zielgruppen
   maxVisibleItems: number = 5; // Anzahl der standardmäßig sichtbaren Items
+  visibleDetails: Set<number> = new Set();
+
 
 
   constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
@@ -99,6 +101,8 @@ export class BeratungsangeboteComponent implements OnInit {
     this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
     this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
   }  
+
+  private previouslyVisibleDetails: Set<number> = new Set();
   
   filterData(): void {
     console.log('Aktuelle ausgewählte Tags:', Array.from(this.selectedTags));
@@ -106,15 +110,25 @@ export class BeratungsangeboteComponent implements OnInit {
   
     const selectedTagIds = Array.from(this.selectedTags);
     const selectedZielgruppenIds = Array.from(this.selectedZielgruppen);
-  
-    const validOffers = this.angebote.filter((angebot) =>
-      (selectedTagIds.length === 0 || selectedTagIds.every((tagId) =>
+
+    
+    const validOffers = this.angebote.filter( (angebot) =>
+      (selectedTagIds.length === 0 || selectedTagIds.every( (tagId) =>
         this.angebotTags.some((at: { AngebotID: number; TagID: number }) => at.AngebotID === angebot.ID && at.TagID === tagId)
       )) &&
       (selectedZielgruppenIds.length === 0 || selectedZielgruppenIds.every((zielgruppenId) =>
         this.angeboteZielgruppen.some((az: { AngebotID: number; ZielgruppeID: number }) => az.AngebotID === angebot.ID && az.ZielgruppeID === zielgruppenId)
       ))
     );
+
+    // Sichtbare Details vor dem Aktualisieren der Filter speichern
+    this.previouslyVisibleDetails = new Set(this.visibleDetails);
+
+    // Nach dem Filtern nur die Details wiederherstellen, die noch gültig sind
+    this.visibleDetails = new Set([...this.previouslyVisibleDetails].filter(id =>
+      validOffers.some(angebot => angebot.ID === id)
+    ));
+
   
     const validTagIds = new Set(
       this.angebotTags
@@ -140,6 +154,12 @@ export class BeratungsangeboteComponent implements OnInit {
   
     // Sichtbare Items aktualisieren
     this.updateVisibleItems();
+
+    // Nur neue Ergebnisse senden, ohne UI-Zustände zu beeinflussen
+    this.sharedDataService.setFilteredResults(validOffers);
+    this.sharedDataService.setVisibleDetails(new Set(this.visibleDetails));
+
+
   }
   
   

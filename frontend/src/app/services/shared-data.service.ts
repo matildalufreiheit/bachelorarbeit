@@ -18,5 +18,21 @@ export class SharedDataService {
   setSelectedZielgruppen(zielgruppen: Set<number>): void {
     this.selectedZielgruppenSubject.next(zielgruppen);
   }
+
+  private filteredResults = new BehaviorSubject<any[]>([]);
+  filteredResults$ = this.filteredResults.asObservable();
+
+  setFilteredResults(results: any[]) {
+    this.filteredResults.next(results);
+  }
+
+  private visibleDetails = new BehaviorSubject<Set<number>>(new Set());
+  visibleDetails$ = this.visibleDetails.asObservable();
+
+  setVisibleDetails(details: Set<number>) {
+    this.visibleDetails.next(details);
+  }
+
+
 }
 

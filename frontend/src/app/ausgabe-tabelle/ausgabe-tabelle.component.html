@@ -12,7 +12,7 @@
       <tr *ngFor="let item of filteredResults">
         <td>
           <div (click)="toggleDetails(item.ID)" class="name-link">
-            <a [href]="item.URL" target="_blank">
+            <a [href]="item.url" target="_blank">
               {{ item.Name }}
               <i class="bi bi-link-45deg" title="Zur Webseite"></i>
             </a>

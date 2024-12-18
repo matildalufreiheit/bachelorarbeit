@@ -9,7 +9,7 @@ interface Angebot {
   ZielgruppenIDs?: number[]; // Falls Zielgruppen als Array vorliegt
   Name: string;
   Beschreibung: string;
-  URL: string;
+  url: string;
   TagIDs?: number[];
   Arten?: string[];
   ArtIDs?: number[];
@@ -52,6 +52,15 @@ export class AusgabeTabelleComponent implements OnInit {
       this.selectedZielgruppen = zielgruppen;
       this.getAngebote();
     });
+
+    this.sharedDataService.filteredResults$.subscribe(results => {
+      this.filteredResults = results;
+    });    
+
+    this.sharedDataService.visibleDetails$.subscribe(details => {
+      this.visibleDetails = details;
+    });
+    
 
     this.getAngebote(); // Initiales Laden der Daten
   }
@@ -120,13 +129,14 @@ export class AusgabeTabelleComponent implements OnInit {
     return this.visibleDetails.has(id);
   }
 
+  
   toggleTag(id: number): void {
     if (this.selectedTags.has(id)) {
       this.selectedTags.delete(id);
     } else {
       this.selectedTags.add(id);
     }
-    this.getAngebote();
+    //this.getAngebote();
   }
 
   toggleZielgruppe(id: number): void {
@@ -135,7 +145,7 @@ export class AusgabeTabelleComponent implements OnInit {
     } else {
       this.selectedZielgruppen.add(id);
     }
-    this.getAngebote();
+    //this.getAngebote();
   }
 
   toggleShowAllTags(): void {
@@ -145,4 +155,5 @@ export class AusgabeTabelleComponent implements OnInit {
   toggleShowAllZielgruppen(): void {
     this.showAllZielgruppen = !this.showAllZielgruppen;
   }
+  
 }
