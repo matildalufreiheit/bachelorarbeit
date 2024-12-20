@@ -30,42 +30,47 @@ export class BeratungsangeboteComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.updateVisibleItems(); // Initial sichtbare Items setzen
   }
   
 
-  async loadData() {
-    try {
-      const tagsResponse = await this.dataService.getTags().toPromise();
-      const angeboteResponse = await this.dataService.getAngebote().toPromise();
-      const angebotTagsResponse = await this.dataService.getAngebotTags().toPromise();
-      const zielgruppenResponse = await this.dataService.getZielgruppen().toPromise();
-      const angeboteZielgruppenResponse = await this.dataService.getAngebotZielgruppe().toPromise(); // Neu
-  
-      console.log('Tags:', tagsResponse.data);
-      console.log('Angebote:', angeboteResponse.data);
-      console.log('AngebotTags Response:', angebotTagsResponse);
-      console.log('Zielgruppen:', zielgruppenResponse.data);
-      console.log('Angebote_Zielgruppen:', angeboteZielgruppenResponse.data); // Neu
-  
-      // Sicherstellen, dass die Daten Arrays sind
-      this.tags = Array.isArray(tagsResponse.data) ? tagsResponse.data : [];
-      this.angebote = Array.isArray(angeboteResponse.data) ? angeboteResponse.data : [];
-      this.angebotTags = Array.isArray(angebotTagsResponse.data) ? angebotTagsResponse.data : [];
-      this.zielgruppen = Array.isArray(zielgruppenResponse.data) ? zielgruppenResponse.data : [];
-      this.angeboteZielgruppen = Array.isArray(angeboteZielgruppenResponse.data) ? angeboteZielgruppenResponse.data : []; // Neu
-  
-      this.filteredTags = [...this.tags];
-      this.filteredZielgruppen = [...this.zielgruppen];
-  
-      // Sichtbare Items initialisieren
-      this.updateVisibleItems();
-    } catch (error) {
-      console.error('Fehler beim Laden der Daten:', error);
-    }
-  }
-  
-  
+  loadData() {
+    this.dataService.getTags().subscribe( 
+      response => {
+        this.tags = response.data;
+        this.filteredTags = [...this.tags];
+        // console.log('Tags:', this.tags);
+        // console.log('Filtered Tags:', this.tags);
+        this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
+      }
+    )
+    this.dataService.getAngebote().subscribe(
+      response => {
+        this.angebote = response.data
+        // console.log('Angebote:', this.angebote);
+      }
+    )
+    this.dataService.getAngebotTags().subscribe(
+      response => {
+        this.angebotTags = response.data
+        // console.log('AngebotTags Response:', this.angebotTags);
+      }
+    )
+    this.dataService.getZielgruppen().subscribe(
+      response => {
+        this.zielgruppen = response.data;
+        this.filteredZielgruppen = [...this.zielgruppen];
+        // console.log('Zielgruppen:', this.zielgruppen);
+        // console.log('Filtered Zielgruppen:', this.filteredZielgruppen);
+        this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
+      }
+    )
+    this.dataService.getAngebotZielgruppe().subscribe(
+      response => {
+        this.angeboteZielgruppen = response.data
+        // console.log('Angebote_Zielgruppen:', this.angeboteZielgruppen); // Neu
+      }
+    )
+}
 
   toggleTag(tagId: number): void {
     if (this.selectedTags.has(tagId)) {

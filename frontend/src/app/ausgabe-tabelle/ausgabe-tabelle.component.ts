@@ -45,12 +45,12 @@ export class AusgabeTabelleComponent implements OnInit {
   
     this.sharedDataService.selectedTags$.subscribe(tags => {
       this.selectedTags = tags;
-      this.getAngebote();
+      //this.getAngebote();
     });
   
     this.sharedDataService.selectedZielgruppen$.subscribe(zielgruppen => {
       this.selectedZielgruppen = zielgruppen;
-      this.getAngebote();
+      //this.getAngebote();
     });
 
     this.sharedDataService.filteredResults$.subscribe(results => {
@@ -61,8 +61,7 @@ export class AusgabeTabelleComponent implements OnInit {
       this.visibleDetails = details;
     });
     
-
-    this.getAngebote(); // Initiales Laden der Daten
+    //this.getAngebote(); // Initiales Laden der Daten
   }
 
   getAngebotsarten(): void {

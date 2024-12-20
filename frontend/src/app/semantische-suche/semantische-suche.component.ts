@@ -33,8 +33,7 @@ export class SemantischeSucheComponent {
         this.searchLoading = false;
       }
     }
-  }   
-
+  }
   get canDeleteSearchterm(): boolean {
     return this.searchQuery.length > 0;
   }

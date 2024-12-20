@@ -1,10 +1,22 @@
 .custom-more-button {
-    border-color: #ff9800; /* Orange Rand */
-    color: #ff9800; /* Orange Text */
-  }
+  border-color: #ff9800; /* Orange Rand */
+  color: #ff9800; /* Orange Text */
+  transition: background-color 0.3s, color 0.3s;
+}
   
-  .custom-more-button:hover {
-    background-color: #ff9800; /* Orange Hintergrund beim Hover */
-    color: #ffffff; /* Weißer Text beim Hover */
-  }
+.custom-more-button:hover {
+  background-color: #ff9800; /* Orange Hintergrund beim Hover */
+  color: #ffffff; /* Weißer Text beim Hover */
+}
+
+.btn-outline-primary:hover {
+  background-color: lightskyblue;
+  border-color: lightskyblue;
+}
+
+.btn-primary:hover {
+  background-color: lightskyblue;
+  border-color: lightskyblue;
+}
+
   
