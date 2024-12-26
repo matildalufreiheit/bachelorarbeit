@@ -19,7 +19,8 @@ export class SemantischeSucheComponent {
       this.showResults = true;
   
       try {
-        const response = await fetch(`http://localhost:3000/meilisearch/search?q=${query}`);
+        const response = await fetch(`https://vm021.qu.tu-berlin.de:3000/meilisearch/search?q=${query}`);
+        //const response = await fetch(`http://localhost:3000/meilisearch/search?q=${query}`);
         const data = await response.json();
   
         // Begrenze die Ergebnisse auf die ersten drei
