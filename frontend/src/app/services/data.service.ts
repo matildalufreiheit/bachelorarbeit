@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-//import { Angebot } from '../shared/angebot';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000'; 
+  private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
 
   constructor(private http: HttpClient) { }
 
@@ -132,3 +131,4 @@ export class DataService {
   }
 
 }
+

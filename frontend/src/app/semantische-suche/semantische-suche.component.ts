@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MeiliSearch } from 'meilisearch';
 
 @Component({
   selector: 'app-semantische-suche',
@@ -33,7 +32,8 @@ export class SemantischeSucheComponent {
         this.searchLoading = false;
       }
     }
-  }
+  }   
+
   get canDeleteSearchterm(): boolean {
     return this.searchQuery.length > 0;
   }

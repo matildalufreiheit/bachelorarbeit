@@ -9,29 +9,31 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of filteredResults">
-        <td>
-          <div (click)="toggleDetails(item.ID)" class="name-link">
-            <a [href]="item.url" target="_blank">
-              {{ item.Name }}
-              <i class="bi bi-link-45deg" title="Zur Webseite"></i>
-            </a>
-          </div>
-          <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
-            <p>Beschreibung: {{ item.Beschreibung }}</p>
-            <p>Angebotsart:</p>
-              <ul *ngIf="item.Arten && item.Arten.length > 0; else noArten">
-                <li *ngFor="let art of item.Arten">{{ art }}</li>
-              </ul>
-              <ng-template #noArten>
-                <p>Keine Arten verfügbar.</p>
-              </ng-template>
-          </div>
-        </td>
-        <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
-          <i [class]="isDetailsVisible(item.ID) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" title="Mehr Informationen"></i>
-        </td>
-      </tr>
+
+        <tr *ngFor="let item of filteredResults; trackBy: trackItem">
+          <td>
+            <div (click)="toggleDetails(item.ID)" class="name-link">
+              <a [href]="item.url" target="_blank">
+                {{ item.Name }}
+                <i class="bi bi-link-45deg" title="Zur Webseite"></i>
+              </a>
+            </div>
+            <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
+              <p>Beschreibung: {{ item.Beschreibung }}</p>
+              <p>Angebotsart:</p>
+                <ul *ngIf="item.Arten && item.Arten.length > 0; else noArten">
+                  <li *ngFor="let art of item.Arten">{{ art }}</li>
+                </ul>
+                <ng-template #noArten>
+                  <p>Keine Arten verfügbar.</p>
+                </ng-template>
+            </div>
+          </td>
+          <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
+            <i [class]="isDetailsVisible(item.ID) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" title="Mehr Informationen"></i>
+          </td>
+        </tr>
+      
     </tbody>
   </table>
 </div>

@@ -23,54 +23,57 @@ export class BeratungsangeboteComponent implements OnInit {
   visibleZielgruppen: any[] = []; // Sichtbare Zielgruppen
   maxVisibleItems: number = 5; // Anzahl der standardmäßig sichtbaren Items
   visibleDetails: Set<number> = new Set();
-
+  previouslyVisibleDetails: Set<number> = new Set();
 
 
   constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
 
   ngOnInit(): void {
     this.loadData();
+    // this.updateVisibleItems(); // Initial sichtbare Items setzen
   }
   
 
   loadData() {
-    this.dataService.getTags().subscribe( 
-      response => {
-        this.tags = response.data;
-        this.filteredTags = [...this.tags];
-        // console.log('Tags:', this.tags);
-        // console.log('Filtered Tags:', this.tags);
-        this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
-      }
-    )
-    this.dataService.getAngebote().subscribe(
-      response => {
-        this.angebote = response.data
-        // console.log('Angebote:', this.angebote);
-      }
-    )
-    this.dataService.getAngebotTags().subscribe(
-      response => {
-        this.angebotTags = response.data
-        // console.log('AngebotTags Response:', this.angebotTags);
-      }
-    )
-    this.dataService.getZielgruppen().subscribe(
-      response => {
-        this.zielgruppen = response.data;
-        this.filteredZielgruppen = [...this.zielgruppen];
-        // console.log('Zielgruppen:', this.zielgruppen);
-        // console.log('Filtered Zielgruppen:', this.filteredZielgruppen);
-        this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
-      }
-    )
-    this.dataService.getAngebotZielgruppe().subscribe(
-      response => {
-        this.angeboteZielgruppen = response.data
-        // console.log('Angebote_Zielgruppen:', this.angeboteZielgruppen); // Neu
-      }
-    )
-}
+      this.dataService.getTags().subscribe( 
+        response => {
+          this.tags = response.data;
+          this.filteredTags = [...this.tags];
+          // console.log('Tags:', this.tags);
+          // console.log('Filtered Tags:', this.tags);
+          this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
+        }
+      )
+      this.dataService.getAngebote().subscribe(
+        response => {
+          this.angebote = response.data
+          // console.log('Angebote:', this.angebote);
+        }
+      )
+      this.dataService.getAngebotTags().subscribe(
+        response => {
+          this.angebotTags = response.data
+          // console.log('AngebotTags Response:', this.angebotTags);
+        }
+      )
+      this.dataService.getZielgruppen().subscribe(
+        response => {
+          this.zielgruppen = response.data;
+          this.filteredZielgruppen = [...this.zielgruppen];
+          // console.log('Zielgruppen:', this.zielgruppen);
+          // console.log('Filtered Zielgruppen:', this.filteredZielgruppen);
+          this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
+        }
+      )
+      this.dataService.getAngebotZielgruppe().subscribe(
+        response => {
+          this.angeboteZielgruppen = response.data
+          // console.log('Angebote_Zielgruppen:', this.angeboteZielgruppen); // Neu
+        }
+      )
+  }
+  
+  
 
   toggleTag(tagId: number): void {
     if (this.selectedTags.has(tagId)) {
@@ -103,11 +106,12 @@ export class BeratungsangeboteComponent implements OnInit {
   }
   
   updateVisibleItems(): void {
+    console.log('update visible items filteredTags : ', this.filteredTags)
+    console.log('update visible items filteredZielgruppen : ', this.filteredZielgruppen)
     this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
     this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
   }  
 
-  private previouslyVisibleDetails: Set<number> = new Set();
   
   filterData(): void {
     console.log('Aktuelle ausgewählte Tags:', Array.from(this.selectedTags));
@@ -125,6 +129,8 @@ export class BeratungsangeboteComponent implements OnInit {
         this.angeboteZielgruppen.some((az: { AngebotID: number; ZielgruppeID: number }) => az.AngebotID === angebot.ID && az.ZielgruppeID === zielgruppenId)
       ))
     );
+
+    console.log('validOffers in Beratung : ', validOffers)
 
     // Sichtbare Details vor dem Aktualisieren der Filter speichern
     this.previouslyVisibleDetails = new Set(this.visibleDetails);

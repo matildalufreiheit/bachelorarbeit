@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Angebot } from '../shared/angebot';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,10 @@ export class SharedDataService {
     this.selectedZielgruppenSubject.next(zielgruppen);
   }
 
-  private filteredResults = new BehaviorSubject<any[]>([]);
+  private filteredResults = new BehaviorSubject<Angebot[]>([]);
   filteredResults$ = this.filteredResults.asObservable();
 
-  setFilteredResults(results: any[]) {
+  setFilteredResults(results: Angebot[]) {
     this.filteredResults.next(results);
   }
 

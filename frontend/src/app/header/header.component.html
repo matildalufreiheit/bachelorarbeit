@@ -1,39 +1,37 @@
 <header class="container-fluid bg-light p-3 border-bottom">
-  <div class="row align-items-center">
-    <!-- Obere Zeile: Logo -->
-    <div class="col-12 col-md-4 d-flex justify-content-between justify-content-md-start mb-2 mb-md-0">
-      <a href="https://www.tu.berlin/go237922/" target="_blank">
-        <img src="./assets/logo_hor_studyguide_black.png" alt="TU Berlin Logo" class="img-fluid" style="max-width: 120px;" />
-      </a>
-    </div>
-
-    <!-- Untere Zeile: Sprache, Notrufnummer, Schriftgröße -->
-    <div class="col-12 col-md-8 d-flex flex-wrap justify-content-end align-items-center">
-      <!-- Sprachwahl -->
-      <div class="d-flex align-items-center me-3">
-        <span (click)="setLanguage('DE')" class="me-2">DE</span>
-        <span class="divider mx-1">|</span>
-        <span (click)="setLanguage('EN')" class="ms-2">EN</span>
+    <div class="row align-items-center">
+      <!-- Logo links -->
+      <div class="col-md-4 d-flex justify-content-start">
+        <a href="https://www.tu.berlin/go237922/" target="_blank">
+          <img src="./assets/logo_hor_studyguide_black.png" alt="TU Berlin Logo" class="img-fluid" style="max-width: 150px;" />
+        </a>
       </div>
-
-      <!-- Notrufnummer Button -->
-      <a href="https://www.berliner-notruf.de/" target="_blank" class="btn btn-danger btn-sm d-flex align-items-center me-3">
-        Notruf Berlin <i class="bi bi-box-arrow-up-right ms-2"></i>
-      </a>
-
-      <!-- Schriftgröße ändern Dropdown -->
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-secondary btn-sm" ngbDropdownToggle>
-          Schriftgröße ändern
-        </button>
-        <div ngbDropdownMenu>
-          <button class="dropdown-item" (click)="changeFontSize('small')">Klein</button>
-          <button class="dropdown-item" (click)="changeFontSize('large')">Groß</button>
+  
+      <!-- Rechter Bereich: Sprache, Notrufnummer, Schriftgröße -->
+      <div class="col-md-8 d-flex justify-content-end">
+        <!-- Sprachwahl -->
+        <div class="d-flex align-items-center me-3">
+          <span (click)="setLanguage('DE')" class="me-2">DE</span>
+          <span class="divider">|</span>
+          <span (click)="setLanguage('EN')" class="ms-2">EN</span>
         </div>
+  
+        <!-- Notrufnummer Button -->
+        <a href="./assets/Plakat-IchbraucheHilfe_Nothilfenummern.pdf" target="_blank" class="btn btn-danger d-flex align-items-center me-3">
+          Nothilfennummer für Berlin <i class="bi bi-box-arrow-up-right ms-2"></i>
+        </a>
+  
+        <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-secondary" ngbDropdownToggle>
+              Schriftgröße ändern 
+            </button>
+            <div ngbDropdownMenu>
+              <button class="dropdown-item" (click)="changeFontSize('small')">Klein</button>
+              <button class="dropdown-item" (click)="changeFontSize('large')">Groß</button>
+            </div>
+          </div>
+          
       </div>
     </div>
-  </div>
-</header>
-
-
+  </header>
   

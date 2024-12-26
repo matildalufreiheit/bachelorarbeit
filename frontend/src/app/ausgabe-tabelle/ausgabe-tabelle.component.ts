@@ -1,19 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { SharedDataService } from '../services/shared-data.service';
+import { Angebot } from '../shared/angebot';
 
-interface Angebot {
-  ID: number;
-  InstitutionID: number;
-  Zielgruppe: string; // Falls Zielgruppen-String existiert
-  ZielgruppenIDs?: number[]; // Falls Zielgruppen als Array vorliegt
-  Name: string;
-  Beschreibung: string;
-  url: string;
-  TagIDs?: number[];
-  Arten?: string[];
-  ArtIDs?: number[];
-}
 
 @Component({
   selector: 'app-ausgabe-tabelle',
@@ -34,7 +23,7 @@ export class AusgabeTabelleComponent implements OnInit {
 
   arten: { ID: number; Art: string }[] = [];
 
-  constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
+  constructor(private dataService: DataService, private sharedDataService: SharedDataService, private changeDetection: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getTags();
@@ -55,12 +44,15 @@ export class AusgabeTabelleComponent implements OnInit {
 
     this.sharedDataService.filteredResults$.subscribe(results => {
       this.filteredResults = results;
+      console.log('filteredResults in Tablle : ', this.filteredResults)
+      this.changeDetection.detectChanges();
     });    
 
     this.sharedDataService.visibleDetails$.subscribe(details => {
       this.visibleDetails = details;
     });
     
+
     //this.getAngebote(); // Initiales Laden der Daten
   }
 
@@ -74,11 +66,11 @@ export class AusgabeTabelleComponent implements OnInit {
   getAngebote(): void {
     this.dataService.getAngebote().subscribe({
       next: (response) => {
-        console.log('Geladene Angebote:', response.data);
+        console.log('Geladene Angebote in Tabelle:', response.data);
   
         this.filteredResults = response.data;       
               
-        console.log('Gefilterte Ergebnisse:', this.filteredResults);
+        console.log('Gefilterte Ergebnisse in Tabelle:', this.filteredResults);
       },
       error: (err) => {
         console.error('Fehler beim Laden der Angebote:', err);
@@ -153,6 +145,10 @@ export class AusgabeTabelleComponent implements OnInit {
 
   toggleShowAllZielgruppen(): void {
     this.showAllZielgruppen = !this.showAllZielgruppen;
+  }
+
+  public trackItem (index: number, item: Angebot) {
+    return item.ID;
   }
   
 }
