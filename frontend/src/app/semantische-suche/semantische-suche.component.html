@@ -1,5 +1,5 @@
 <div class="container my-4">
-  <h2>Dein Thema war nicht dabei? <br> Dann kannst du hier mit eigenen Stichworten deine Anlaufstelle suchen.</h2>
+  <h2>{{ 'SEARCH.TITLE' | translate }}</h2>
   
   <!-- Suchfeld und Buttons -->
   <div class="input-group">
@@ -7,7 +7,7 @@
       [(ngModel)]="searchQuery"
       type="text"
       class="form-control"
-      [placeholder]="searchPlaceHolder"
+      [placeholder]="'SEARCH.PLACEHOLDER' | translate"
       autocomplete="off"
       autofocus
       (keydown.enter)="search(searchQuery)"
@@ -38,7 +38,7 @@
       <!-- Ladeicon -->
       <div *ngIf="searchLoading" class="text-center">
         <div class="spinner-border" role="status">
-          <span class="visually-hidden">Lädt...</span>
+          <span class="visually-hidden">{{ 'SEARCH.LOADING' | translate }}</span>
         </div>
       </div>
 
@@ -49,22 +49,15 @@
           <a [href]="item.url" class="text-decoration-none" target="_blank">
             {{ item.name }}
           </a>
-          <i class="bi bi-link-45deg" title="Zur Webseite"></i>
+          <i class="bi bi-link-45deg" title="{{ 'SEARCH.WEBSITE_TOOLTIP' | translate }}"></i>
         </div>
-
-        <!-- URL anzeigen 
-        <small>
-          <a [href]="item.url" class="text-muted" target="_blank">
-            {{ item.url }}
-          </a>
-        </small>-->
       </li>
     </ul>
 
     <!-- Pfeil zum Schließen der Suchergebnisse -->
     <div class="text-end">
       <button class="btn btn-sm btn-outline-secondary" (click)="showResults = false">
-        <i class="bi bi-chevron-up"></i> Ergebnisse schließen
+        <i class="bi bi-chevron-up"></i> {{ 'SEARCH.CLOSE_RESULTS' | translate }}
       </button>
     </div>
   </div>

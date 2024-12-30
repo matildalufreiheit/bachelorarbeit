@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <p>Wähle Kategorien aus, für die du Empfehlungen erhalten möchtest. Du kannst deine Auswahl später jederzeit anpassen.</p>
+  <p>{{ 'CONSULTATION.SELECT_CATEGORIES' | translate }}</p>
 
   <!-- Tags als Buttons -->
   <div class="d-flex flex-wrap">
@@ -18,10 +18,10 @@
     class="btn custom-more-button me-2 mb-2"
     (click)="toggleShowAllTags()"
   >
-    {{ showAllTags ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
+    {{ showAllTags ? ('CONSULTATION.SHOW_LESS' | translate) : ('CONSULTATION.SHOW_MORE' | translate) }}
   </button>
 
-  <p class="mt-4">Wähle zusätzlich ein oder mehrere Filter aus, die auf dich zutreffen. Du kannst deine Auswahl später jederzeit anpassen.</p>
+  <p class="mt-4">{{ 'CONSULTATION.SELECT_FILTERS' | translate }}</p>
 
   <!-- Gefilterte Zielgruppen als Buttons -->
   <div class="d-flex flex-wrap">
@@ -40,6 +40,6 @@
     class="btn custom-more-button me-2 mb-2"
     (click)="toggleShowAllZielgruppen()"
   >
-    {{ showAllZielgruppen ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
+    {{ showAllZielgruppen ? ('CONSULTATION.SHOW_LESS' | translate) : ('CONSULTATION.SHOW_MORE' | translate) }}
   </button>
 </div>

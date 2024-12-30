@@ -1,49 +1,49 @@
 <div class="container my-5">
-  <h1 class="text-center mb-4">Impressum & Datenschutz</h1>
-  <p class="text-muted">Beschreibung des Impressums und der Datenschutzrichtlinien.</p>
-</div>
-
-<div class="container my-5">
-  <div class="row">
-      <div class="col-md-6 mb-4">
-          <h5>Projektleiter</h5>
-          <p>
-              Stefan Hillmann <br>
-              <a href="mailto:stefan.hillmann@tu-berlin.de" class="text-primary">stefan.hillmann@tu-berlin.de</a>
-          </p>
-      </div>
-      <div class="col-md-6 mb-4">
-          <h5>Inhaltliche Verantwortung</h5>
-          <p>
-              Arlett Sommerfeld <br>
-              Allgemeine Studienberatung, Abteilung Studierendenservice <br>
-              <a href="mailto:arlett.sommerfeld@tu-berlin.de" class="text-primary">arlett.sommerfeld@tu-berlin.de</a>
-          </p>
-      </div>
+    <h1 class="text-center mb-4">{{ 'IMPRINT.TITLE' | translate }}</h1>
+    <p class="text-muted">{{ 'IMPRINT.DESCRIPTION' | translate }}</p>
   </div>
-  <div class="row">
-      <div class="col-md-12">
-          <h5>Entwickler</h5>
-          <p>
-              Anna König <br>
-              Fabian Schwarzenbolz <br>
-              Matilda Freiheit <br>
-              Niklas J. M. Hoffmann <br>
-              Tom Rüger
-          </p>
-      </div>
-  </div>
+  
+  <div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5>{{ 'IMPRINT.PROJECT_LEAD' | translate }}</h5>
+            <p>
+                Stefan Hillmann <br>
+                <a href="mailto:stefan.hillmann@tu-berlin.de" class="text-primary">stefan.hillmann@tu-berlin.de</a>
+            </p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5>{{ 'IMPRINT.RESPONSIBILITY' | translate }}</h5>
+            <p>
+                Arlett Sommerfeld <br>
+                {{ 'IMPRINT.RESPONSIBILITY_DEPARTMENT' | translate }} <br>
+                <a href="mailto:arlett.sommerfeld@tu-berlin.de" class="text-primary">arlett.sommerfeld@tu-berlin.de</a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>{{ 'IMPRINT.DEVELOPERS' | translate }}</h5>
+            <p>
+                Anna König <br>
+                Fabian Schwarzenbolz <br>
+                Matilda Freiheit <br>
+                Niklas J. M. Hoffmann <br>
+                Tom Rüger
+            </p>
+        </div>
+    </div>
 </div>
 
 <div class="container my-5 text-center">
-  <p>
-      Weitere Informationen zur Datenschutzerklärung finden Sie 
-      <a href="https://www.tu.berlin/datenschutz" target="_blank" class="text-primary">hier</a>.
-  </p>
+    <p>
+        {{ 'IMPRINT.FURTHER_INFO' | translate }} 
+        <a href="https://www.tu.berlin/datenschutz" target="_blank" class="text-primary">{{ 'IMPRINT.FURTHER_INFO_LINK' | translate }}</a>.
+    </p>
 </div>
-
+  
 <div class="container text-center mt-3">
-  <button routerLink="/" class="btn btn-outline-primary">Zurück zur Startseite</button>
+    <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
 </div>
 
   

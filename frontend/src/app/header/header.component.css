@@ -35,6 +35,11 @@ header {
     header .me-3 {
       margin-right: 0.5rem; /* Reduziert Abstand für mobile Ansicht */
     }
-    }
+  }
+  .active {
+    /* font-weight: bold; */
+    text-decoration: underline;
+  }
+  
   
 

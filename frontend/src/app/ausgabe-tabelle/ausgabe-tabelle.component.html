@@ -1,39 +1,37 @@
 <div class="container mt-4">
-  <h2>Deine Ergebnisse</h2>
-  <p>Klicke rechts auf den Pfeil, um eine Beschreibung zum jeweiligen Angebot zu erhalten.</p>
+  <h2>{{ 'RESULT_TABLE.TITLE' | translate }}</h2>
+  <p>{{ 'RESULT_TABLE.DESCRIPTION' | translate }}</p>
   <table class="table">
     <thead>
       <tr>
-        <th>Institution</th>
+        <th>{{ 'RESULT_TABLE.INSTITUTION' | translate }}</th>
         <th></th> <!-- Spalte für den Pfeil -->
       </tr>
     </thead>
     <tbody>
-
         <tr *ngFor="let item of filteredResults; trackBy: trackItem">
           <td>
             <div (click)="toggleDetails(item.ID)" class="name-link">
               <a [href]="item.url" target="_blank">
                 {{ item.Name }}
-                <i class="bi bi-link-45deg" title="Zur Webseite"></i>
+                <i class="bi bi-link-45deg" title="{{ 'RESULT_TABLE.WEBSITE_TOOLTIP' | translate }}"></i>
               </a>
             </div>
             <div *ngIf="isDetailsVisible(item.ID)" class="details mt-2">
-              <p>Beschreibung: {{ item.Beschreibung }}</p>
-              <p>Angebotsart:</p>
-                <ul *ngIf="item.Arten && item.Arten.length > 0; else noArten">
-                  <li *ngFor="let art of item.Arten">{{ art }}</li>
-                </ul>
-                <ng-template #noArten>
-                  <p>Keine Arten verfügbar.</p>
-                </ng-template>
+              <p>{{ 'RESULT_TABLE.DESCRIPTION_LABEL' | translate }}: {{ item.Beschreibung }}</p>
+              <p>{{ 'RESULT_TABLE.TYPES_LABEL' | translate }}:</p>
+              <ul *ngIf="item.Arten && item.Arten.length > 0; else noArten">
+                <li *ngFor="let art of item.Arten">{{ art }}</li>
+              </ul>
+              <ng-template #noArten>
+                <p>{{ 'RESULT_TABLE.NO_TYPES_AVAILABLE' | translate }}</p>
+              </ng-template>
             </div>
           </td>
           <td (click)="toggleDetails(item.ID)" class="text-center" style="cursor: pointer;">
-            <i [class]="isDetailsVisible(item.ID) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" title="Mehr Informationen"></i>
+            <i [class]="isDetailsVisible(item.ID) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" title="{{ 'RESULT_TABLE.MORE_INFO_TOOLTIP' | translate }}"></i>
           </td>
         </tr>
-      
     </tbody>
   </table>
 </div>

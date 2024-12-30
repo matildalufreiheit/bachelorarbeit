@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -24,8 +25,14 @@ export class HeaderComponent {
   }
 
   // Sprachwechsel-Logik
-  setLanguage(lang: string): void {
-    console.log('Sprache geändert zu:', lang);
-    // Sprachwechsel-Logik muss implementiert werden TODO
+  currentLang = 'de'; // Standardsprache
+
+  constructor(private translate: TranslateService) {
+    this.translate.setDefaultLang(this.currentLang); // Standardsprache setzen
+  }
+
+  switchLanguage() {
+    this.currentLang = this.currentLang === 'en' ? 'de' : 'en';
+    this.translate.use(this.currentLang); // Sprache wechseln
   }
 }

@@ -1,0 +1,130 @@
+{
+    "LOGIN": {
+      "TITLE": "Login",
+      "USERNAME_LABEL": "Username:",
+      "PASSWORD_LABEL": "Password:",
+      "SUBMIT_BUTTON": "Login"
+    },
+    "ADMIN": {
+      "WELCOME": "Welcome, Admin!",
+      "LOGOUT_BUTTON": "Logout",
+      "CHOOSE_ACTION": "Choose action:",
+      "NEW_BUTTON": "New",
+      "EDIT_BUTTON": "Edit",
+      "DELETE_BUTTON": "Delete",
+      "MANAGE_USERS_BUTTON": "Manage users"
+    },
+    "USER_MANAGEMENT": {
+      "NEW_USER_TITLE": "New User",
+      "REGISTER_BUTTON": "Register",
+      "DELETE_USER_TITLE": "Delete User",
+      "SELECT_USER_LABEL": "Select user",
+      "DELETE_USER_BUTTON": "Delete user"
+    },
+    "OFFER_MANAGEMENT": {
+      "NEW_OFFER_TITLE": "Create New Offer",
+      "NAME_LABEL": "Name:",
+      "DESCRIPTION_LABEL": "Description:",
+      "URL_LABEL": "URL:",
+      "CREATE_BUTTON": "Create",
+      "NEW_TAG_TITLE": "Create New Tag",
+      "NEW_TAG_PLACEHOLDER": "Enter new tag",
+      "CREATE_TAG_BUTTON": "Create Tag",
+      "NEW_GROUP_TITLE": "Create New Group",
+      "NEW_GROUP_PLACEHOLDER": "Enter new group",
+      "CREATE_GROUP_BUTTON": "Create Group"
+    },
+    "EDIT_MANAGEMENT": {
+      "EDIT_INSTITUTION_TITLE": "Edit Institution",
+      "SELECT_INSTITUTION_LABEL": "Select institution",
+      "EDIT_NAME_LABEL": "Name:",
+      "EDIT_DESCRIPTION_LABEL": "Description:",
+      "EDIT_URL_LABEL": "URL:",
+      "SAVE_CHANGES_BUTTON": "Save changes",
+      "EDIT_TAG_TITLE": "Edit Tag",
+      "SELECT_TAG_LABEL": "Select tag",
+      "EDIT_TAG_PLACEHOLDER": "Edit tag name",
+      "EDIT_TAG_BUTTON": "Edit Tag",
+      "EDIT_GROUP_TITLE": "Edit Group",
+      "SELECT_GROUP_LABEL": "Select group",
+      "EDIT_GROUP_PLACEHOLDER": "Edit group name",
+      "EDIT_GROUP_BUTTON": "Edit Group"
+    },
+    "DELETE_MANAGEMENT": {
+      "DELETE_INSTITUTION_TITLE": "Delete Institution",
+      "DELETE_INSTITUTION_BUTTON": "Delete Institution",
+      "DELETE_TAG_TITLE": "Delete Tag",
+      "DELETE_TAG_BUTTON": "Delete Tag",
+      "DELETE_GROUP_TITLE": "Delete Group",
+      "DELETE_GROUP_BUTTON": "Delete Group"
+    },
+    "COMMON": {
+      "BACK_TO_HOME_BUTTON": "Back to Home"
+    },
+    "RESULT_TABLE": {
+        "TITLE": "Your Results",
+        "DESCRIPTION": "Click the arrow on the right to see a description of the respective offer.",
+        "INSTITUTION": "Institution",
+        "WEBSITE_TOOLTIP": "Go to website",
+        "DESCRIPTION_LABEL": "Description",
+        "TYPES_LABEL": "Offer Types",
+        "NO_TYPES_AVAILABLE": "No types available.",
+        "MORE_INFO_TOOLTIP": "More information"
+    },
+    "CONSULTATION": {
+    "SELECT_CATEGORIES": "Select categories for which you would like to receive recommendations. You can adjust your selection at any time.",
+    "SHOW_MORE": "Show more",
+    "SHOW_LESS": "Show less",
+    "SELECT_FILTERS": "Additionally, select one or more filters that apply to you. You can adjust your selection at any time."
+  },
+  "FOOTER": {
+    "CONTACT": "Contact",
+    "IMPRINT_PRIVACY": "Imprint & Privacy",
+    "ACCESSIBILITY": "Accessibility",
+    "ADMIN_AREA": "Admin Area",
+    "TU_BERLIN": "Technical University of Berlin"
+  },
+  "HEADER": {
+    "TU_LOGO_ALT": "TU Berlin Logo",
+    "LANGUAGE_DE": "DE",
+    "LANGUAGE_EN": "EN",
+    "EMERGENCY": "Emergency Berlin",
+    "CHANGE_FONT_SIZE": "Change Font Size",
+    "FONT_SMALL": "Small",
+    "FONT_LARGE": "Large"
+  },
+  "IMPRINT": {
+    "TITLE": "Imprint & Privacy Policy",
+    "DESCRIPTION": "Description of the imprint and privacy policy.",
+    "PROJECT_LEAD": "Project Lead",
+    "RESPONSIBILITY": "Content Responsibility",
+    "RESPONSIBILITY_DEPARTMENT": "General Student Advisory Service, Student Services Department",
+    "DEVELOPERS": "Developers",
+    "FURTHER_INFO": "Further information on the privacy policy can be found",
+    "FURTHER_INFO_LINK": "here",
+    "BACK_HOME": "Back to Home"
+  },
+  "CONTACT": {
+    "TITLE": "Contact",
+    "DESCRIPTION": "If you have any questions, please feel free to contact us.",
+    "PROJECT_LEAD": "Project Lead",
+    "RESPONSIBILITY": "Content Responsibility",
+    "RESPONSIBILITY_DEPARTMENT": "General Student Advisory Service, Student Services Department",
+    "BACK_HOME": "Back to Home"
+  },
+  "SCROLL": {
+    "UP_BUTTON": "Back to top"
+  },
+    "SEARCH": {
+      "TITLE": "Couldn't find your topic? Use your own keywords to search for a contact point here.",
+      "PLACEHOLDER": "Enter search term...",
+      "LOADING": "Loading...",
+      "WEBSITE_TOOLTIP": "Go to website",
+      "CLOSE_RESULTS": "Close results"
+    },
+    "HOME": {
+        "TITLE": "Advisory Services for TU Berlin Students",
+        "DESCRIPTION": "Quickly and easily find the right advisory office for your concern!"
+    }
+}
+  

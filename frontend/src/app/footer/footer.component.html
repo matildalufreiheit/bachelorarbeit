@@ -2,14 +2,14 @@
   <div class="row align-items-center">
     <!-- Link-Bereich -->
     <div class="col-12 col-md-8 d-flex flex-wrap justify-content-start">
-      <a routerLink="/kontakt" class="me-3" style="color: inherit; text-decoration: none;">Kontakt</a>
-      <a routerLink="/impressum-datenschutz" class="me-3" style="color: inherit; text-decoration: none;">Impressum & Datenschutz</a>
-      <a href="https://www.tu.berlin/footer/barrierefreiheit" target="_blank" class="me-3" style="color: inherit; text-decoration: none;">Barrierefreiheit</a>
-      <a routerLink="/admin" class="me-3" style="color: inherit; text-decoration: none;">Adminbereich</a>
+      <a routerLink="/kontakt" class="me-3" style="color: inherit; text-decoration: none;">{{ 'FOOTER.CONTACT' | translate }}</a>
+      <a routerLink="/impressum-datenschutz" class="me-3" style="color: inherit; text-decoration: none;">{{ 'FOOTER.IMPRINT_PRIVACY' | translate }}</a>
+      <a href="https://www.tu.berlin/footer/barrierefreiheit" target="_blank" class="me-3" style="color: inherit; text-decoration: none;">{{ 'FOOTER.ACCESSIBILITY' | translate }}</a>
+      <a routerLink="/admin" class="me-3" style="color: inherit; text-decoration: none;">{{ 'FOOTER.ADMIN_AREA' | translate }}</a>
     </div>
     <!-- TU Berlin Bereich -->
     <div class="col-12 col-md-4 text-end">
-      <p class="mb-0">Technische Universität Berlin</p>
+      <p class="mb-0">{{ 'FOOTER.TU_BERLIN' | translate }}</p>
     </div>
   </div>
 </footer>

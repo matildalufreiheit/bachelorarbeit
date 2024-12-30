@@ -1,0 +1,130 @@
+{
+    "LOGIN": {
+      "TITLE": "Login",
+      "USERNAME_LABEL": "Benutzername:",
+      "PASSWORD_LABEL": "Passwort:",
+      "SUBMIT_BUTTON": "Anmelden"
+    },
+    "ADMIN": {
+      "WELCOME": "Willkommen, Admin!",
+      "LOGOUT_BUTTON": "Abmelden",
+      "CHOOSE_ACTION": "Aktion wählen:",
+      "NEW_BUTTON": "Neu",
+      "EDIT_BUTTON": "Ändern",
+      "DELETE_BUTTON": "Löschen",
+      "MANAGE_USERS_BUTTON": "Benutzer verwalten"
+    },
+    "USER_MANAGEMENT": {
+      "NEW_USER_TITLE": "Neuer Benutzer",
+      "REGISTER_BUTTON": "Registrieren",
+      "DELETE_USER_TITLE": "Benutzer löschen",
+      "SELECT_USER_LABEL": "Benutzer auswählen",
+      "DELETE_USER_BUTTON": "Benutzer löschen"
+    },
+    "OFFER_MANAGEMENT": {
+      "NEW_OFFER_TITLE": "Neues Angebot erstellen",
+      "NAME_LABEL": "Name:",
+      "DESCRIPTION_LABEL": "Beschreibung:",
+      "URL_LABEL": "URL:",
+      "CREATE_BUTTON": "Erstellen",
+      "NEW_TAG_TITLE": "Neues Tag erstellen",
+      "NEW_TAG_PLACEHOLDER": "Neues Tag eingeben",
+      "CREATE_TAG_BUTTON": "Tag erstellen",
+      "NEW_GROUP_TITLE": "Neue Zielgruppe erstellen",
+      "NEW_GROUP_PLACEHOLDER": "Neue Zielgruppe eingeben",
+      "CREATE_GROUP_BUTTON": "Zielgruppe erstellen"
+    },
+    "EDIT_MANAGEMENT": {
+      "EDIT_INSTITUTION_TITLE": "Institution bearbeiten",
+      "SELECT_INSTITUTION_LABEL": "Institution auswählen",
+      "EDIT_NAME_LABEL": "Name:",
+      "EDIT_DESCRIPTION_LABEL": "Beschreibung:",
+      "EDIT_URL_LABEL": "URL:",
+      "SAVE_CHANGES_BUTTON": "Änderungen speichern",
+      "EDIT_TAG_TITLE": "Tag bearbeiten",
+      "SELECT_TAG_LABEL": "Tag auswählen",
+      "EDIT_TAG_PLACEHOLDER": "Tag-Name bearbeiten",
+      "EDIT_TAG_BUTTON": "Tag bearbeiten",
+      "EDIT_GROUP_TITLE": "Zielgruppe bearbeiten",
+      "SELECT_GROUP_LABEL": "Zielgruppe auswählen",
+      "EDIT_GROUP_PLACEHOLDER": "Zielgruppen-Name bearbeiten",
+      "EDIT_GROUP_BUTTON": "Zielgruppe bearbeiten"
+    },
+    "DELETE_MANAGEMENT": {
+      "DELETE_INSTITUTION_TITLE": "Institution löschen",
+      "DELETE_INSTITUTION_BUTTON": "Institution löschen",
+      "DELETE_TAG_TITLE": "Tag löschen",
+      "DELETE_TAG_BUTTON": "Tag löschen",
+      "DELETE_GROUP_TITLE": "Zielgruppe löschen",
+      "DELETE_GROUP_BUTTON": "Zielgruppe löschen"
+    },
+    "COMMON": {
+      "BACK_TO_HOME_BUTTON": "Zurück zur Startseite"
+    },
+    "RESULT_TABLE": {
+        "TITLE": "Deine Ergebnisse",
+        "DESCRIPTION": "Klicke rechts auf den Pfeil, um eine Beschreibung zum jeweiligen Angebot zu erhalten.",
+        "INSTITUTION": "Institution",
+        "WEBSITE_TOOLTIP": "Zur Webseite",
+        "DESCRIPTION_LABEL": "Beschreibung",
+        "TYPES_LABEL": "Angebotsart",
+        "NO_TYPES_AVAILABLE": "Keine Arten verfügbar.",
+        "MORE_INFO_TOOLTIP": "Mehr Informationen"
+    },
+    "CONSULTATION": {
+    "SELECT_CATEGORIES": "Wähle Kategorien aus, für die du Empfehlungen erhalten möchtest. Du kannst deine Auswahl später jederzeit anpassen.",
+    "SHOW_MORE": "Mehr anzeigen",
+    "SHOW_LESS": "Weniger anzeigen",
+    "SELECT_FILTERS": "Wähle zusätzlich ein oder mehrere Filter aus, die auf dich zutreffen. Du kannst deine Auswahl später jederzeit anpassen."
+  },
+  "FOOTER": {
+    "CONTACT": "Kontakt",
+    "IMPRINT_PRIVACY": "Impressum & Datenschutz",
+    "ACCESSIBILITY": "Barrierefreiheit",
+    "ADMIN_AREA": "Adminbereich",
+    "TU_BERLIN": "Technische Universität Berlin"
+  },
+  "HEADER": {
+    "TU_LOGO_ALT": "TU Berlin Logo",
+    "LANGUAGE_DE": "DE",
+    "LANGUAGE_EN": "EN",
+    "EMERGENCY": "Notruf Berlin",
+    "CHANGE_FONT_SIZE": "Schriftgröße ändern",
+    "FONT_SMALL": "Klein",
+    "FONT_LARGE": "Groß"
+  },
+    "IMPRINT": {
+      "TITLE": "Impressum & Datenschutz",
+      "DESCRIPTION": "Beschreibung des Impressums und der Datenschutzrichtlinien.",
+      "PROJECT_LEAD": "Projektleiter",
+      "RESPONSIBILITY": "Inhaltliche Verantwortung",
+      "RESPONSIBILITY_DEPARTMENT": "Allgemeine Studienberatung, Abteilung Studierendenservice",
+      "DEVELOPERS": "Entwickler",
+      "FURTHER_INFO": "Weitere Informationen zur Datenschutzerklärung finden Sie",
+      "FURTHER_INFO_LINK": "hier",
+      "BACK_HOME": "Zurück zur Startseite"
+    },
+    "CONTACT": {
+    "TITLE": "Kontakt",
+    "DESCRIPTION": "Falls Sie Fragen haben, wenden Sie sich bitte an uns.",
+    "PROJECT_LEAD": "Projektleiter",
+    "RESPONSIBILITY": "Inhaltliche Verantwortung",
+    "RESPONSIBILITY_DEPARTMENT": "Allgemeine Studienberatung, Abteilung Studierendenservice",
+    "BACK_HOME": "Zurück zur Startseite"
+  },
+  "SCROLL": {
+    "UP_BUTTON": "Zurück nach oben"
+  },
+  "SEARCH": {
+      "TITLE": "Dein Thema war nicht dabei? Dann kannst du hier mit eigenen Stichworten deine Anlaufstelle suchen.",
+      "PLACEHOLDER": "Suchbegriff eingeben...",
+      "LOADING": "Lädt...",
+      "WEBSITE_TOOLTIP": "Zur Webseite",
+      "CLOSE_RESULTS": "Ergebnisse schließen"
+    },
+  "HOME": {
+    "TITLE": "Beratungsangebote für Studierende der TU Berlin",
+    "DESCRIPTION": "Finde schnell und einfach die passende Beratungsstelle für dein Anliegen!"
+  }   
+}
+  
