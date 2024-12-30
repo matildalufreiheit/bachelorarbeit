@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class DataService {
   private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
+  //private apiUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) { }
 

@@ -1,0 +1,14 @@
+h1 {
+    font-size: 2.5rem; /* Größere Hauptüberschrift */
+    font-weight: bold;
+}
+
+p {
+    line-height: 1.6; /* Bessere Lesbarkeit */
+}
+
+.container {
+    background-color: #f8f9fa; /* Leicht grauer Hintergrund */
+    border-radius: 8px; /* Abgerundete Ecken */
+    padding: 20px;
+}

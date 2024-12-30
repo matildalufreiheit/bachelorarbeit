@@ -1,6 +1,17 @@
 .site {
-    min-height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: minmax(0, 1fr);
+    min-height: 100dvh; /* Mindestens die Höhe des Viewports */
+    display: flex;
+    flex-direction: column; /* Inhalte vertikal anordnen */
 }
+
+.content-wrapper {
+    flex: 1; /* Füllt den Platz zwischen Header und Footer */
+    display: flex;
+    flex-direction: column; /* Inhalte vertikal anordnen */
+    justify-content: flex-start; /* Standardmäßig nach oben ausgerichtet */
+    align-items: center; /* Horizontal zentrieren */
+    padding: 1rem; /* Innenabstand */
+    box-sizing: border-box; /* Padding in die Breite einberechnen */
+}
+
+
