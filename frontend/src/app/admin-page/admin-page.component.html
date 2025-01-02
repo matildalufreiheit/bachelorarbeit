@@ -69,23 +69,36 @@
     <!-- Modus: Neu -->
     <div *ngIf="mode === 'neu'">
       <h2>{{ 'OFFER_MANAGEMENT.NEW_OFFER_TITLE' | translate }}</h2>
-      <form (ngSubmit)="createAngebot(name.value, description.value, url.value)" class="border p-4 rounded shadow-sm">
+      <form (ngSubmit)="createAngebot(name.value, description.value, url.value, nameEn.value, descriptionEn.value, urlEn.value)" class="border p-4 rounded shadow-sm">
         <div class="mb-3">
           <label for="name" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL' | translate }}</label>
           <input id="name" type="text" class="form-control" #name />
+        </div>
+        <div class="mb-3">
+          <label for="name-en" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL_EN' | translate }}</label>
+          <input id="name-en" type="text" class="form-control" #nameEn />
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL' | translate }}</label>
           <textarea id="description" class="form-control" #description></textarea>
         </div>
         <div class="mb-3">
+          <label for="description-en" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL_EN' | translate }}</label>
+          <textarea id="description-en" class="form-control" #descriptionEn></textarea>
+        </div>
+        <div class="mb-3">
           <label for="url" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL' | translate }}</label>
           <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
         </div>
+        <div class="mb-3">
+          <label for="url-en" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL_EN' | translate }}</label>
+          <input id="url-en" type="url" class="form-control" #urlEn placeholder="https://example.com" />
+        </div>
+        
 
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.NEW_TAG_TITLE' | translate }}</mat-label>
+            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TAG' | translate }}</mat-label>
             <mat-select multiple [(value)]="selectedTags">
               <mat-option *ngFor="let tag of tags" [value]="tag.ID">{{ tag.Tag }}</mat-option>
             </mat-select>
@@ -94,7 +107,7 @@
 
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.NEW_GROUP_TITLE' | translate }}</mat-label>
+            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_GROUP' | translate }}</mat-label>
             <mat-select multiple [(value)]="selectedZielgruppen">
               <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">{{ zielgruppe.Name }}</mat-option>
             </mat-select>
@@ -103,7 +116,7 @@
 
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.CREATE_BUTTON' | translate }}</mat-label>
+            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TYPE' | translate }}</mat-label>
             <mat-select multiple [(value)]="selectedArt">
               <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
             </mat-select>
@@ -118,9 +131,17 @@
           <div class="input-group mb-3">
             <input
               type="text"
-              [(ngModel)]="newTag"
-              name="newTag"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER' | translate }}"
+              [(ngModel)]="newTag.de"
+              name="newTagDe"
+              placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_DE' | translate }}"
+              class="form-control"
+              required
+            />
+            <input
+              type="text"
+              [(ngModel)]="newTag.en"
+              name="newTagEn"
+              placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_EN' | translate }}"
               class="form-control"
               required
             />
@@ -128,23 +149,31 @@
           </div>
         </form>
       </div>
-
+      
       <div class="mt-5">
         <h2>{{ 'OFFER_MANAGEMENT.NEW_GROUP_TITLE' | translate }}</h2>
         <form (ngSubmit)="addZielgruppe()">
           <div class="input-group mb-3">
             <input
               type="text"
-              [(ngModel)]="newZielgruppe"
-              name="newZielgruppe"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER' | translate }}"
+              [(ngModel)]="newZielgruppe.de"
+              name="newZielgruppeDe"
+              placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_DE' | translate }}"
+              class="form-control"
+              required
+            />
+            <input
+              type="text"
+              [(ngModel)]="newZielgruppe.en"
+              name="newZielgruppeEn"
+              placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_EN' | translate }}"
               class="form-control"
               required
             />
             <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_GROUP_BUTTON' | translate }}</button>
           </div>
         </form>
-      </div>
+      </div>      
     </div>
 
     <!-- Modus: Ändern -->

@@ -61,7 +61,7 @@ export class AusgabeTabelleComponent implements OnInit {
   }
 
   getAngebotsarten(): void {
-    this.dataService.getAngebotsarten().subscribe(response => {
+    this.dataService.getArten().subscribe(response => {
       this.arten = response.data; // Arten speichern
       console.log('Geladene Angebotsarten:', this.arten); // Debug-Ausgabe
     });

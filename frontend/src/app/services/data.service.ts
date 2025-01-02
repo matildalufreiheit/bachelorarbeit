@@ -8,8 +8,8 @@ import { LanguageService } from './language.service';
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
-  //private apiUrl = 'http://localhost:3000';
+  //private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
+  private apiUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient,
     private languageService: LanguageService
@@ -21,7 +21,6 @@ export class DataService {
     const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
     return this.http.get(`${this.apiUrl}/angebote?lang=${lang}`); // Sprache an API übergeben
 }
-
 
   createAngebot(angebot: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/angebote`, angebot);
@@ -41,8 +40,7 @@ export class DataService {
 
 
   // -------------------------------------------------------------  Tags
-  getTags(): Observable<any> {
-    const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
+  getTags(lang: string = 'de'): Observable<any> {
     return this.http.get(`${this.apiUrl}/tags?lang=${lang}`); // Sprache an API übergeben
   }
 
@@ -54,13 +52,14 @@ export class DataService {
     return this.http.delete(`${this.apiUrl}/tags/${tagId}`);
   }
 
-  addTag(tag: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/tags`, { tag });
+  addTag(tag: { de: string; en: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tags`, tag );
   }
 
+
   // ----------------------------------------------------------- Institutionen
-  getInstitutions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/institutionen`).pipe(
+  getInstitutions(lang: string = 'de'): Observable<any> {
+    return this.http.get(`${this.apiUrl}/institutionen?lang=${lang}`).pipe(
       tap(response => console.log('API Antwort:', response))
     );
   }
@@ -84,13 +83,12 @@ export class DataService {
 
 
   // -------------------------------------------------------------  Zielgruppen
-  getZielgruppen(): Observable<any> {
-    const lang = this.languageService.getCurrentLanguage();
+  getZielgruppen(lang: string = 'de'): Observable<any> {
     return this.http.get(`${this.apiUrl}/zielgruppen?lang=${lang}`);
   }
 
-  addZielgruppe(name: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/zielgruppen`, { name });
+  addZielgruppe(zielgruppe: { de: string; en: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/zielgruppen`, zielgruppe );
   }
 
   updateZielgruppe(zielgruppeId: number, zielgruppeName: string): Observable<any> {
@@ -121,12 +119,13 @@ export class DataService {
 
 
   // -------------------------------------------------------------  Arten  ----> 2x???
-  getAngebotsarten(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/arten`);
-  }
+  // getAngebotsarten(lang: string = 'de'): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/arten?lang=${lang}`);
+  // }
 
-  getArten(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/arten`);
+  getArten(lang: string = 'de'): Observable<any> {
+    console.log(`API-Aufruf für Arten: ${this.apiUrl}/angebotsarten?lang=${lang}`); // Debugging
+    return this.http.get(`${this.apiUrl}/arten?lang=${lang}`);
   }
 
 

@@ -28,11 +28,20 @@
       "URL_LABEL": "URL:",
       "CREATE_BUTTON": "Erstellen",
       "NEW_TAG_TITLE": "Neues Tag erstellen",
+      "CHOOSE_TAG": "Tag auswählen",
+      "CHOOSE_GROUP": "Zielgruppe auswählen",
       "NEW_TAG_PLACEHOLDER": "Neues Tag eingeben",
+      "NEW_TAG_PLACEHOLDER_DE": "Neues Tag eingeben",
+      "NEW_TAG_PLACEHOLDER_EN": "Neues Tag in Englisch eingeben",
       "CREATE_TAG_BUTTON": "Tag erstellen",
       "NEW_GROUP_TITLE": "Neue Zielgruppe erstellen",
-      "NEW_GROUP_PLACEHOLDER": "Neue Zielgruppe eingeben",
-      "CREATE_GROUP_BUTTON": "Zielgruppe erstellen"
+      "NEW_GROUP_PLACEHOLDER_DE": "Neue Zielgruppe eingeben",
+      "NEW_GROUP_PLACEHOLDER_EN": "Neue Zielgruppe in Englisch eingeben",
+      "CREATE_GROUP_BUTTON": "Zielgruppe erstellen",
+      "NAME_LABEL_EN": "Name in Englisch:",
+      "DESCRIPTION_LABEL_EN": "Beschreibung in Englisch:",
+      "URL_LABEL_EN": "URL für Englisch:",
+      "CHOOSE_TYPE" : "Art wählen"
     },
     "EDIT": {
     "INSTITUTION_EDIT_TITLE": "Angebot bearbeiten",

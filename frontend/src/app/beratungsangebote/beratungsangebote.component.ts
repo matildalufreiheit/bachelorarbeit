@@ -41,37 +41,35 @@ export class BeratungsangeboteComponent implements OnInit {
   
 
   loadData() {
-    this.dataService.getTags().subscribe((response) => {
+    const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
+  
+    this.dataService.getTags(lang).subscribe((response) => {
       this.tags = response.data;
       this.visibleTags = this.showAllTags
         ? this.tags
         : this.tags.slice(0, this.maxVisibleItems);
     });
-      this.dataService.getAngebote().subscribe(
-        response => {
-          this.angebote = response.data
-          // console.log('Angebote:', this.angebote);
-        }
-      )
-      this.dataService.getAngebotTags().subscribe(
-        response => {
-          this.angebotTags = response.data
-          // console.log('AngebotTags Response:', this.angebotTags);
-        }
-      )
-      this.dataService.getZielgruppen().subscribe((response) => {
-        this.zielgruppen = response.data;
-        this.visibleZielgruppen = this.showAllZielgruppen
-          ? this.zielgruppen
-          : this.zielgruppen.slice(0, this.maxVisibleItems);
-      });
-      this.dataService.getAngebotZielgruppe().subscribe(
-        response => {
-          this.angeboteZielgruppen = response.data
-          // console.log('Angebote_Zielgruppen:', this.angeboteZielgruppen); // Neu
-        }
-      )
+  
+    this.dataService.getAngebote().subscribe((response) => {
+      this.angebote = response.data;
+    });
+  
+    this.dataService.getAngebotTags().subscribe((response) => {
+      this.angebotTags = response.data;
+    });
+  
+    this.dataService.getZielgruppen(lang).subscribe((response) => {
+      this.zielgruppen = response.data;
+      this.visibleZielgruppen = this.showAllZielgruppen
+        ? this.zielgruppen
+        : this.zielgruppen.slice(0, this.maxVisibleItems);
+    });
+  
+    this.dataService.getAngebotZielgruppe().subscribe((response) => {
+      this.angeboteZielgruppen = response.data;
+    });
   }
+  
   
   
 
