@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-header',
@@ -24,15 +25,27 @@ export class HeaderComponent {
     }
   }
 
-  // Sprachwechsel-Logik
-  currentLang = 'de'; // Standardsprache
+  constructor(public languageService: LanguageService) {}
 
-  constructor(private translate: TranslateService) {
-    this.translate.setDefaultLang(this.currentLang); // Standardsprache setzen
-  }
-
+  // Sprache wechseln
   switchLanguage() {
-    this.currentLang = this.currentLang === 'en' ? 'de' : 'en';
-    this.translate.use(this.currentLang); // Sprache wechseln
+    this.languageService.switchLanguage();
   }
+
+  // Aktuelle Sprache abrufen (optional für Anzeige im Template)
+  get currentLang(): string {
+    return this.languageService.getCurrentLanguage();
+  }
+
+  // Sprachwechsel-Logik
+  // currentLang = 'de'; // Standardsprache
+
+  // constructor(private translate: TranslateService) {
+  //   this.translate.setDefaultLang(this.currentLang); // Standardsprache setzen
+  // }
+
+  // switchLanguage() {
+  //   this.currentLang = this.currentLang === 'en' ? 'de' : 'en';
+  //   this.translate.use(this.currentLang); // Sprache wechseln
+  // }
 }

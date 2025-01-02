@@ -351,6 +351,10 @@ onZielgruppeSelectionChange(zielgruppeId: number): void {
     const institution = this.institutions.find(inst => inst.ID === institutionId);
     if (institution) {
       this.selectedInstitution = { ...institution }; // Setze die ausgewählte Institution
+      this.institutionName = institution.Name; // Setze den Namen der Institution
+      this.institutionDescription = institution.Beschreibung; // Setze die Beschreibung der Institution
+      this.institutionURL = institution.URL; // Setze die URL der Institution
+  
       this.originalInstitution = { ...institution }; // Speichere den Originalzustand
       console.log('Ausgewählte Institution:', this.selectedInstitution);
     } else {

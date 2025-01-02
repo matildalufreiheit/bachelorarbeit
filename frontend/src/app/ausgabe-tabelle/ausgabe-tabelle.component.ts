@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { SharedDataService } from '../services/shared-data.service';
 import { Angebot } from '../shared/angebot';
+import { LanguageService } from '../services/language.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AusgabeTabelleComponent implements OnInit {
 
   arten: { ID: number; Art: string }[] = [];
 
-  constructor(private dataService: DataService, private sharedDataService: SharedDataService, private changeDetection: ChangeDetectorRef) {}
+  constructor(private dataService: DataService, private sharedDataService: SharedDataService, private changeDetection: ChangeDetectorRef, private languageService: LanguageService) {}
 
   ngOnInit(): void {
     this.getTags();
@@ -31,6 +32,11 @@ export class AusgabeTabelleComponent implements OnInit {
     this.getArten(); 
     this.getAngeboteZielgruppen(); 
     this.getAngebote();
+
+    // Sprache beobachten und bei Änderung Angebote neu laden
+    this.languageService.currentLang$.subscribe(() => {
+      this.getAngebote();
+    });
   
     this.sharedDataService.selectedTags$.subscribe(tags => {
       this.selectedTags = tags;
@@ -52,8 +58,6 @@ export class AusgabeTabelleComponent implements OnInit {
       this.visibleDetails = details;
     });
     
-
-    //this.getAngebote(); // Initiales Laden der Daten
   }
 
   getAngebotsarten(): void {
@@ -64,19 +68,21 @@ export class AusgabeTabelleComponent implements OnInit {
   }
 
   getAngebote(): void {
+    const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
     this.dataService.getAngebote().subscribe({
       next: (response) => {
-        console.log('Geladene Angebote in Tabelle:', response.data);
+        console.log(`Geladene Angebote in Tabelle (${lang}):`, response.data);
   
-        this.filteredResults = response.data;       
-              
+        this.filteredResults = response.data;
+  
         console.log('Gefilterte Ergebnisse in Tabelle:', this.filteredResults);
+        this.changeDetection.detectChanges();
       },
       error: (err) => {
         console.error('Fehler beim Laden der Angebote:', err);
-      }
+      },
     });
-  }
+  }  
   
   
   // Neue Methode, um Arten aus der API zu laden

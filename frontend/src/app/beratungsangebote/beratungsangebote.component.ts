@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { SharedDataService } from '../services/shared-data.service';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-beratungsangebote',
@@ -26,24 +27,26 @@ export class BeratungsangeboteComponent implements OnInit {
   previouslyVisibleDetails: Set<number> = new Set();
 
 
-  constructor(private dataService: DataService, private sharedDataService: SharedDataService) {}
+
+  constructor(private dataService: DataService, private sharedDataService: SharedDataService, private languageService: LanguageService) {}
 
   ngOnInit(): void {
     this.loadData();
     // this.updateVisibleItems(); // Initial sichtbare Items setzen
+    // Sprache beobachten und bei Änderung Daten nachladen
+    this.languageService.currentLang$.subscribe(() => {
+      this.loadData();
+    });
   }
   
 
   loadData() {
-      this.dataService.getTags().subscribe( 
-        response => {
-          this.tags = response.data;
-          this.filteredTags = [...this.tags];
-          // console.log('Tags:', this.tags);
-          // console.log('Filtered Tags:', this.tags);
-          this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
-        }
-      )
+    this.dataService.getTags().subscribe((response) => {
+      this.tags = response.data;
+      this.visibleTags = this.showAllTags
+        ? this.tags
+        : this.tags.slice(0, this.maxVisibleItems);
+    });
       this.dataService.getAngebote().subscribe(
         response => {
           this.angebote = response.data
@@ -56,15 +59,12 @@ export class BeratungsangeboteComponent implements OnInit {
           // console.log('AngebotTags Response:', this.angebotTags);
         }
       )
-      this.dataService.getZielgruppen().subscribe(
-        response => {
-          this.zielgruppen = response.data;
-          this.filteredZielgruppen = [...this.zielgruppen];
-          // console.log('Zielgruppen:', this.zielgruppen);
-          // console.log('Filtered Zielgruppen:', this.filteredZielgruppen);
-          this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
-        }
-      )
+      this.dataService.getZielgruppen().subscribe((response) => {
+        this.zielgruppen = response.data;
+        this.visibleZielgruppen = this.showAllZielgruppen
+          ? this.zielgruppen
+          : this.zielgruppen.slice(0, this.maxVisibleItems);
+      });
       this.dataService.getAngebotZielgruppe().subscribe(
         response => {
           this.angeboteZielgruppen = response.data
@@ -97,20 +97,22 @@ export class BeratungsangeboteComponent implements OnInit {
 
   toggleShowAllTags(): void {
     this.showAllTags = !this.showAllTags;
-    this.updateVisibleItems(); // Sichtbare Tags aktualisieren
+    this.updateVisibleItems();
   }
-  
+
   toggleShowAllZielgruppen(): void {
     this.showAllZielgruppen = !this.showAllZielgruppen;
-    this.updateVisibleItems(); // Sichtbare Zielgruppen aktualisieren
+    this.updateVisibleItems();
   }
-  
+
   updateVisibleItems(): void {
-    console.log('update visible items filteredTags : ', this.filteredTags)
-    console.log('update visible items filteredZielgruppen : ', this.filteredZielgruppen)
-    this.visibleTags = this.showAllTags ? this.filteredTags : this.filteredTags.slice(0, this.maxVisibleItems);
-    this.visibleZielgruppen = this.showAllZielgruppen ? this.filteredZielgruppen : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
-  }  
+    this.visibleTags = this.showAllTags
+      ? this.tags
+      : this.tags.slice(0, this.maxVisibleItems);
+    this.visibleZielgruppen = this.showAllZielgruppen
+      ? this.zielgruppen
+      : this.zielgruppen.slice(0, this.maxVisibleItems);
+  }
 
   
   filterData(): void {
