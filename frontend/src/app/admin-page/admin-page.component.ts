@@ -2,12 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { LanguageService } from '../services/language.service';
 
+interface Tag {
+  ID: number;
+  Tag: string;
+  Tag_EN: string; // Englischer Name
+  PreferredTag: string; // Bevorzugter Name basierend auf Sprache
+}
+
+interface Zielgruppe {
+  ID: number;
+  Name: string;
+  Zielgruppe_EN: string; // Englischer Name
+  PreferredTag: string; // Bevorzugter Name basierend auf Sprache
+}
+
+
 
 @Component({
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.css'],
 })
+
+
 export class AdminPageComponent implements OnInit {
   isLoggedIn = false;
   selectedTags: number[] = [];
@@ -29,12 +46,17 @@ export class AdminPageComponent implements OnInit {
   institutionName: string = ''; // Name der Institution
   institutionDescription: string = ''; // Beschreibung der Institution
   institutionURL: string = ''; // URL der Institution
+  institutionNameEN: string = ''; // Name der Institution
+  institutionDescriptionEN: string = ''; // Beschreibung der Institution
+  institutionURLEN: string = ''; // URL der Institution
   arten: { ID: number; Art: string }[] = []; // Speichere die Arten
-  tags: { ID: number; Tag: string }[] = [];
-  zielgruppen: { ID: number; Name: string }[] = [];
+  //tags: { ID: number; Tag: string }[] = [];
+  tags: Tag[] = [];
+  //zielgruppen: { ID: number; Name: string }[] = [];
+  zielgruppen: Zielgruppe[] = [];
   originalInstitution: any | null = null;
-
-
+  selectedTagNameEN: string = ''; // Englischer Name des ausgewählten Tags
+  selectedZielgruppeNameEN: string = ''; // Englischer Name des ausgewählten Tags
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
   mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
@@ -44,7 +66,7 @@ export class AdminPageComponent implements OnInit {
   showAddTagForm: boolean = false;
   showAddZielgruppeForm: boolean = false;
 
-  constructor(private dataService: DataService, private languageService: LanguageService) {}
+  constructor(private dataService: DataService, public languageService: LanguageService) {}
 
   ngOnInit() {
     this.loadTags();
@@ -53,12 +75,14 @@ export class AdminPageComponent implements OnInit {
     this.loadInstitutions();
     this.loadArten();
     this.loadUsers();
+    this.getAngebote();
 
     // Sprache beobachten und bei Änderung Tags und Zielgruppen neu laden
     this.languageService.currentLang$.subscribe(() => {
     this.loadTags();
     this.loadZielgruppen();
     this.loadArten();
+    this.getAngebote();
   });
   }
 
@@ -268,39 +292,54 @@ createAngebot(name: string, description: string, url: string, nameEn: string, de
   }  
 
   // Tag bearbeiten
-editTag(): void {
-  if (this.selectedTagId === null || !this.selectedTagName.trim()) {
-    alert('Bitte wählen Sie ein Tag aus und geben Sie einen gültigen Namen ein.');
-    return;
+  editTag(): void {
+    if (this.selectedTagId === null || !this.selectedTagName.trim() || !this.selectedTagNameEN.trim()) {
+      alert('Bitte geben Sie sowohl den deutschen als auch den englischen Namen ein.');
+      return;
+    }
+  
+    const tagData = {
+      de: this.selectedTagName,
+      en: this.selectedTagNameEN,
+    };
+  
+    this.dataService.updateTag(this.selectedTagId, tagData).subscribe({
+      next: () => {
+        alert('Tag erfolgreich bearbeitet.');
+        this.loadTags(); // Aktualisiert die Liste der Tags
+        this.selectedTagId = null;
+        this.selectedTagName = '';
+        this.selectedTagNameEN = '';
+      },
+      error: (err) => {
+        console.error('Fehler beim Bearbeiten des Tags:', err);
+        alert('Fehler beim Bearbeiten des Tags.');
+      },
+    });
   }
-
-  this.dataService.updateTag(this.selectedTagId, this.selectedTagName).subscribe({
-    next: () => {
-      alert('Tag erfolgreich bearbeitet.');
-      this.loadTags(); // Tags-Liste aktualisieren
-      this.selectedTagId = null;
-      this.selectedTagName = '';
-    },
-    error: (err) => {
-      console.error('Fehler beim Bearbeiten des Tags:', err);
-      alert('Fehler beim Bearbeiten des Tags.');
-    },
-  });
-}
+  
+  
+  
 
 // Zielgruppe bearbeiten
 editZielgruppe(): void {
-  if (this.selectedZielgruppeId === null || !this.selectedZielgruppeName.trim()) {
-    alert('Bitte wählen Sie eine Zielgruppe aus und geben Sie einen gültigen Namen ein.');
+  if (this.selectedZielgruppeId === null || !this.selectedZielgruppeName.trim() || !this.selectedZielgruppeNameEN.trim()) {
+    alert('Bitte geben Sie sowohl den deutschen als auch den englischen Namen ein.');
     return;
   }
 
-  this.dataService.updateZielgruppe(this.selectedZielgruppeId, this.selectedZielgruppeName).subscribe({
+  const zielgruppeData = {
+    de: this.selectedZielgruppeName,
+    en: this.selectedZielgruppeNameEN,
+  };
+
+  this.dataService.updateZielgruppe(this.selectedZielgruppeId, zielgruppeData).subscribe({
     next: () => {
       alert('Zielgruppe erfolgreich bearbeitet.');
       this.loadZielgruppen(); // Zielgruppen-Liste aktualisieren
       this.selectedZielgruppeId = null;
       this.selectedZielgruppeName = '';
+      this.selectedZielgruppeNameEN = '';
     },
     error: (err) => {
       console.error('Fehler beim Bearbeiten der Zielgruppe:', err);
@@ -309,38 +348,60 @@ editZielgruppe(): void {
   });
 }
 
+
 onTagSelectionChange(tagId: number): void {
   const selectedTag = this.tags.find(tag => tag.ID === tagId);
   if (selectedTag) {
-    this.selectedTagName = selectedTag.Tag; // Setze den Tag-Namen
+    this.selectedTagName = selectedTag.Tag; // Deutscher Name
+    this.selectedTagNameEN = selectedTag.Tag_EN; // Englischer Name
+    console.log('Ausgewähltes Tag:', selectedTag);
   } else {
-    this.selectedTagName = ''; // Zurücksetzen, falls keine Auswahl
+    console.error('Tag nicht gefunden:', tagId);
   }
 }
+
+
 
 onZielgruppeSelectionChange(zielgruppeId: number): void {
   const selectedZielgruppe = this.zielgruppen.find(zielgruppe => zielgruppe.ID === zielgruppeId);
   if (selectedZielgruppe) {
-    this.selectedZielgruppeName = selectedZielgruppe.Name; // Setze den Zielgruppen-Namen
+    this.selectedZielgruppeName = selectedZielgruppe.Name; // Deutscher Name
+    this.selectedZielgruppeNameEN = selectedZielgruppe.Zielgruppe_EN; // Englischer Name
+    console.log('Ausgewählte Zielgruppe:', selectedZielgruppe);
   } else {
-    this.selectedZielgruppeName = ''; // Zurücksetzen, falls keine Auswahl
+    console.error('Zielgruppe nicht gefunden:', zielgruppeId);
   }
 }
+
 
   
 private loadTags(): void {
   const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
-  this.dataService.getTags(lang).subscribe((response: any) => {
-    this.tags = response.data;
+  this.dataService.getTags(lang).subscribe({
+    next: (response: { data: Tag[] }) => {
+      this.tags = response.data;
+      console.log('Geladene Tags:', this.tags); // Debugging
+    },
+    error: (err) => {
+      console.error('Fehler beim Laden der Tags:', err);
+    },
   });
 }
 
 private loadZielgruppen(): void {
   const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
-  this.dataService.getZielgruppen(lang).subscribe((response: any) => {
-    this.zielgruppen = response.data;
+  this.dataService.getZielgruppen(lang).subscribe({
+    next: (response: { data: Zielgruppe[] }) => {
+      this.zielgruppen = response.data;
+      console.log('Geladene Zielgruppen:', this.zielgruppen); // Debugging
+    },
+    error: (err) => {
+      console.error('Fehler beim Laden der Zielgruppen:', err);
+    },
   });
 }
+
+
 
 
 private loadArten(): void {
@@ -350,44 +411,99 @@ private loadArten(): void {
 
   this.dataService.getArten(lang).subscribe({
     next: (response: any) => {
-      this.angebotsarten = response.data;
+      this.arten = response.data;
       console.log('Geladene Angebotsarten:', this.angebotsarten); // Debugging
     },
     error: (err) => {
       console.error('Fehler beim Laden der Angebotsarten:', err); // Fehlerprotokoll
     }
   });
-}
+  } 
 
-
-
+  getAngebote(): void {
+    this.dataService.getAngebote().subscribe({
+      next: (response: any) => {
+        this.institutions = response.data; // Angebote den Institutionen zuordnen
+        console.log('Geladene Angebote:', this.institutions); // Debugging
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Angebote:', err); // Fehlerprotokoll
+      },
+    });
+  }
+   
 
   // Lädt die Liste aller Institutionen
   loadInstitutions(): void {
     const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
-    this.dataService.getInstitutions(lang).subscribe(response => {
-      this.institutions = response.data; // Prüfe, ob response.data korrekt ist
-      console.log('Geladene Institutionen:', this.institutions);
+    this.dataService.getInstitutions(lang).subscribe({
+      next: (response: any) => {
+        this.institutions = response.data;
+        console.log('Geladene Institutionen:', this.institutions); // Debugging
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Institutionen:', err);
+      },
     });
-  }
-
+  }  
 
   // Wird aufgerufen, wenn eine Institution im Dropdown ausgewählt wird
   onInstitutionSelected(institutionId: number): void {
     console.log('Ausgewählte Institution ID:', institutionId);
+  
     const institution = this.institutions.find(inst => inst.ID === institutionId);
     if (institution) {
       this.selectedInstitution = { ...institution }; // Setze die ausgewählte Institution
-      this.institutionName = institution.Name; // Setze den Namen der Institution
-      this.institutionDescription = institution.Beschreibung; // Setze die Beschreibung der Institution
-      this.institutionURL = institution.URL; // Setze die URL der Institution
   
-      this.originalInstitution = { ...institution }; // Speichere den Originalzustand
-      console.log('Ausgewählte Institution:', this.selectedInstitution);
+      // Felder für Deutsch
+      this.institutionName = institution.Name;
+      this.institutionDescription = institution.Beschreibung;
+      this.institutionURL = institution.url;
+  
+      // Felder für Englisch
+      this.institutionNameEN = institution.Name_EN;
+      this.institutionDescriptionEN = institution.Description_EN;
+      this.institutionURLEN = institution.url_EN;
+      
+      // Vorhandene Tags laden
+      this.dataService.getAngebotTags(institutionId).subscribe({
+        next: (response) => {
+          this.selectedTags = response.data.map((tag: any) => tag.TagID);
+          console.log('Vorhandene Tags:', this.selectedTags);
+        },
+        error: (err) => {
+          console.error('Fehler beim Laden der Tags:', err);
+        }
+      });
+
+    // Vorhandene Zielgruppen laden
+      this.dataService.getAngebotZielgruppe(institutionId).subscribe({
+        next: (response) => {
+          this.selectedZielgruppen = response.data.map((zielgruppe: any) => zielgruppe.ZielgruppeID);
+          console.log('Vorhandene Zielgruppen:', this.selectedZielgruppen);
+        },
+        error: (err) => {
+          console.error('Fehler beim Laden der Zielgruppen:', err);
+        }
+      });
+      
+      // Vorhandene Arten laden
+    this.dataService.getAngebotArt(institutionId).subscribe({
+      next: (response) => {
+        this.selectedArt = response.data.map((art: any) => art.ArtID);
+        console.log('Vorhandene Arten:', this.selectedArt);
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Angebotsarten:', err);
+      }
+    });
+
+      console.log('Geladene Institution:', this.selectedInstitution);
     } else {
       console.error('Institution nicht gefunden:', institutionId);
     }
   }
+   
   
   
 
@@ -406,15 +522,22 @@ private loadArten(): void {
   saveChanges(): void {
     if (this.selectedInstitution && this.selectedInstitutionId) {
       const updatedInstitution: any = {};
+      const currentLang = this.languageService.getCurrentLanguage();
   
-      if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
-        updatedInstitution.name = this.selectedInstitution.Name;
-      }
-      if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
-        updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
-      }
-      if (this.selectedInstitution.URL !== this.originalInstitution.URL) {
-        updatedInstitution.url = this.selectedInstitution.URL;
+      if (currentLang === 'en') {
+        if (this.selectedInstitution.Name_EN !== this.originalInstitution.Name_EN) {
+          updatedInstitution.name_en = this.selectedInstitution.Name_EN;
+        }
+        if (this.selectedInstitution.Description_EN !== this.originalInstitution.Description_EN) {
+          updatedInstitution.beschreibung_en = this.selectedInstitution.Description_EN;
+        }
+      } else {
+        if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
+          updatedInstitution.name = this.selectedInstitution.Name;
+        }
+        if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
+          updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
+        }
       }
   
       if (Object.keys(updatedInstitution).length === 0) {
@@ -425,7 +548,7 @@ private loadArten(): void {
       this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution).subscribe({
         next: () => {
           alert('Institution erfolgreich aktualisiert!');
-          this.loadInstitutions(); // Aktualisiere die Liste
+          this.getAngebote(); // Aktualisiere die Liste
         },
         error: (err) => {
           console.error('Fehler beim Aktualisieren der Institution:', err);
@@ -433,7 +556,8 @@ private loadArten(): void {
         },
       });
     }
-}
+  }  
+  
   
 // Löschen
 deleteSelectedInstitution(): void {

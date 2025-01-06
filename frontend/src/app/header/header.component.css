@@ -1,45 +1,63 @@
 /* Standard-Stile für den Header */
 header {
-    padding: 1rem 1.5rem;
-  }
-  
-  header .divider {
-    font-size: 14px;
-    color: #6c757d; /* Grauer Trenner */
-  }
-  
-  /* Layout-Anpassungen für mobile Geräte */
-  @media (max-width: 768px) {
-    header .row {
+  padding: 1rem 1.5rem;
+}
+
+header .divider {
+  font-size: 14px;
+  color: #6c757d; /* Grauer Trenner */
+}
+
+/* Sprachwahl spezifisch stylen */
+.language-switch .btn {
+  color: #000; /* Schwarz */
+  text-decoration: none; /* Entfernt Unterstreichung */
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: inherit; /* Gleiche Schriftgröße wie der umgebende Text */
+  cursor: pointer; /* Zeigt an, dass der Button klickbar ist */
+}
+
+.language-switch .btn.active {
+  text-decoration: underline;
+}
+
+.language-switch .btn:hover {
+  color: #000; /* Schwarz bleibt auch beim Hover */
+  text-decoration: none;
+}
+
+
+/* Layout-Anpassungen für mobile Geräte */
+@media (max-width: 768px) {
+  header .row {
       text-align: center; /* Zentriert Inhalte */
-    }
-  
-    header .d-flex {
+  }
+
+  header .d-flex {
       flex-wrap: nowrap; /* Kein Umbrechen der Elemente */
       justify-content: center;
-    }
-  
-    header img {
+  }
+
+  header img {
       max-width: 100px; /* Kleinere Logos für Mobilgeräte */
-    }
-  
-    header .btn {
+  }
+
+  header .btn {
       font-size: 14px; /* Kleinere Schrift für Buttons */
       padding: 0.3rem 0.6rem;
-    }
-  
-    header .btn-sm {
+  }
+
+  header .btn-sm {
       font-size: 12px; /* Noch kleinere Schrift für die btn-sm Klasse */
-    }
-  
-    header .me-3 {
+  }
+
+  header .me-3 {
       margin-right: 0.5rem; /* Reduziert Abstand für mobile Ansicht */
-    }
   }
-  .active {
-    /* font-weight: bold; */
-    text-decoration: underline;
-  }
+}
+
   
   
 

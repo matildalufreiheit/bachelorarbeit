@@ -10,11 +10,17 @@
     <!-- Untere Zeile: Sprache, Notrufnummer, Schriftgröße -->
     <div class="col-12 col-md-8 d-flex flex-wrap justify-content-end align-items-center">
       <!-- Sprachwahl -->
-      <div class="d-flex align-items-center me-3">
-        <span (click)="switchLanguage()" class="me-2" [class.active]="currentLang === 'de'">{{ 'HEADER.LANGUAGE_DE' | translate }}</span>
+      <div class="d-flex align-items-center me-3 language-switch">
+        <button (click)="switchLanguage()" class="btn btn-link me-2" [class.active]="currentLang === 'de'">
+          {{ 'HEADER.LANGUAGE_DE' | translate }}
+        </button>
+        
         <span class="divider mx-1">|</span>
-        <span (click)="switchLanguage()" class="ms-2" [class.active]="currentLang === 'en'">{{ 'HEADER.LANGUAGE_EN' | translate }}</span>
-      </div>      
+        <button (click)="switchLanguage()" class="btn btn-link ms-2" [class.active]="currentLang === 'en'" style="padding: 0; border: none; background: none;">
+          {{ 'HEADER.LANGUAGE_EN' | translate }}
+        </button>
+      </div>
+        
 
       <!-- Notrufnummer Button -->
       <a href="https://www.berliner-notruf.de/" target="_blank" class="btn btn-danger btn-sm d-flex align-items-center me-3">

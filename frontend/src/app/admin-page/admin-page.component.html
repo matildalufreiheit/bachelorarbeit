@@ -94,26 +94,32 @@
           <label for="url-en" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL_EN' | translate }}</label>
           <input id="url-en" type="url" class="form-control" #urlEn placeholder="https://example.com" />
         </div>
-        
 
+        <!-- Tags -->
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TAG' | translate }}</mat-label>
-            <mat-select multiple [(value)]="selectedTags">
-              <mat-option *ngFor="let tag of tags" [value]="tag.ID">{{ tag.Tag }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TAG' | translate }}</mat-label>
+          <mat-select multiple [(value)]="selectedTags">
+            <mat-option *ngFor="let tag of tags" [value]="tag.ID">
+              {{ tag.PreferredTag }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         </div>
 
+        <!-- Zielgruppen -->
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_GROUP' | translate }}</mat-label>
             <mat-select multiple [(value)]="selectedZielgruppen">
-              <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">{{ zielgruppe.Name }}</mat-option>
+              <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
+                {{ zielgruppe.PreferredTag }}
+              </mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field>          
         </div>
 
+        <!-- Angebotsart -->
         <div class="mb-4">
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TYPE' | translate }}</mat-label>
@@ -122,6 +128,7 @@
             </mat-select>
           </mat-form-field>
         </div>
+
         <button type="submit" class="btn btn-success w-100">{{ 'OFFER_MANAGEMENT.CREATE_BUTTON' | translate }}</button>
       </form>
 
@@ -149,7 +156,7 @@
           </div>
         </form>
       </div>
-      
+
       <div class="mt-5">
         <h2>{{ 'OFFER_MANAGEMENT.NEW_GROUP_TITLE' | translate }}</h2>
         <form (ngSubmit)="addZielgruppe()">
@@ -173,7 +180,7 @@
             <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_GROUP_BUTTON' | translate }}</button>
           </div>
         </form>
-      </div>      
+      </div>
     </div>
 
     <!-- Modus: Ändern -->
@@ -183,10 +190,10 @@
         <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
         <mat-select [(value)]="selectedInstitutionId" (selectionChange)="onInstitutionSelected($event.value)">
           <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
-            {{ institution.Name }}
-          </mat-option>
+            {{ institution.Name_EN || institution.Name }}
+          </mat-option>          
         </mat-select>
-      </mat-form-field>      
+      </mat-form-field>
       <div *ngIf="selectedInstitution">
         <h3>{{ 'EDIT.EDIT_DETAILS' | translate }}</h3>
         <form>
@@ -195,24 +202,20 @@
             <input
               id="institution-name"
               type="text"
-              [(ngModel)]="selectedInstitution.Name"
+              [(ngModel)]="selectedInstitution.Name_EN || selectedInstitution.Name"
               name="institutionName"
               class="form-control"
             />
           </div>
-
-          <!-- Beschreibung -->
           <div class="mb-3">
             <label for="institution-description">{{ 'EDIT.DESCRIPTION_LABEL' | translate }}</label>
             <textarea
               id="institution-description"
-              [(ngModel)]="institutionDescription"
+              [(ngModel)]="selectedInstitution.Description_EN || selectedInstitution.Beschreibung"
               name="institutionDescription"
               class="form-control"
             ></textarea>
           </div>
-
-          <!-- URL -->
           <div class="mb-3">
             <label for="institution-url">{{ 'EDIT.URL_LABEL' | translate }}</label>
             <input
@@ -230,8 +233,8 @@
               <mat-label>{{ 'EDIT.SELECT_TAGS' | translate }}</mat-label>
               <mat-select multiple [(value)]="selectedTags">
                 <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-                  {{ tag.Tag }}
-                </mat-option>
+                  {{ tag.PreferredTag }}
+                </mat-option>              
               </mat-select>
             </mat-form-field>
           </div>
@@ -242,9 +245,9 @@
               <mat-label>{{ 'EDIT.SELECT_TARGET_GROUPS' | translate }}</mat-label>
               <mat-select multiple [(value)]="selectedZielgruppen">
                 <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-                  {{ zielgruppe.Name }}
+                  {{ zielgruppe.PreferredTag }}
                 </mat-option>
-              </mat-select>
+            </mat-select>
             </mat-form-field>
           </div>
 
@@ -253,123 +256,139 @@
             <mat-form-field appearance="fill" class="w-100">
               <mat-label>{{ 'EDIT.SELECT_TYPES' | translate }}</mat-label>
               <mat-select multiple [(value)]="selectedArt">
-                <mat-option *ngFor="let art of arten" [value]="art.ID">
-                  {{ art.Art }}
-                </mat-option>
+                <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field>            
           </div>
 
-          <!-- Speichern -->
           <button type="button" class="btn btn-primary w-100" (click)="saveChanges()">{{ 'EDIT.SAVE_CHANGES' | translate }}</button>
-    </form>
-  </div>
+        </form>
+      </div>
 
-      <!-- Tags & Zielgruppen unabhängig bearbeiten -->
       <div class="edit-section mt-4">
         <h2>{{ 'EDIT.EDIT_TAG_TITLE' | translate }}</h2>
+        
+        <!-- Dropdown zur Auswahl eines Tags -->
         <mat-form-field appearance="fill" class="w-100 mb-3">
           <mat-label>{{ 'EDIT.SELECT_TAG' | translate }}</mat-label>
           <mat-select
             [(value)]="selectedTagId"
             (selectionChange)="onTagSelectionChange($event.value)">
             <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-              {{ tag.Tag }}
+              {{ tag.PreferredTag }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        
+        <!-- Eingabefeld für den deutschen Namen -->
         <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.TAG_NAME_EDIT' | translate }}</mat-label>
+          <mat-label>{{ 'EDIT.TAG_NAME_EDIT_DE' | translate }}</mat-label>
           <input matInput [(ngModel)]="selectedTagName" />
         </mat-form-field>
-        <button class="btn btn-primary" (click)="editTag()">{{ 'EDIT.EDIT_TAG_BUTTON' | translate }}</button>
+      
+        <!-- Eingabefeld für den englischen Namen -->
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>{{ 'EDIT.TAG_NAME_EDIT_EN' | translate }}</mat-label>
+          <input matInput [(ngModel)]="selectedTagNameEN" />
+        </mat-form-field>
+        
+        <!-- Speichern-Button -->
+        <button class="btn btn-primary" (click)="editTag()">
+          {{ 'EDIT.EDIT_TAG_BUTTON' | translate }}
+        </button>
       </div>
+      
 
       <div class="edit-section mt-4">
         <h2>{{ 'EDIT.EDIT_GROUP_TITLE' | translate }}</h2>
+        
+        <!-- Dropdown zur Auswahl einer Zielgruppe -->
         <mat-form-field appearance="fill" class="w-100 mb-3">
           <mat-label>{{ 'EDIT.SELECT_GROUP' | translate }}</mat-label>
           <mat-select
             [(value)]="selectedZielgruppeId"
             (selectionChange)="onZielgruppeSelectionChange($event.value)">
             <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-              {{ zielgruppe.Name }}
+              {{ zielgruppe.Name }} / {{ zielgruppe.Zielgruppe_EN }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        
+        <!-- Eingabefeld für den deutschen Namen -->
         <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.GROUP_NAME_EDIT' | translate }}</mat-label>
+          <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_DE' | translate }}</mat-label>
           <input matInput [(ngModel)]="selectedZielgruppeName" />
         </mat-form-field>
-        <button class="btn btn-primary" (click)="editZielgruppe()">{{ 'EDIT.EDIT_GROUP_BUTTON' | translate }}</button>
-      </div>
+        
+        <!-- Eingabefeld für den englischen Namen -->
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_EN' | translate }}</mat-label>
+          <input matInput [(ngModel)]="selectedZielgruppeNameEN" />
+        </mat-form-field>
+        
+        <!-- Speichern-Button -->
+        <button class="btn btn-primary" (click)="editZielgruppe()">
+          {{ 'EDIT.EDIT_GROUP_BUTTON' | translate }}
+        </button>
+      </div>      
     </div>
 
     <!-- Modus: Löschen -->
     <div *ngIf="mode === 'löschen'">
-      <!-- Institution löschen -->
-      <div class="delete-section">
-        <h2>{{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_TITLE' | translate }}</h2>
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
-          <mat-select [(value)]="selectedInstitutionId">
-            <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
-              {{ institution.Name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button
-          type="button"
-          class="btn btn-danger mb-4"
-          (click)="deleteSelectedInstitution()"
-        >
-          {{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_BUTTON' | translate}}
-        </button>
-      </div>
-
+      <h2>{{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_TITLE' | translate }}</h2>
+      <mat-form-field appearance="fill" class="w-100 mb-3">
+        <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
+        <mat-select [(value)]="selectedInstitutionId">
+          <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
+            {{ institution.Name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        type="button"
+        class="btn btn-danger mb-4"
+        (click)="deleteSelectedInstitution()"
+      >
+        {{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_BUTTON' | translate }}
+      </button>
       <!-- Tag löschen -->
-      <div class="delete-section">
-        <h2>{{ 'DELETE_MANAGEMENT.DELETE_TAG_TITLE' | translate}}</h2>
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.SELECT_TAGS' | translate}}</mat-label>
-          <mat-select [(value)]="selectedTagId">
-            <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-              {{ tag.Tag }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button
-          type="button"
-          class="btn btn-danger mb-4"
-          (click)="deleteTag(selectedTagId)"
-        >
-          {{'DELETE_MANAGEMENT.DELETE_TAG_BUTTON' | translate}}
-        </button>
-      </div>
+      <h2>{{ 'DELETE_MANAGEMENT.DELETE_TAG_TITLE' | translate }}</h2>
+      <mat-form-field appearance="fill" class="w-100 mb-3">
+        <mat-label>{{ 'EDIT.SELECT_TAG' | translate }}</mat-label>
+        <mat-select [(value)]="selectedTagId">
+          <mat-option *ngFor="let tag of tags" [value]="tag.ID">
+            {{ tag.PreferredTag }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        type="button"
+        class="btn btn-danger mb-4"
+        (click)="deleteTag(selectedTagId)"
+        [disabled]="!selectedTagId"
+      >
+        {{ 'DELETE_MANAGEMENT.DELETE_TAG_BUTTON' | translate }}
+      </button>
+      <h2>{{ 'DELETE_MANAGEMENT.DELETE_GROUP_TITLE' | translate }}</h2>
+      <mat-form-field appearance="fill" class="w-100 mb-3">
+        <mat-label>{{ 'EDIT.SELECT_GROUP' | translate }}</mat-label>
+        <mat-select [(value)]="selectedZielgruppeId">
+          <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
+            {{ zielgruppe.PreferredTag }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        type="button"
+        class="btn btn-danger mb-4"
+        (click)="deleteZielgruppe(selectedZielgruppeId)"
+        [disabled]="!selectedZielgruppeId"
+      >
+        {{ 'DELETE_MANAGEMENT.DELETE_GROUP_BUTTON' | translate }}
+      </button>
 
-      <!-- Zielgruppe löschen -->
-      <div class="delete-section">
-        <h2>{{'DELETE_MANAGEMENT.DELETE_GROUP_TITLE' | translate}}</h2>
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{'EDIT.SELECT_GROUP' | translate}}</mat-label>
-          <mat-select [(value)]="selectedZielgruppeId">
-            <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-              {{ zielgruppe.Name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="deleteZielgruppe(selectedZielgruppeId)"
-        >
-          {{'DELETE_MANAGEMENT.DELETE_GROUP_BUTTON' | translate }}
-        </button>
-      </div>
-    </div>
-    
-    <div class="mt-3">
-      <button routerLink="/" class="btn btn-outline-primary">{{ 'COMMON.BACK_TO_HOME_BUTTON' | translate }}</button>
     </div>
   </div>
 </div>
+
+

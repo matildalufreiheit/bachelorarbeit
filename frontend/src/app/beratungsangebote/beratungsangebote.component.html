@@ -10,9 +10,10 @@
       [disabled]="tag.disabled"
       (click)="!tag.disabled && toggleTag(tag.ID)"
     >
-      {{ tag.Tag }}
+      {{ tag.PreferredTag }}
     </button>
   </div>
+  
 
   <button
     class="btn custom-more-button me-2 mb-2"
@@ -32,9 +33,10 @@
       [disabled]="zielgruppe.disabled"
       (click)="!zielgruppe.disabled && toggleZielgruppe(zielgruppe.ID)"
     >
-      {{ zielgruppe.Name }}
+      {{ zielgruppe.PreferredTag }}
     </button>
   </div>
+  
   
   <button
     class="btn custom-more-button me-2 mb-2"

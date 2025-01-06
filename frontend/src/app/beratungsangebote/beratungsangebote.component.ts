@@ -3,14 +3,29 @@ import { DataService } from '../services/data.service';
 import { SharedDataService } from '../services/shared-data.service';
 import { LanguageService } from '../services/language.service';
 
+interface Tag {
+  ID: number;
+  Tag: string; // Deutscher Name
+  Tag_EN: string; // Englischer Name
+  PreferredTag: string; // Bevorzugter Name basierend auf Sprache
+}
+
+interface Zielgruppe {
+  ID: number;
+  Name: string; // Deutscher Name
+  Zielgruppe_EN: string; // Englischer Name
+  PreferredTag: string; // Bevorzugter Name basierend auf Sprache
+}
+
 @Component({
   selector: 'app-beratungsangebote',
   templateUrl: './beratungsangebote.component.html',
   styleUrls: ['./beratungsangebote.component.css']
 })
+
 export class BeratungsangeboteComponent implements OnInit {
-  tags: any[] = [];
-  zielgruppen: any[] = [];
+  tags: Tag[] = [];
+  zielgruppen: Zielgruppe[] = [];  
   angebote: any[] = [];
   angebotTags: any[] = [];
   angeboteZielgruppen: { AngebotID: number; ZielgruppeID: number }[] = [];
@@ -42,35 +57,30 @@ export class BeratungsangeboteComponent implements OnInit {
 
   loadData() {
     const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
+    console.log('Aktuelle Sprache:', lang); // Debugging
   
-    this.dataService.getTags(lang).subscribe((response) => {
-      this.tags = response.data;
-      this.visibleTags = this.showAllTags
-        ? this.tags
-        : this.tags.slice(0, this.maxVisibleItems);
+    this.dataService.getTags(lang).subscribe({
+      next: (response: { data: Tag[] }) => {
+        this.tags = response.data;
+        console.log('Geladene Tags:', this.tags); // Debugging
+        this.visibleTags = this.showAllTags
+          ? this.tags
+          : this.tags.slice(0, this.maxVisibleItems);
+      },
+      error: (err) => console.error('Fehler beim Laden der Tags:', err),
     });
   
-    this.dataService.getAngebote().subscribe((response) => {
-      this.angebote = response.data;
-    });
-  
-    this.dataService.getAngebotTags().subscribe((response) => {
-      this.angebotTags = response.data;
-    });
-  
-    this.dataService.getZielgruppen(lang).subscribe((response) => {
-      this.zielgruppen = response.data;
-      this.visibleZielgruppen = this.showAllZielgruppen
-        ? this.zielgruppen
-        : this.zielgruppen.slice(0, this.maxVisibleItems);
-    });
-  
-    this.dataService.getAngebotZielgruppe().subscribe((response) => {
-      this.angeboteZielgruppen = response.data;
+    this.dataService.getZielgruppen(lang).subscribe({
+      next: (response: { data: Zielgruppe[] }) => {
+        this.zielgruppen = response.data;
+        console.log('Geladene Zielgruppen:', this.zielgruppen); // Debugging
+        this.visibleZielgruppen = this.showAllZielgruppen
+          ? this.zielgruppen
+          : this.zielgruppen.slice(0, this.maxVisibleItems);
+      },
+      error: (err) => console.error('Fehler beim Laden der Zielgruppen:', err),
     });
   }
-  
-  
   
 
   toggleTag(tagId: number): void {

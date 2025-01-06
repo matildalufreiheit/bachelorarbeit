@@ -8,8 +8,8 @@ import { LanguageService } from './language.service';
   providedIn: 'root'
 })
 export class DataService {
-  //private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'https://vm021.qu.tu-berlin.de:3000'; 
+  //private apiUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient,
     private languageService: LanguageService
@@ -19,8 +19,10 @@ export class DataService {
   // ----------------------------------------------------------  Angebote
   getAngebote(): Observable<any> {
     const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
-    return this.http.get(`${this.apiUrl}/angebote?lang=${lang}`); // Sprache an API übergeben
-}
+    console.log('API wird mit Sprache aufgerufen:', lang);
+    return this.http.get(`${this.apiUrl}/angebote?lang=${lang}`);
+  }
+  
 
   createAngebot(angebot: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/angebote`, angebot);
@@ -44,9 +46,10 @@ export class DataService {
     return this.http.get(`${this.apiUrl}/tags?lang=${lang}`); // Sprache an API übergeben
   }
 
-  updateTag(tagId: number, tagName: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/tags/${tagId}`, { tag: tagName });
+  updateTag(tagId: number, tagData: { de: string; en: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/tags/${tagId}`, tagData);
   }
+  
 
   deleteTagById(tagId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/tags/${tagId}`);
@@ -55,6 +58,11 @@ export class DataService {
   addTag(tag: { de: string; en: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/tags`, tag );
   }
+
+  getAngebotTagsById(angebotId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/nm/angebot_tags/${angebotId}`);
+  }
+  
 
 
   // ----------------------------------------------------------- Institutionen
@@ -91,14 +99,19 @@ export class DataService {
     return this.http.post(`${this.apiUrl}/zielgruppen`, zielgruppe );
   }
 
-  updateZielgruppe(zielgruppeId: number, zielgruppeName: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/zielgruppen/${zielgruppeId}`, { name: zielgruppeName });
+  updateZielgruppe(zielgruppeId: number, zielgruppeData: { de: string; en: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/zielgruppen/${zielgruppeId}`, zielgruppeData);
   }
+  
 
   deleteZielgruppeById(zielgruppeId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/zielgruppen/${zielgruppeId}`);
   }
 
+  getAngebotZielgruppenById(angebotId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/nm/angebot_zielgruppe/${angebotId}`);
+  }
+  
 
   // -------------------------------------------------------------  Benutzer
   login(username: string, password: string): Observable<any> {
@@ -128,15 +141,35 @@ export class DataService {
     return this.http.get(`${this.apiUrl}/arten?lang=${lang}`);
   }
 
+  getAngebotArt(angebotId?: number): Observable<any> {
+    const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
+    const url = angebotId
+      ? `${this.apiUrl}/nm/angebot_art/${angebotId}?lang=${lang}`
+      : `${this.apiUrl}/nm/angebot_art?lang=${lang}`;
+    return this.http.get(url);
+  }
+  
+  
+
 
   // -------------------------------------------------------------  n:m
-  getAngebotTags(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/nm/angebot_tags`);
+  getAngebotTags(angebotId?: number): Observable<any> {
+    const url = angebotId
+      ? `${this.apiUrl}/nm/angebot_tags/${angebotId}`
+      : `${this.apiUrl}/nm/angebot_tags`;
+    return this.http.get(url);
   }
+  
 
-  getAngebotZielgruppe(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/nm/angebot_zielgruppe`);
+  getAngebotZielgruppe(angebotId?: number): Observable<any> {
+    const url = angebotId
+      ? `${this.apiUrl}/nm/angebot_zielgruppe/${angebotId}`
+      : `${this.apiUrl}/nm/angebot_zielgruppe`;
+    return this.http.get(url);
   }
+  
+
+  
 
 }
 
