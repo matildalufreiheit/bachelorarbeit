@@ -16,6 +16,16 @@ interface Zielgruppe {
   PreferredTag: string; // Bevorzugter Name basierend auf Sprache
 }
 
+interface Angebot {
+  ID: number;
+  InstitutionID: number;
+  Name: string;
+  Name_EN: string;
+  Beschreibung: string;
+  Beschreibung_EN: string;
+  URL: string;
+  URL_EN: string;
+}
 
 
 @Component({
@@ -40,7 +50,7 @@ export class AdminPageComponent implements OnInit {
   institutionNames: string[] = [];
   institutions: any[] = []; // Liste der Institutionen
   selectedInstitutionId: number | null = null; // ID der ausgewählten Institution
-  selectedInstitution: any = null; // Details der ausgewählten Institution
+  selectedInstitution: Angebot | null = null;
   users: any[] = [];
   selectedUserId: number | null = null;
   institutionName: string = ''; // Name der Institution
@@ -401,9 +411,6 @@ private loadZielgruppen(): void {
   });
 }
 
-
-
-
 private loadArten(): void {
   console.log('loadArten() wird aufgerufen...'); // Debugging
   const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
@@ -455,56 +462,34 @@ private loadArten(): void {
     if (institution) {
       this.selectedInstitution = { ...institution }; // Setze die ausgewählte Institution
   
-      // Felder für Deutsch
-      this.institutionName = institution.Name;
-      this.institutionDescription = institution.Beschreibung;
-      this.institutionURL = institution.url;
-  
-      // Felder für Englisch
-      this.institutionNameEN = institution.Name_EN;
-      this.institutionDescriptionEN = institution.Description_EN;
-      this.institutionURLEN = institution.url_EN;
-      
-      // Vorhandene Tags laden
+      // Tags, Zielgruppen und Arten laden
       this.dataService.getAngebotTags(institutionId).subscribe({
         next: (response) => {
           this.selectedTags = response.data.map((tag: any) => tag.TagID);
           console.log('Vorhandene Tags:', this.selectedTags);
         },
-        error: (err) => {
-          console.error('Fehler beim Laden der Tags:', err);
-        }
+        error: (err) => console.error('Fehler beim Laden der Tags:', err),
       });
-
-    // Vorhandene Zielgruppen laden
+  
       this.dataService.getAngebotZielgruppe(institutionId).subscribe({
         next: (response) => {
           this.selectedZielgruppen = response.data.map((zielgruppe: any) => zielgruppe.ZielgruppeID);
           console.log('Vorhandene Zielgruppen:', this.selectedZielgruppen);
         },
-        error: (err) => {
-          console.error('Fehler beim Laden der Zielgruppen:', err);
-        }
+        error: (err) => console.error('Fehler beim Laden der Zielgruppen:', err),
       });
-      
-      // Vorhandene Arten laden
-    this.dataService.getAngebotArt(institutionId).subscribe({
-      next: (response) => {
-        this.selectedArt = response.data.map((art: any) => art.ArtID);
-        console.log('Vorhandene Arten:', this.selectedArt);
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Angebotsarten:', err);
-      }
-    });
-
-      console.log('Geladene Institution:', this.selectedInstitution);
+  
+      this.dataService.getAngebotArt(institutionId).subscribe({
+        next: (response) => {
+          this.selectedArt = response.data.map((art: any) => art.ArtID);
+          console.log('Vorhandene Arten:', this.selectedArt);
+        },
+        error: (err) => console.error('Fehler beim Laden der Arten:', err),
+      });
     } else {
       console.error('Institution nicht gefunden:', institutionId);
     }
   }
-   
-  
   
 
   // Lädt die Details einer spezifischen Institution
@@ -519,44 +504,69 @@ private loadArten(): void {
   }
 
   // Ändern (Speichern)
+  // saveChanges(): void {
+  //   if (this.selectedInstitution && this.selectedInstitutionId) {
+  //     const updatedInstitution: any = {};
+  //     const currentLang = this.languageService.getCurrentLanguage();
+  
+  //     if (currentLang === 'en') {
+  //       if (this.selectedInstitution.Name_EN !== this.originalInstitution.Name_EN) {
+  //         updatedInstitution.name_en = this.selectedInstitution.Name_EN;
+  //       }
+  //       if (this.selectedInstitution.Description_EN !== this.originalInstitution.Description_EN) {
+  //         updatedInstitution.beschreibung_en = this.selectedInstitution.Description_EN;
+  //       }
+  //     } else {
+  //       if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
+  //         updatedInstitution.name = this.selectedInstitution.Name;
+  //       }
+  //       if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
+  //         updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
+  //       }
+  //     }
+  
+  //     if (Object.keys(updatedInstitution).length === 0) {
+  //       alert('Keine Änderungen vorgenommen.');
+  //       return;
+  //     }
+  
+  //     this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution).subscribe({
+  //       next: () => {
+  //         alert('Institution erfolgreich aktualisiert!');
+  //         this.getAngebote(); // Aktualisiere die Liste
+  //       },
+  //       error: (err) => {
+  //         console.error('Fehler beim Aktualisieren der Institution:', err);
+  //         alert('Fehler beim Aktualisieren der Institution.');
+  //       },
+  //     });
+  //   }
+  // }  
+
+  //NEU saveChanges:
   saveChanges(): void {
-    if (this.selectedInstitution && this.selectedInstitutionId) {
-      const updatedInstitution: any = {};
-      const currentLang = this.languageService.getCurrentLanguage();
-  
-      if (currentLang === 'en') {
-        if (this.selectedInstitution.Name_EN !== this.originalInstitution.Name_EN) {
-          updatedInstitution.name_en = this.selectedInstitution.Name_EN;
-        }
-        if (this.selectedInstitution.Description_EN !== this.originalInstitution.Description_EN) {
-          updatedInstitution.beschreibung_en = this.selectedInstitution.Description_EN;
-        }
-      } else {
-        if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
-          updatedInstitution.name = this.selectedInstitution.Name;
-        }
-        if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
-          updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
-        }
-      }
-  
-      if (Object.keys(updatedInstitution).length === 0) {
-        alert('Keine Änderungen vorgenommen.');
-        return;
-      }
-  
-      this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution).subscribe({
-        next: () => {
-          alert('Institution erfolgreich aktualisiert!');
-          this.getAngebote(); // Aktualisiere die Liste
-        },
-        error: (err) => {
-          console.error('Fehler beim Aktualisieren der Institution:', err);
-          alert('Fehler beim Aktualisieren der Institution.');
-        },
-      });
+    if (!this.selectedInstitutionId) {
+      alert('Keine Institution ausgewählt.');
+      return;
     }
-  }  
+  
+    const updatedData = {
+      Name: this.institutionName,
+      Beschreibung: this.institutionDescription,
+      url: this.institutionURL,
+      Name_en: this.institutionNameEN,
+      Beschreibung_en: this.institutionDescriptionEN,
+      url_en: this.institutionURLEN,
+    };
+  
+    this.dataService.updateAngebot(this.selectedInstitutionId, updatedData).subscribe({
+      next: () => {
+        alert('Änderungen erfolgreich gespeichert!');
+        this.getAngebote(); // Aktualisiere die Liste
+      },
+      error: (err) => console.error('Fehler beim Speichern:', err),
+    });
+  }
   
   
 // Löschen
@@ -578,8 +588,6 @@ deleteSelectedInstitution(): void {
     console.warn('Keine Institution ausgewählt.');
   }
 }
-
-
 
 setMode(mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer') {
   this.mode = mode;

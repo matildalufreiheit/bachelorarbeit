@@ -157,16 +157,29 @@ export class DataService {
     const url = angebotId
       ? `${this.apiUrl}/nm/angebot_tags/${angebotId}`
       : `${this.apiUrl}/nm/angebot_tags`;
-    return this.http.get(url);
+    console.log('AngebotTags API-Aufruf gestartet:', url);
+    return this.http.get(url).pipe(
+      tap({
+        next: (response) => console.log('Antwort von AngebotTags:', response),
+        error: (error) => console.error('Fehler bei AngebotTags:', error),
+      })
+    );
   }
   
-
   getAngebotZielgruppe(angebotId?: number): Observable<any> {
     const url = angebotId
       ? `${this.apiUrl}/nm/angebot_zielgruppe/${angebotId}`
       : `${this.apiUrl}/nm/angebot_zielgruppe`;
-    return this.http.get(url);
+    console.log('AngeboteZielgruppen API-Aufruf gestartet:', url);
+    return this.http.get(url).pipe(
+      tap({
+        next: (response) => console.log('Antwort von AngebotZielgruppen:', response),
+        error: (error) => console.error('Fehler bei AngebotZielgruppen:', error),
+      })
+    );
   }
+  
+  
   
 
   

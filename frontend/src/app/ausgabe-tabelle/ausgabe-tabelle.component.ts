@@ -20,7 +20,7 @@ export class AusgabeTabelleComponent implements OnInit {
   filteredResults: Angebot[] = [];
   visibleDetails: Set<number> = new Set(); // Set für sichtbare Details
   angeboteZielgruppen: { AngebotID: number; ZielgruppeID: number }[] = []; // Neu hinzugefügt
-  
+  allOffers: Angebot[] = []; // Alle Angebote speichern
 
   arten: { ID: number; Art: string }[] = [];
 
@@ -49,10 +49,10 @@ export class AusgabeTabelleComponent implements OnInit {
     });
 
     this.sharedDataService.filteredResults$.subscribe(results => {
-      this.filteredResults = results;
-      console.log('filteredResults in Tablle : ', this.filteredResults)
+      this.filteredResults = results.length > 0 ? results : this.allOffers; // Fallback auf alle Angebote
+      console.log('filteredResults in Tabelle:', this.filteredResults);
       this.changeDetection.detectChanges();
-    });    
+    });
 
     this.sharedDataService.visibleDetails$.subscribe(details => {
       this.visibleDetails = details;
@@ -68,23 +68,27 @@ export class AusgabeTabelleComponent implements OnInit {
   }
 
   getAngebote(): void {
-    const lang = this.languageService.getCurrentLanguage(); // Aktuelle Sprache abrufen
+    const lang = this.languageService.getCurrentLanguage();
     this.dataService.getAngebote().subscribe({
       next: (response) => {
         console.log(`Geladene Angebote in Tabelle (${lang}):`, response.data);
   
-        this.filteredResults = response.data;
+        this.allOffers = response.data; // Alle Angebote speichern
+        console.log('Alle Angebote gespeichert:', this.allOffers);
   
-        console.log('Gefilterte Ergebnisse in Tabelle:', this.filteredResults);
+        // FilteredResults nur initial setzen, falls keine Filter aktiv sind
+        if (this.filteredResults.length === 0) {
+          this.filteredResults = this.allOffers;
+        }
+  
         this.changeDetection.detectChanges();
       },
       error: (err) => {
         console.error('Fehler beim Laden der Angebote:', err);
       },
     });
-  }  
-  
-  
+  }
+     
   // Neue Methode, um Arten aus der API zu laden
   getArten(): void {
     this.dataService.getArten().subscribe(response => {
