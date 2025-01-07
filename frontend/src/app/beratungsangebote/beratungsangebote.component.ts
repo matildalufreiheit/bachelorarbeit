@@ -48,10 +48,12 @@ export class BeratungsangeboteComponent implements OnInit {
     this.loadData();
     this.updateVisibleItems();
   
+    // Aktualisiere Daten bei Sprachwechsel
     this.languageService.currentLang$.subscribe(() => {
-      console.log('Sprache geändert, Daten werden neu geladen');
-      this.loadData();
-    });
+    console.log('Sprache geändert, Daten werden neu geladen');
+    this.loadData(); // API-Daten für die neue Sprache laden
+    this.filterData(); // Gefilterte Ergebnisse für die neue Sprache aktualisieren
+  });
   
     // Überprüfe initiale Zustände
     console.log('Initiale States:');
