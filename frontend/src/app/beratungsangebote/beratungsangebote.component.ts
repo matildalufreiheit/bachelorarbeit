@@ -196,17 +196,20 @@ export class BeratungsangeboteComponent implements OnInit {
   }
 
   updateVisibleItems(): void {
+    // Verwende gefilterte Tags für Sichtbarkeit
     this.visibleTags = this.showAllTags
-      ? this.tags
-      : this.tags.slice(0, this.maxVisibleItems);
+      ? this.filteredTags
+      : this.filteredTags.slice(0, this.maxVisibleItems);
   
+    // Verwende gefilterte Zielgruppen für Sichtbarkeit
     this.visibleZielgruppen = this.showAllZielgruppen
-      ? this.zielgruppen
-      : this.zielgruppen.slice(0, this.maxVisibleItems);
+      ? this.filteredZielgruppen
+      : this.filteredZielgruppen.slice(0, this.maxVisibleItems);
   
     console.log('Visible tags:', this.visibleTags);
     console.log('Visible zielgruppen:', this.visibleZielgruppen);
   }
+  
   
 
   // filterData(): void {
@@ -252,10 +255,38 @@ export class BeratungsangeboteComponent implements OnInit {
     });
   
     console.log('Gefilterte gültige Angebote:', validOffers);
-
-    // Gefilterte Ergebnisse in den SharedDataService speichern
+  
+    // Berechne gültige Tag- und Zielgruppen-IDs
+    const validTagIds = new Set(
+      this.angebotTags
+        .filter((at) => validOffers.some((offer) => offer.ID === at.AngebotID))
+        .map((at) => at.TagID)
+    );
+  
+    const validZielgruppenIds = new Set(
+      this.angeboteZielgruppen
+        .filter((az) => validOffers.some((offer) => offer.ID === az.AngebotID))
+        .map((az) => az.ZielgruppeID)
+    );
+  
+    // Aktualisiere gefilterte Tags und Zielgruppen
+    this.filteredTags = this.tags.map((tag) => ({
+      ...tag,
+      disabled: !validTagIds.has(tag.ID),
+    }));
+  
+    this.filteredZielgruppen = this.zielgruppen.map((ziel) => ({
+      ...ziel,
+      disabled: !validZielgruppenIds.has(ziel.ID),
+    }));
+  
+    // Sichtbare Items aktualisieren
+    this.updateVisibleItems();
+  
+    // Gefilterte Ergebnisse speichern
     this.sharedDataService.setFilteredResults(validOffers);
   }
+  
   
   
   
