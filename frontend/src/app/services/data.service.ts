@@ -36,9 +36,14 @@ export class DataService {
     return this.http.get(`${this.apiUrl}/angebote/namen`);
   }
 
-  getAngebotById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/angebote/${id}`);
+  // getAngebotById(id: number): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/angebote/${id}`);
+  // }
+
+  getAngebotById(id: number, lang: string = 'de'): Observable<any> {
+    return this.http.get(`${this.apiUrl}/angebote/${id}?lang=${lang}`);
   }
+
 
 
   // -------------------------------------------------------------  Tags

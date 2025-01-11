@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { LanguageService } from '../services/language.service';
+import { forkJoin } from 'rxjs';
 
 interface Tag {
   ID: number;
@@ -26,7 +27,6 @@ interface Angebot {
   URL: string;
   URL_EN: string;
 }
-
 
 @Component({
   selector: 'app-admin-page',
@@ -181,6 +181,8 @@ createAngebot(name: string, description: string, url: string, nameEn: string, de
           url_en: urlEn // Englische URL der Institution
       }
     };
+
+    console.log('Gesendete Daten:', angebot); // Debugging
 
     this.dataService.createAngebot(angebot).subscribe({
         next: (response) => {
@@ -454,15 +456,25 @@ private loadArten(): void {
     });
   }  
 
-  // Wird aufgerufen, wenn eine Institution im Dropdown ausgewählt wird
   onInstitutionSelected(institutionId: number): void {
-    console.log('Ausgewählte Institution ID:', institutionId);
+    console.log('Institution ausgewählt mit ID:', institutionId);
   
+    // Schritt 1: Institution aus der Liste suchen und Basisdaten setzen
     const institution = this.institutions.find(inst => inst.ID === institutionId);
     if (institution) {
-      this.selectedInstitution = { ...institution }; // Setze die ausgewählte Institution
+      this.selectedInstitution = { ...institution }; // Kopiere die Institution
   
-      // Tags, Zielgruppen und Arten laden
+      // Schritt 2: Felder mit Basisdaten aus der Institution belegen
+      this.institutionName = institution.Name || '';
+      this.institutionNameEN = institution.Name_EN || '';
+      this.institutionDescription = institution.Beschreibung || '';
+      this.institutionDescriptionEN = institution.Beschreibung_EN || '';
+      this.institutionURL = institution.URL || '';
+      this.institutionURLEN = institution.URL_EN || '';
+  
+      console.log('Institution geladen:', this.selectedInstitution);
+  
+      // Schritt 3: Zusätzliche Daten (Tags, Zielgruppen, Arten) laden
       this.dataService.getAngebotTags(institutionId).subscribe({
         next: (response) => {
           this.selectedTags = response.data.map((tag: any) => tag.TagID);
@@ -488,63 +500,67 @@ private loadArten(): void {
       });
     } else {
       console.error('Institution nicht gefunden:', institutionId);
+      return;
     }
-  }
   
+    // Schritt 4: Zusätzliche Daten für Deutsch und Englisch laden (falls API verfügbar)
+    this.loadInstitutionDetails(institutionId);
+  }
+   
 
   // Lädt die Details einer spezifischen Institution
   loadInstitutionDetails(institutionId: number): void {
-    const institution = this.institutions.find(inst => inst.ID === institutionId);
-    if (institution) {
-      this.selectedInstitution = { ...institution }; // Kopie der Institution erstellen
-      console.log('Ausgewählte Institution:', this.selectedInstitution);
-    } else {
-      console.error('Institution konnte nicht gefunden werden:', institutionId);
-    }
+    console.log('loadInstitutionDetails wird aufgerufen mit ID:', institutionId);
+
+    // Anfragen für Deutsch und Englisch
+    const deutsch$ = this.dataService.getAngebotById(institutionId, 'de');
+    const englisch$ = this.dataService.getAngebotById(institutionId, 'en');
+  
+    forkJoin([deutsch$, englisch$]).subscribe(
+      ([deutschData, englischData]) => {
+        const deutsch = deutschData.data;
+        const englisch = englischData.data;
+    
+        console.log('Deutsche Daten (extrahiert):', deutsch);
+        console.log('Englische Daten (extrahiert):', englisch);
+    
+        this.institutionName = deutsch.Name || '';
+        this.institutionDescription = deutsch.Beschreibung || '';
+        this.institutionURL = deutsch.url || ''; // Anpassung hier
+    
+        this.institutionNameEN = englisch.Name || '';
+        this.institutionDescriptionEN = englisch.Beschreibung || '';
+        this.institutionURLEN = englisch.url || ''; // Anpassung hier
+    
+        console.log('Zuordnung:');
+        console.log('Deutscher Name:', this.institutionName);
+        console.log('Englischer Name:', this.institutionNameEN);
+        console.log('Deutsche Beschreibung:', this.institutionDescription);
+        console.log('Englische Beschreibung:', this.institutionDescriptionEN);
+        console.log('Deutsche URL:', this.institutionURL);
+        console.log('Englische URL:', this.institutionURLEN);
+      },
+      (err) => {
+        console.error('Fehler beim Laden der Angebotsdaten:', err);
+      }
+    );
+    
+    
+    console.log('Zuordnung:');
+    console.log('Deutscher Name:', this.institutionName);
+    console.log('Englischer Name:', this.institutionNameEN);
+    console.log('Deutsche Beschreibung:', this.institutionDescription);
+    console.log('Englische Beschreibung:', this.institutionDescriptionEN);
+    console.log('Deutsche URL:', this.institutionURL);
+    console.log('Englische URL:', this.institutionURLEN);
   }
-
-  // Ändern (Speichern)
-  // saveChanges(): void {
-  //   if (this.selectedInstitution && this.selectedInstitutionId) {
-  //     const updatedInstitution: any = {};
-  //     const currentLang = this.languageService.getCurrentLanguage();
   
-  //     if (currentLang === 'en') {
-  //       if (this.selectedInstitution.Name_EN !== this.originalInstitution.Name_EN) {
-  //         updatedInstitution.name_en = this.selectedInstitution.Name_EN;
-  //       }
-  //       if (this.selectedInstitution.Description_EN !== this.originalInstitution.Description_EN) {
-  //         updatedInstitution.beschreibung_en = this.selectedInstitution.Description_EN;
-  //       }
-  //     } else {
-  //       if (this.selectedInstitution.Name !== this.originalInstitution.Name) {
-  //         updatedInstitution.name = this.selectedInstitution.Name;
-  //       }
-  //       if (this.selectedInstitution.Beschreibung !== this.originalInstitution.Beschreibung) {
-  //         updatedInstitution.beschreibung = this.selectedInstitution.Beschreibung;
-  //       }
-  //     }
   
-  //     if (Object.keys(updatedInstitution).length === 0) {
-  //       alert('Keine Änderungen vorgenommen.');
-  //       return;
-  //     }
-  
-  //     this.dataService.updateInstitution(this.selectedInstitutionId, updatedInstitution).subscribe({
-  //       next: () => {
-  //         alert('Institution erfolgreich aktualisiert!');
-  //         this.getAngebote(); // Aktualisiere die Liste
-  //       },
-  //       error: (err) => {
-  //         console.error('Fehler beim Aktualisieren der Institution:', err);
-  //         alert('Fehler beim Aktualisieren der Institution.');
-  //       },
-  //     });
-  //   }
-  // }  
-
   //NEU saveChanges:
   saveChanges(): void {
+    const updateUrl = `https://vm021.qu.tu-berlin.de:3000/angebote/${this.selectedInstitutionId}`;
+    console.log('Update-URL:', updateUrl);
+
     if (!this.selectedInstitutionId) {
       alert('Keine Institution ausgewählt.');
       return;
@@ -553,11 +569,16 @@ private loadArten(): void {
     const updatedData = {
       Name: this.institutionName,
       Beschreibung: this.institutionDescription,
-      url: this.institutionURL,
-      Name_en: this.institutionNameEN,
-      Beschreibung_en: this.institutionDescriptionEN,
-      url_en: this.institutionURLEN,
+      URL: this.institutionURL,
+      Name_EN: this.institutionNameEN,
+      Beschreibung_EN: this.institutionDescriptionEN,
+      URL_EN: this.institutionURLEN,
+      Tags: this.selectedTags,
+      Zielgruppen: this.selectedZielgruppen,
+      Arten: this.selectedArt,
     };
+
+    console.log('Zu aktualisierende Daten:', updatedData);
   
     this.dataService.updateAngebot(this.selectedInstitutionId, updatedData).subscribe({
       next: () => {
@@ -567,8 +588,7 @@ private loadArten(): void {
       error: (err) => console.error('Fehler beim Speichern:', err),
     });
   }
-  
-  
+    
 // Löschen
 deleteSelectedInstitution(): void {
   if (this.selectedInstitutionId) {

@@ -1,435 +1,448 @@
-<div class="container m-4">
-  <!-- Login-Bereich -->
-  <div *ngIf="!isLoggedIn">
-    <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
-    <form (ngSubmit)="login(username.value, password.value)" class="border p-4 rounded shadow-sm">
-      <div class="mb-3">
-        <label for="username" class="form-label">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
-        <input id="username" type="text" class="form-control" #username />
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
-        <input id="password" type="password" class="form-control" #password />
-      </div>
-      <button type="submit" class="btn btn-primary w-100">{{ 'LOGIN.SUBMIT_BUTTON' | translate }}</button>
-    </form>
-  </div>
-
-  <!-- Admin-Bereich -->
-  <div *ngIf="isLoggedIn">
-    <h3>{{ 'ADMIN.WELCOME' | translate }}</h3>
-    <button (click)="logout()" class="btn btn-danger mb-4">{{ 'ADMIN.LOGOUT_BUTTON' | translate }}</button>
-
-    <!-- Aktionswahl -->
-    <div class="mb-4">
-      <label class="form-label">{{ 'ADMIN.CHOOSE_ACTION' | translate }}</label>
-      <div class="btn-group w-100" role="group">
-        <button type="button" class="btn btn-outline-primary" (click)="setMode('neu')">{{ 'ADMIN.NEW_BUTTON' | translate }}</button>
-        <button type="button" class="btn btn-outline-primary" (click)="setMode('ändern')">{{ 'ADMIN.EDIT_BUTTON' | translate }}</button>
-        <button type="button" class="btn btn-outline-primary" (click)="setMode('löschen')">{{ 'ADMIN.DELETE_BUTTON' | translate }}</button>
-        <button type="button" class="btn btn-outline-primary" (click)="setMode('neuerBenutzer')">{{ 'ADMIN.MANAGE_USERS_BUTTON' | translate }}</button>
-      </div>
-    </div>
-
-    <!-- Modus: Neuer Benutzer -->
-    <div *ngIf="mode === 'neuerBenutzer'">
-      <h2>{{ 'USER_MANAGEMENT.NEW_USER_TITLE' | translate }}</h2>
-      <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
+<div class="container-fluid m-4 d-flex justify-content-center align-items-center">
+    <!-- Login-Bereich -->
+    <div *ngIf="!isLoggedIn">
+      <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
+      <form (ngSubmit)="login(username.value, password.value)" class="border p-4 rounded shadow-sm">
         <div class="mb-3">
-          <label for="regUsername" class="form-label">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
-          <input id="regUsername" type="text" class="form-control" #regUsername required />
+          <label for="username" class="form-label">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
+          <input id="username" type="text" class="form-control" #username />
         </div>
         <div class="mb-3">
-          <label for="regPassword" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
-          <input id="regPassword" type="password" class="form-control" #regPassword required />
+          <label for="password" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
+          <input id="password" type="password" class="form-control" #password />
         </div>
-        <button type="submit" class="btn btn-primary w-100">{{ 'USER_MANAGEMENT.REGISTER_BUTTON' | translate }}</button>
+        <button type="submit" class="btn btn-primary w-100">{{ 'LOGIN.SUBMIT_BUTTON' | translate }}</button>
       </form>
-      <div>
-        <h2>{{ 'USER_MANAGEMENT.DELETE_USER_TITLE' | translate }}</h2>
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'USER_MANAGEMENT.SELECT_USER_LABEL' | translate }}</mat-label>
-          <mat-select [(value)]="selectedUserId">
-            <mat-option *ngFor="let user of users" [value]="user.ID">
-              {{ user.Benutzername }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="deleteUser(selectedUserId)"
-          [disabled]="!selectedUserId"
-        >
-          {{ 'USER_MANAGEMENT.DELETE_USER_BUTTON' | translate }}
-        </button>
-      </div>
+      <div class="container text-center mt-3">
+        <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
+    </div>
     </div>
 
-    <!-- Modus: Neu -->
-    <div *ngIf="mode === 'neu'">
-      <h2>{{ 'OFFER_MANAGEMENT.NEW_OFFER_TITLE' | translate }}</h2>
-      <form (ngSubmit)="createAngebot(name.value, description.value, url.value, nameEn.value, descriptionEn.value, urlEn.value)" class="border p-4 rounded shadow-sm">
-        <div class="mb-3">
-          <label for="name" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL' | translate }}</label>
-          <input id="name" type="text" class="form-control" #name />
-        </div>
-        <div class="mb-3">
-          <label for="name-en" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL_EN' | translate }}</label>
-          <input id="name-en" type="text" class="form-control" #nameEn />
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL' | translate }}</label>
-          <textarea id="description" class="form-control" #description></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="description-en" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL_EN' | translate }}</label>
-          <textarea id="description-en" class="form-control" #descriptionEn></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="url" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL' | translate }}</label>
-          <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
-        </div>
-        <div class="mb-3">
-          <label for="url-en" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL_EN' | translate }}</label>
-          <input id="url-en" type="url" class="form-control" #urlEn placeholder="https://example.com" />
-        </div>
+    <!-- Admin-Bereich -->
+    <div *ngIf="isLoggedIn">
+      <h3>{{ 'ADMIN.WELCOME' | translate }}</h3>
+      <button (click)="logout()" class="btn btn-danger mb-4">{{ 'ADMIN.LOGOUT_BUTTON' | translate }}</button>
 
-        <!-- Tags -->
-        <div class="mb-4">
-          <mat-form-field appearance="fill" class="w-100">
-          <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TAG' | translate }}</mat-label>
-          <mat-select multiple [(value)]="selectedTags">
-            <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-              {{ tag.PreferredTag }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <!-- Aktionswahl -->
+      <div class="mb-4">
+        <label class="form-label">{{ 'ADMIN.CHOOSE_ACTION' | translate }}</label>
+        <div class="btn-group w-100" role="group">
+          <button type="button" class="btn btn-outline-primary" (click)="setMode('neu')">{{ 'ADMIN.NEW_BUTTON' | translate }}</button>
+          <button type="button" class="btn btn-outline-primary" (click)="setMode('ändern')">{{ 'ADMIN.EDIT_BUTTON' | translate }}</button>
+          <button type="button" class="btn btn-outline-primary" (click)="setMode('löschen')">{{ 'ADMIN.DELETE_BUTTON' | translate }}</button>
+          <button type="button" class="btn btn-outline-primary" (click)="setMode('neuerBenutzer')">{{ 'ADMIN.MANAGE_USERS_BUTTON' | translate }}</button>
         </div>
+      </div>
 
-        <!-- Zielgruppen -->
-        <div class="mb-4">
-          <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_GROUP' | translate }}</mat-label>
-            <mat-select multiple [(value)]="selectedZielgruppen">
-              <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-                {{ zielgruppe.PreferredTag }}
+      <!-- Modus: Neuer Benutzer -->
+      <div *ngIf="mode === 'neuerBenutzer'">
+        <h2>{{ 'USER_MANAGEMENT.NEW_USER_TITLE' | translate }}</h2>
+        <form (ngSubmit)="register(regUsername.value, regPassword.value)" class="border p-4 rounded shadow-sm">
+          <div class="mb-3">
+            <label for="regUsername" class="form-label">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
+            <input id="regUsername" type="text" class="form-control" #regUsername required />
+          </div>
+          <div class="mb-3">
+            <label for="regPassword" class="form-label">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
+            <input id="regPassword" type="password" class="form-control" #regPassword required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">{{ 'USER_MANAGEMENT.REGISTER_BUTTON' | translate }}</button>
+        </form>
+        <div>
+          <h2>{{ 'USER_MANAGEMENT.DELETE_USER_TITLE' | translate }}</h2>
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'USER_MANAGEMENT.SELECT_USER_LABEL' | translate }}</mat-label>
+            <mat-select [(value)]="selectedUserId">
+              <mat-option *ngFor="let user of users" [value]="user.ID">
+                {{ user.Benutzername }}
               </mat-option>
             </mat-select>
-          </mat-form-field>          
-        </div>
-
-        <!-- Angebotsart -->
-        <div class="mb-4">
-          <mat-form-field appearance="fill" class="w-100">
-            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TYPE' | translate }}</mat-label>
-            <mat-select multiple [(value)]="selectedArt">
-              <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
-            </mat-select>
           </mat-form-field>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="deleteUser(selectedUserId)"
+            [disabled]="!selectedUserId"
+          >
+            {{ 'USER_MANAGEMENT.DELETE_USER_BUTTON' | translate }}
+          </button>
         </div>
-
-        <button type="submit" class="btn btn-success w-100">{{ 'OFFER_MANAGEMENT.CREATE_BUTTON' | translate }}</button>
-      </form>
-
-      <div class="mt-5">
-        <h2>{{ 'OFFER_MANAGEMENT.NEW_TAG_TITLE' | translate }}</h2>
-        <form (ngSubmit)="addTag()">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              [(ngModel)]="newTag.de"
-              name="newTagDe"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_DE' | translate }}"
-              class="form-control"
-              required
-            />
-            <input
-              type="text"
-              [(ngModel)]="newTag.en"
-              name="newTagEn"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_EN' | translate }}"
-              class="form-control"
-              required
-            />
-            <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_TAG_BUTTON' | translate }}</button>
-          </div>
-        </form>
+        <div class="container text-center mt-3">
+          <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
+      </div>
       </div>
 
-      <div class="mt-5">
-        <h2>{{ 'OFFER_MANAGEMENT.NEW_GROUP_TITLE' | translate }}</h2>
-        <form (ngSubmit)="addZielgruppe()">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              [(ngModel)]="newZielgruppe.de"
-              name="newZielgruppeDe"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_DE' | translate }}"
-              class="form-control"
-              required
-            />
-            <input
-              type="text"
-              [(ngModel)]="newZielgruppe.en"
-              name="newZielgruppeEn"
-              placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_EN' | translate }}"
-              class="form-control"
-              required
-            />
-            <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_GROUP_BUTTON' | translate }}</button>
+      <!-- Modus: Neu -->
+      <div *ngIf="mode === 'neu'">
+        <h2>{{ 'OFFER_MANAGEMENT.NEW_OFFER_TITLE' | translate }}</h2>
+        <form (ngSubmit)="createAngebot(name.value, description.value, url.value, nameEn.value, descriptionEn.value, urlEn.value)" class="border p-4 rounded shadow-sm">
+          <div class="mb-3">
+            <label for="name" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL' | translate }}</label>
+            <input id="name" type="text" class="form-control" #name />
           </div>
-        </form>
-      </div>
-    </div>
+          <div class="mb-3">
+            <label for="name-en" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL_EN' | translate }}</label>
+            <input id="name-en" type="text" class="form-control" #nameEn />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL' | translate }}</label>
+            <textarea id="description" class="form-control" #description></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="description-en" class="form-label">{{ 'OFFER_MANAGEMENT.DESCRIPTION_LABEL_EN' | translate }}</label>
+            <textarea id="description-en" class="form-control" #descriptionEn></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="url" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL' | translate }}</label>
+            <input id="url" type="url" class="form-control" #url placeholder="https://example.com" />
+          </div>
+          <div class="mb-3">
+            <label for="url-en" class="form-label">{{ 'OFFER_MANAGEMENT.URL_LABEL_EN' | translate }}</label>
+            <input id="url-en" type="url" class="form-control" #urlEn placeholder="https://example.com" />
+          </div>
 
-    <!-- Modus: Ändern -->
-    <div *ngIf="mode === 'ändern'">
-      <h2>{{ 'EDIT.INSTITUTION_EDIT_TITLE' | translate }}</h2>
-      <mat-form-field appearance="fill" class="w-100 mb-4">
-        <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
-        <mat-select [(value)]="selectedInstitutionId" (selectionChange)="onInstitutionSelected($event.value)">
-          <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
-            {{ institution.Name_EN || institution.Name }}
-          </mat-option>          
-        </mat-select>
-      </mat-form-field>
-      <div *ngIf="selectedInstitution">
-        <h3>{{ 'EDIT.EDIT_DETAILS' | translate }}</h3>
-        <form>
-          <!-- Deutscher Name -->
-          <div class="mb-3">
-            <label for="name-de">{{ 'EDIT.NAME_LABEL' | translate }}</label>
-            <input
-              id="name-de"
-              type="text"
-              [(ngModel)]="selectedInstitution.Name"
-              name="institutionNameDe"
-              class="form-control"
-            />
-          </div>
-      
-          <!-- Englischer Name -->
-          <div class="mb-3">
-            <label for="name-en">{{ 'EDIT.NAME_LABEL_EN' | translate }}</label>
-            <input
-              id="name-en"
-              type="text"
-              [(ngModel)]="selectedInstitution.Name_EN"
-              name="institutionNameEn"
-              class="form-control"
-            />
-          </div>
-      
-          <!-- Deutsche Beschreibung -->
-          <div class="mb-3">
-            <label for="description-de">{{ 'EDIT.DESCRIPTION_LABEL' | translate }}</label>
-            <textarea
-              id="description-de"
-              [(ngModel)]="selectedInstitution.Beschreibung"
-              name="institutionDescriptionDe"
-              class="form-control"
-            ></textarea>
-          </div>
-      
-          <!-- Englische Beschreibung -->
-          <div class="mb-3">
-            <label for="description-en">{{ 'EDIT.DESCRIPTION_LABEL_EN' | translate }}</label>
-            <textarea
-              id="description-en"
-              [(ngModel)]="selectedInstitution.Beschreibung_EN"
-              name="institutionDescriptionEn"
-              class="form-control"
-            ></textarea>
-          </div>
-      
-          <!-- Deutsche URL -->
-          <div class="mb-3">
-            <label for="url-de">{{ 'EDIT.URL_LABEL' | translate }}</label>
-            <input
-              id="url-de"
-              type="text"
-              [(ngModel)]="selectedInstitution.URL"
-              name="institutionUrlDe"
-              class="form-control"
-            />
-          </div>
-      
-          <!-- Englische URL -->
-          <div class="mb-3">
-            <label for="url-en">{{ 'EDIT.URL_LABEL_EN' | translate }}</label>
-            <input
-              id="url-en"
-              type="text"
-              [(ngModel)]="selectedInstitution.URL_EN"
-              name="institutionUrlEn"
-              class="form-control"
-            />
-          </div>
-      
           <!-- Tags -->
           <div class="mb-4">
             <mat-form-field appearance="fill" class="w-100">
-              <mat-label>{{ 'EDIT.SELECT_TAGS' | translate }}</mat-label>
-              <mat-select multiple [(value)]="selectedTags">
-                <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-                  {{ tag.PreferredTag }}
-                </mat-option>              
-              </mat-select>
-            </mat-form-field>
+            <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TAG' | translate }}</mat-label>
+            <mat-select multiple [(value)]="selectedTags">
+              <mat-option *ngFor="let tag of tags" [value]="tag.ID">
+                {{ tag.PreferredTag }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           </div>
 
           <!-- Zielgruppen -->
           <div class="mb-4">
             <mat-form-field appearance="fill" class="w-100">
-              <mat-label>{{ 'EDIT.SELECT_TARGET_GROUPS' | translate }}</mat-label>
+              <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_GROUP' | translate }}</mat-label>
               <mat-select multiple [(value)]="selectedZielgruppen">
                 <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
                   {{ zielgruppe.PreferredTag }}
                 </mat-option>
-            </mat-select>
-            </mat-form-field>
+              </mat-select>
+            </mat-form-field>          
           </div>
 
           <!-- Angebotsart -->
           <div class="mb-4">
             <mat-form-field appearance="fill" class="w-100">
-              <mat-label>{{ 'EDIT.SELECT_TYPES' | translate }}</mat-label>
+              <mat-label>{{ 'OFFER_MANAGEMENT.CHOOSE_TYPE' | translate }}</mat-label>
               <mat-select multiple [(value)]="selectedArt">
                 <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
               </mat-select>
-            </mat-form-field>            
+            </mat-form-field>
           </div>
 
-          <button type="button" class="btn btn-primary w-100" (click)="saveChanges()">{{ 'EDIT.SAVE_CHANGES' | translate }}</button>
+          <button type="submit" class="btn btn-success w-100">{{ 'OFFER_MANAGEMENT.CREATE_BUTTON' | translate }}</button>
         </form>
+
+        <div class="mt-5">
+          <h2>{{ 'OFFER_MANAGEMENT.NEW_TAG_TITLE' | translate }}</h2>
+          <form (ngSubmit)="addTag()">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                [(ngModel)]="newTag.de"
+                name="newTagDe"
+                placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_DE' | translate }}"
+                class="form-control"
+                required
+              />
+              <input
+                type="text"
+                [(ngModel)]="newTag.en"
+                name="newTagEn"
+                placeholder="{{ 'OFFER_MANAGEMENT.NEW_TAG_PLACEHOLDER_EN' | translate }}"
+                class="form-control"
+                required
+              />
+              <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_TAG_BUTTON' | translate }}</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="mt-5">
+          <h2>{{ 'OFFER_MANAGEMENT.NEW_GROUP_TITLE' | translate }}</h2>
+          <form (ngSubmit)="addZielgruppe()">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                [(ngModel)]="newZielgruppe.de"
+                name="newZielgruppeDe"
+                placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_DE' | translate }}"
+                class="form-control"
+                required
+              />
+              <input
+                type="text"
+                [(ngModel)]="newZielgruppe.en"
+                name="newZielgruppeEn"
+                placeholder="{{ 'OFFER_MANAGEMENT.NEW_GROUP_PLACEHOLDER_EN' | translate }}"
+                class="form-control"
+                required
+              />
+              <button type="submit" class="btn btn-success">{{ 'OFFER_MANAGEMENT.CREATE_GROUP_BUTTON' | translate }}</button>
+            </div>
+          </form>
+        </div>
+        <div class="container text-center mt-3">
+          <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
+      </div>
       </div>
 
-      <div class="edit-section mt-4">
-        <h2>{{ 'EDIT.EDIT_TAG_TITLE' | translate }}</h2>
+      <!-- Modus: Ändern -->
+      <div *ngIf="mode === 'ändern'">
+        <h2>{{ 'EDIT.INSTITUTION_EDIT_TITLE' | translate }}</h2>
+        <mat-form-field appearance="fill" class="w-100 mb-4">
+          <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
+          <mat-select [(value)]="selectedInstitutionId" (selectionChange)="onInstitutionSelected($event.value)">
+            <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
+              {{ institution.Name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+        <div *ngIf="selectedInstitution">
+          <h3>{{ 'EDIT.EDIT_DETAILS' | translate }}</h3>
+          <form>
+            <!-- Deutscher Name -->
+            <div class="mb-3">
+              <label for="name-de">{{ 'EDIT.NAME_LABEL' | translate }}</label>
+              <input
+                id="name-de"
+                type="text"
+                [(ngModel)]="institutionName"
+                name="institutionNameDe"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Englischer Name -->
+            <div class="mb-3">
+              <label for="name-en">{{ 'EDIT.NAME_LABEL_EN' | translate }}</label>
+              <input
+                id="name-en"
+                type="text"
+                [(ngModel)]="institutionNameEN"
+                name="institutionNameEn"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Deutsche Beschreibung -->
+            <div class="mb-3">
+              <label for="description-de">{{ 'EDIT.DESCRIPTION_LABEL' | translate }}</label>
+              <textarea
+                id="description-de"
+                [(ngModel)]="institutionDescription"
+                name="institutionDescriptionDe"
+                class="form-control"
+              ></textarea>
+            </div>
+
+            <!-- Englische Beschreibung -->
+            <div class="mb-3">
+              <label for="description-en">{{ 'EDIT.DESCRIPTION_LABEL_EN' | translate }}</label>
+              <textarea
+                id="description-en"
+                [(ngModel)]="institutionDescriptionEN"
+                name="institutionDescriptionEn"
+                class="form-control"
+              ></textarea>
+            </div>
+
+            <!-- Deutsche URL -->
+            <div class="mb-3">
+              <label for="url-de">{{ 'EDIT.URL_LABEL' | translate }}</label>
+              <input
+                id="url-de"
+                type="text"
+                [(ngModel)]="institutionURL"
+                name="institutionUrlDe"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Englische URL -->
+            <div class="mb-3">
+              <label for="url-en">{{ 'EDIT.URL_LABEL_EN' | translate }}</label>
+              <input
+                id="url-en"
+                type="text"
+                [(ngModel)]="institutionURLEN"
+                name="institutionUrlEn"
+                class="form-control"
+              />
+            </div>
         
-        <!-- Dropdown zur Auswahl eines Tags -->
+            <!-- Tags -->
+            <div class="mb-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ 'EDIT.SELECT_TAGS' | translate }}</mat-label>
+                <mat-select multiple [(value)]="selectedTags">
+                  <mat-option *ngFor="let tag of tags" [value]="tag.ID">
+                    {{ tag.PreferredTag }}
+                  </mat-option>              
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Zielgruppen -->
+            <div class="mb-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ 'EDIT.SELECT_TARGET_GROUPS' | translate }}</mat-label>
+                <mat-select multiple [(value)]="selectedZielgruppen">
+                  <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
+                    {{ zielgruppe.PreferredTag }}
+                  </mat-option>
+              </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Angebotsart -->
+            <div class="mb-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ 'EDIT.SELECT_TYPES' | translate }}</mat-label>
+                <mat-select multiple [(value)]="selectedArt">
+                  <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
+                </mat-select>
+              </mat-form-field>            
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" (click)="saveChanges()">{{ 'EDIT.SAVE_CHANGES' | translate }}</button>
+          </form>
+        </div>
+
+        <div class="edit-section mt-4">
+          <h2>{{ 'EDIT.EDIT_TAG_TITLE' | translate }}</h2>
+          
+          <!-- Dropdown zur Auswahl eines Tags -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.SELECT_TAG' | translate }}</mat-label>
+            <mat-select
+              [(value)]="selectedTagId"
+              (selectionChange)="onTagSelectionChange($event.value)">
+              <mat-option *ngFor="let tag of tags" [value]="tag.ID">
+                {{ tag.Tag }} / {{ tag.Tag_EN }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <!-- Eingabefeld für den deutschen Namen -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.TAG_NAME_EDIT_DE' | translate }}</mat-label>
+            <input matInput [(ngModel)]="selectedTagName" />
+          </mat-form-field>
+        
+          <!-- Eingabefeld für den englischen Namen -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.TAG_NAME_EDIT_EN' | translate }}</mat-label>
+            <input matInput [(ngModel)]="selectedTagNameEN" />
+          </mat-form-field>
+          
+          <!-- Speichern-Button -->
+          <button class="btn btn-primary" (click)="editTag()">
+            {{ 'EDIT.EDIT_TAG_BUTTON' | translate }}
+          </button>
+        </div>
+        
+
+        <div class="edit-section mt-4">
+          <h2>{{ 'EDIT.EDIT_GROUP_TITLE' | translate }}</h2>
+          
+          <!-- Dropdown zur Auswahl einer Zielgruppe -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.SELECT_GROUP' | translate }}</mat-label>
+            <mat-select
+              [(value)]="selectedZielgruppeId"
+              (selectionChange)="onZielgruppeSelectionChange($event.value)">
+              <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
+                {{ zielgruppe.Name }} / {{ zielgruppe.Zielgruppe_EN }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <!-- Eingabefeld für den deutschen Namen -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_DE' | translate }}</mat-label>
+            <input matInput [(ngModel)]="selectedZielgruppeName" />
+          </mat-form-field>
+          
+          <!-- Eingabefeld für den englischen Namen -->
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_EN' | translate }}</mat-label>
+            <input matInput [(ngModel)]="selectedZielgruppeNameEN" />
+          </mat-form-field>
+          
+          <!-- Speichern-Button -->
+          <button class="btn btn-primary" (click)="editZielgruppe()">
+            {{ 'EDIT.EDIT_GROUP_BUTTON' | translate }}
+          </button>
+        </div>  
+        <div class="container text-center mt-3">
+          <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
+      </div>    
+      </div>
+
+      <!-- Modus: Löschen -->
+      <div *ngIf="mode === 'löschen'">
+        <h2>{{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_TITLE' | translate }}</h2>
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
+          <mat-select [(value)]="selectedInstitutionId">
+            <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
+              {{ institution.Name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          type="button"
+          class="btn btn-danger mb-4"
+          (click)="deleteSelectedInstitution()"
+          [disabled]="!selectedInstitutionId"
+        >
+          {{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_BUTTON' | translate }}
+        </button>
+        <!-- Tag löschen -->
+        <h2>{{ 'DELETE_MANAGEMENT.DELETE_TAG_TITLE' | translate }}</h2>
         <mat-form-field appearance="fill" class="w-100 mb-3">
           <mat-label>{{ 'EDIT.SELECT_TAG' | translate }}</mat-label>
-          <mat-select
-            [(value)]="selectedTagId"
-            (selectionChange)="onTagSelectionChange($event.value)">
+          <mat-select [(value)]="selectedTagId">
             <mat-option *ngFor="let tag of tags" [value]="tag.ID">
               {{ tag.PreferredTag }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
-        <!-- Eingabefeld für den deutschen Namen -->
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.TAG_NAME_EDIT_DE' | translate }}</mat-label>
-          <input matInput [(ngModel)]="selectedTagName" />
-        </mat-form-field>
-      
-        <!-- Eingabefeld für den englischen Namen -->
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.TAG_NAME_EDIT_EN' | translate }}</mat-label>
-          <input matInput [(ngModel)]="selectedTagNameEN" />
-        </mat-form-field>
-        
-        <!-- Speichern-Button -->
-        <button class="btn btn-primary" (click)="editTag()">
-          {{ 'EDIT.EDIT_TAG_BUTTON' | translate }}
+        <button
+          type="button"
+          class="btn btn-danger mb-4"
+          (click)="deleteTag(selectedTagId)"
+          [disabled]="!selectedTagId"
+        >
+          {{ 'DELETE_MANAGEMENT.DELETE_TAG_BUTTON' | translate }}
         </button>
-      </div>
-      
-
-      <div class="edit-section mt-4">
-        <h2>{{ 'EDIT.EDIT_GROUP_TITLE' | translate }}</h2>
-        
-        <!-- Dropdown zur Auswahl einer Zielgruppe -->
+        <h2>{{ 'DELETE_MANAGEMENT.DELETE_GROUP_TITLE' | translate }}</h2>
         <mat-form-field appearance="fill" class="w-100 mb-3">
           <mat-label>{{ 'EDIT.SELECT_GROUP' | translate }}</mat-label>
-          <mat-select
-            [(value)]="selectedZielgruppeId"
-            (selectionChange)="onZielgruppeSelectionChange($event.value)">
+          <mat-select [(value)]="selectedZielgruppeId">
             <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-              {{ zielgruppe.Name }} / {{ zielgruppe.Zielgruppe_EN }}
+              {{ zielgruppe.PreferredTag }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
-        <!-- Eingabefeld für den deutschen Namen -->
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_DE' | translate }}</mat-label>
-          <input matInput [(ngModel)]="selectedZielgruppeName" />
-        </mat-form-field>
-        
-        <!-- Eingabefeld für den englischen Namen -->
-        <mat-form-field appearance="fill" class="w-100 mb-3">
-          <mat-label>{{ 'EDIT.GROUP_NAME_EDIT_EN' | translate }}</mat-label>
-          <input matInput [(ngModel)]="selectedZielgruppeNameEN" />
-        </mat-form-field>
-        
-        <!-- Speichern-Button -->
-        <button class="btn btn-primary" (click)="editZielgruppe()">
-          {{ 'EDIT.EDIT_GROUP_BUTTON' | translate }}
+        <button
+          type="button"
+          class="btn btn-danger mb-4"
+          (click)="deleteZielgruppe(selectedZielgruppeId)"
+          [disabled]="!selectedZielgruppeId"
+        >
+          {{ 'DELETE_MANAGEMENT.DELETE_GROUP_BUTTON' | translate }}
         </button>
-      </div>      
+        <div class="container text-center mt-3">
+          <button routerLink="/" class="btn btn-outline-primary">{{ 'IMPRINT.BACK_HOME' | translate }}</button>
+      </div>
+      </div>
     </div>
-
-    <!-- Modus: Löschen -->
-    <div *ngIf="mode === 'löschen'">
-      <h2>{{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_TITLE' | translate }}</h2>
-      <mat-form-field appearance="fill" class="w-100 mb-3">
-        <mat-label>{{ 'EDIT.SELECT_INSTITUTION' | translate }}</mat-label>
-        <mat-select [(value)]="selectedInstitutionId">
-          <mat-option *ngFor="let institution of institutions" [value]="institution.ID">
-            {{ institution.Name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button
-        type="button"
-        class="btn btn-danger mb-4"
-        (click)="deleteSelectedInstitution()"
-        [disabled]="!selectedInstitutionId"
-      >
-        {{ 'DELETE_MANAGEMENT.DELETE_INSTITUTION_BUTTON' | translate }}
-      </button>
-      <!-- Tag löschen -->
-      <h2>{{ 'DELETE_MANAGEMENT.DELETE_TAG_TITLE' | translate }}</h2>
-      <mat-form-field appearance="fill" class="w-100 mb-3">
-        <mat-label>{{ 'EDIT.SELECT_TAG' | translate }}</mat-label>
-        <mat-select [(value)]="selectedTagId">
-          <mat-option *ngFor="let tag of tags" [value]="tag.ID">
-            {{ tag.PreferredTag }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button
-        type="button"
-        class="btn btn-danger mb-4"
-        (click)="deleteTag(selectedTagId)"
-        [disabled]="!selectedTagId"
-      >
-        {{ 'DELETE_MANAGEMENT.DELETE_TAG_BUTTON' | translate }}
-      </button>
-      <h2>{{ 'DELETE_MANAGEMENT.DELETE_GROUP_TITLE' | translate }}</h2>
-      <mat-form-field appearance="fill" class="w-100 mb-3">
-        <mat-label>{{ 'EDIT.SELECT_GROUP' | translate }}</mat-label>
-        <mat-select [(value)]="selectedZielgruppeId">
-          <mat-option *ngFor="let zielgruppe of zielgruppen" [value]="zielgruppe.ID">
-            {{ zielgruppe.PreferredTag }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button
-        type="button"
-        class="btn btn-danger mb-4"
-        (click)="deleteZielgruppe(selectedZielgruppeId)"
-        [disabled]="!selectedZielgruppeId"
-      >
-        {{ 'DELETE_MANAGEMENT.DELETE_GROUP_BUTTON' | translate }}
-      </button>
-
-    </div>
-  </div>
 </div>
-
 
