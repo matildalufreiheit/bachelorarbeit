@@ -558,9 +558,6 @@ private loadArten(): void {
   
   //NEU saveChanges:
   saveChanges(): void {
-    const updateUrl = `https://vm021.qu.tu-berlin.de:3000/angebote/${this.selectedInstitutionId}`;
-    console.log('Update-URL:', updateUrl);
-
     if (!this.selectedInstitutionId) {
       alert('Keine Institution ausgewählt.');
       return;

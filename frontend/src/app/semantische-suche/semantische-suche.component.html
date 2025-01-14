@@ -9,7 +9,6 @@
       class="form-control"
       [placeholder]="'SEARCH.PLACEHOLDER' | translate"
       autocomplete="off"
-      autofocus
       (keydown.enter)="search(searchQuery)"
       (keydown.esc)="clearSearch(); showResults = false"
     />
