@@ -82,8 +82,8 @@
       "BACK_TO_HOME_BUTTON": "Zurück zur Startseite"
     },
     "RESULT_TABLE": {
-        "TITLE": "Deine Ergebnisse",
-        "DESCRIPTION": "Klicke rechts auf den Pfeil, um eine Beschreibung zum jeweiligen Angebot zu erhalten.",
+        "TITLE": "Beratungsangebote für dein Thema",
+        "DESCRIPTION": "Um eine Beschreibung des jeweiligen Angebots zu erhalten, klicke rechts auf den Pfeil.",
         "INSTITUTION": "Institution",
         "WEBSITE_TOOLTIP": "Zur Webseite",
         "DESCRIPTION_LABEL": "Beschreibung",
@@ -92,10 +92,10 @@
         "MORE_INFO_TOOLTIP": "Mehr Informationen"
     },
     "CONSULTATION": {
-    "SELECT_CATEGORIES": "Wähle Kategorien aus, für die du Empfehlungen erhalten möchtest. Du kannst deine Auswahl später jederzeit anpassen.",
+    "SELECT_CATEGORIES": "Wähle Themen aus, für die du Empfehlungen erhalten möchtest. Du kannst deine Auswahl später jederzeit anpassen.",
     "SHOW_MORE": "Mehr anzeigen",
     "SHOW_LESS": "Weniger anzeigen",
-    "SELECT_FILTERS": "Wähle zusätzlich ein oder mehrere Filter aus, die auf dich zutreffen. Du kannst deine Auswahl später jederzeit anpassen."
+    "SELECT_FILTERS": "Wähle optional zusätzlich ein oder mehrere Filter aus, die auf dich zutreffen. Du kannst deine Auswahl später jederzeit anpassen."
   },
   "FOOTER": {
     "CONTACT": "Kontakt",
@@ -119,7 +119,7 @@
       "PROJECT_LEAD": "Projektleiter",
       "RESPONSIBILITY": "Inhaltliche Verantwortung",
       "RESPONSIBILITY_DEPARTMENT": "Allgemeine Studienberatung, Abteilung Studierendenservice",
-      "DEVELOPERS": "Entwickler",
+      "DEVELOPERS": "Entwickler*innen",
       "FURTHER_INFO": "Weitere Informationen zur Datenschutzerklärung finden Sie",
       "FURTHER_INFO_LINK": "hier",
       "BACK_HOME": "Zurück zur Startseite"

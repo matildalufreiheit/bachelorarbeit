@@ -81,8 +81,8 @@
       "BACK_TO_HOME_BUTTON": "Back to Home"
     },
     "RESULT_TABLE": {
-        "TITLE": "Your Results",
-        "DESCRIPTION": "Click the arrow on the right to see a description of the respective offer.",
+        "TITLE": "Consulting services for your topic",
+        "DESCRIPTION": "To get a description of the respective offer, click on the arrow on the right.",
         "INSTITUTION": "Institution",
         "WEBSITE_TOOLTIP": "Go to website",
         "DESCRIPTION_LABEL": "Description",
@@ -91,10 +91,10 @@
         "MORE_INFO_TOOLTIP": "More information"
     },
     "CONSULTATION": {
-    "SELECT_CATEGORIES": "Select categories for which you would like to receive recommendations. You can adjust your selection at any time.",
+    "SELECT_CATEGORIES": "Select themes for which you would like to receive recommendations. You can adjust your selection at any time.",
     "SHOW_MORE": "Show more",
     "SHOW_LESS": "Show less",
-    "SELECT_FILTERS": "Additionally, select one or more filters that apply to you. You can adjust your selection at any time."
+    "SELECT_FILTERS": "Optionally select one or more additional filters that apply to you. You can adjust your selection later at any time."
   },
   "FOOTER": {
     "CONTACT": "Contact",
