@@ -75,7 +75,7 @@
       <!-- Modus: Neu -->
       <div *ngIf="mode === 'neu'">
         <h2>{{ 'OFFER_MANAGEMENT.NEW_OFFER_TITLE' | translate }}</h2>
-        <form (ngSubmit)="createAngebot(name.value, description.value, url.value, nameEn.value, descriptionEn.value, urlEn.value)" class="border p-4 rounded shadow-sm">
+        <form (ngSubmit)="createAngebot(name.value, description.value, url.value, nameEn.value, descriptionEn.value, urlEn.value, newSuchbegriffe)" class="border p-4 rounded shadow-sm">
           <div class="mb-3">
             <label for="name" class="form-label">{{ 'OFFER_MANAGEMENT.NAME_LABEL' | translate }}</label>
             <input id="name" type="text" class="form-control" #name />
@@ -133,6 +133,21 @@
                 <mat-option *ngFor="let art of arten" [value]="art.ID">{{ art.Art }}</mat-option>
               </mat-select>
             </mat-form-field>
+          </div>
+
+          <!-- Suchbegriffe -->
+          <div class="mb-4">
+            <label for="suchbegriffe" class="form-label">{{ 'OFFER_MANAGEMENT.KEYWORDS_LABEL' | translate }}</label>
+            <input
+              id="suchbegriffe"
+              type="text"
+              class="form-control"
+              [(ngModel)]="newSuchbegriffe"
+              placeholder="{{ 'OFFER_MANAGEMENT.KEYWORDS_PLACEHOLDER' | translate }}"
+            />
+            <small class="form-text text-muted">
+              {{ 'OFFER_MANAGEMENT.KEYWORDS_HINT' | translate }}
+            </small>
           </div>
 
           <button type="submit" class="btn btn-success w-100">{{ 'OFFER_MANAGEMENT.CREATE_BUTTON' | translate }}</button>
@@ -309,6 +324,22 @@
                 </mat-select>
               </mat-form-field>            
             </div>
+
+            <!-- Suchbegriffe -->
+            <div class="mb-4">
+              <label for="edit-suchbegriffe" class="form-label">{{ 'EDIT.KEYWORDS_LABEL' | translate }}</label>
+              <input
+                id="edit-suchbegriffe"
+                type="text"
+                class="form-control"
+                [(ngModel)]="selectedSuchbegriffe"
+                placeholder="{{ 'EDIT.KEYWORDS_PLACEHOLDER' | translate }}"
+              />
+              <small class="form-text text-muted">
+                {{ 'EDIT.KEYWORDS_HINT' | translate }}
+              </small>
+            </div>
+
 
             <button type="button" class="btn btn-primary w-100" (click)="saveChanges()">{{ 'EDIT.SAVE_CHANGES' | translate }}</button>
           </form>

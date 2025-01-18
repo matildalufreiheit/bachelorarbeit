@@ -41,7 +41,10 @@
       "NAME_LABEL_EN": "Name in Englisch:",
       "DESCRIPTION_LABEL_EN": "Beschreibung in Englisch:",
       "URL_LABEL_EN": "URL für Englisch:",
-      "CHOOSE_TYPE" : "Art wählen"
+      "CHOOSE_TYPE" : "Art wählen",
+      "KEYWORDS_LABEL": "Suchbegriffe",
+      "KEYWORDS_PLACEHOLDER": "Geben Sie Suchbegriffe ein, getrennt durch Kommas",
+      "KEYWORDS_HINT": "Z. B.: Bildung, Kinder, Veranstaltungen"
     },
     "EDIT": {
     "INSTITUTION_EDIT_TITLE": "Angebot bearbeiten",
@@ -68,7 +71,10 @@
     "GROUP_NAME_EDIT": "Zielgruppen-Name bearbeiten",
     "GROUP_NAME_EDIT_DE": "Zielgruppen-Name bearbeiten",
     "GROUP_NAME_EDIT_EN": "egnlischen Zielgruppen-Name bearbeiten",
-    "EDIT_GROUP_BUTTON": "Zielgruppe bearbeiten"
+    "EDIT_GROUP_BUTTON": "Zielgruppe bearbeiten",
+    "KEYWORDS_LABEL": "Suchbegriffe bearbeiten",
+    "KEYWORDS_PLACEHOLDER": "Bearbeiten Sie die Suchbegriffe, getrennt durch Kommas",
+    "KEYWORDS_HINT": "Z. B.: Bildung, Kinder, Veranstaltungen"
   },
     "DELETE_MANAGEMENT": {
       "DELETE_INSTITUTION_TITLE": "Angebot löschen",

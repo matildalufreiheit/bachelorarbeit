@@ -67,6 +67,8 @@ export class AdminPageComponent implements OnInit {
   originalInstitution: any | null = null;
   selectedTagNameEN: string = ''; // Englischer Name des ausgewählten Tags
   selectedZielgruppeNameEN: string = ''; // Englischer Name des ausgewählten Tags
+  newSuchbegriffe: string = '';
+  selectedSuchbegriffe: string = '';
 
   // Modus für die Aktionen: "neu", "löschen", "ändern"
   mode: 'neu' | 'löschen' | 'ändern' | 'neuerBenutzer' |'' = ''; // Standardmäßig kein Modus ausgewählt
@@ -161,7 +163,7 @@ export class AdminPageComponent implements OnInit {
     this.isLoggedIn = false;
   }
 
-createAngebot(name: string, description: string, url: string, nameEn: string, descriptionEn: string, urlEn: string) {
+createAngebot(name: string, description: string, url: string, nameEn: string, descriptionEn: string, urlEn: string, suchbegriffe: string) {
     const angebot = {
         name,
         beschreibung: description,
@@ -172,6 +174,7 @@ createAngebot(name: string, description: string, url: string, nameEn: string, de
         url,
         tags: this.selectedTags, // IDs der ausgewählten Tags
         zielgruppen: this.selectedZielgruppen, // IDs der ausgewählten Zielgruppen
+        suchebegriffe: suchbegriffe.split(',').map((kw) => kw.trim()), // Split & trim für Freitextfeld
         institution: {
           name, // Deutscher Name der Institution
           beschreibung: description, // Deutsche Beschreibung der Institution
@@ -573,6 +576,7 @@ private loadArten(): void {
       Tags: this.selectedTags,
       Zielgruppen: this.selectedZielgruppen,
       Arten: this.selectedArt,
+      Suchebegriffe: this.selectedSuchbegriffe.split(',').map((kw) => kw.trim()), // NEU
     };
 
     console.log('Zu aktualisierende Daten:', updatedData);

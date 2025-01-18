@@ -40,7 +40,10 @@
       "CREATE_GROUP_BUTTON": "Create group",
       "NAME_LABEL_EN": "Name in english:",
       "DESCRIPTION_LABEL_EN": "Description in english:",
-      "URL_LABEL_EN": "URL for english:"
+      "URL_LABEL_EN": "URL for english:",
+      "KEYWORDS_LABEL": "keywords",
+      "KEYWORDS_PLACEHOLDER": "Enter search terms, separated by commas",
+      "KEYWORDS_HINT": "for example: education, children, events"
     },
     "EDIT": {
     "INSTITUTION_EDIT_TITLE": "Edit Offer",
@@ -67,7 +70,10 @@
     "GROUP_NAME_EDIT": "Edit Group Name",
     "GROUP_NAME_EDIT_DE": "Edit Group Name",
     "GROUP_NAME_EDIT_EN": "Edit english Group Name",
-    "EDIT_GROUP_BUTTON": "Edit Group"
+    "EDIT_GROUP_BUTTON": "Edit Group",
+    "KEYWORDS_LABEL": "Edit keywords",
+    "KEYWORDS_PLACEHOLDER": "Edit the search terms, separated by commas",
+    "KEYWORDS_HINT": "for example: education, children, events"
   },
     "DELETE_MANAGEMENT": {
       "DELETE_INSTITUTION_TITLE": "Delete Offer",
